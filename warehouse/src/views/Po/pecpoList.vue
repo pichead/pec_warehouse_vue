@@ -95,7 +95,8 @@ export default {
                         '<div class="col my-auto">'+new_crdate+'</div>'+
                         '<div class="col-2 my-auto">no validation</div>'+
                         '<div class="col-2 d-flex justify-content-center row-hl">'+
-                            '<a class="btn btn-info p-1 col-10" href="/pecpo_print/'+po.id+'">print</a>'+
+                            '<a class="btn btn-warning text-white p-1 mr-2 col-5" href="/editPecpo/'+po.id+'">Edit</a>'+
+                            '<a class="btn btn-info p-1 col-5" href="/pecpo_print/'+po.id+'">Print</a>'+
                         '</div>'+
                     '</div>')
             })

@@ -234,7 +234,6 @@ export default {
 
             function project_select(){
                 project_id = project_id.filter(onlyUnique)
-                console.log(project_id)
             }
 
         }
@@ -249,7 +248,6 @@ export default {
             await render_project()
             await render_project_data()
             
-
             function render_project(){
                     $('#data').append('<div id="row-'+rowjob_count+'" class="row mb-4">'+
                                 '<div class="col-3">'+
@@ -291,49 +289,125 @@ export default {
                                             '<div class="col-2">Amount (USD)</div>'+
                                         '</div>'+
                                         '<div id="data-pa-'+rowjob_count+'">'+
-                                            '<div id="row-'+rowjob_count+'-1" class="row py-2">'+
-                                                '<div class="col-2">'+
-                                                    '<div class="row">'+
-                                                        '<select id="ordersheet-'+rowjob_count+'-1" class="form-control col-8" style="font-size:14px"></select>'+
-                                                        '<div class="col-4 pt-1"><i class="bi bi-trash text-danger ordersheet-del" data-project="'+rowjob_count+'" data-ordersheet="1" style="font-size:25px;" ></i></div>'+
-                                                    '</div>'+
-                                                '</div>'+
-                                                '<div id="description-'+rowjob_count+'-1" class="col-3"></div>'+
-                                                '<div id="qty-'+rowjob_count+'-1" class="col"></div>'+
-                                                '<div id="unit-'+rowjob_count+'-1" class="col text-center"></div>'+
-                                                '<div id="price-'+rowjob_count+'-1" class="col-2"></div>'+
-                                                '<div id="total-'+rowjob_count+'-1" class="col-2"></div> '+
-                                            '</div>'+
+                                            // '<div id="row-'+rowjob_count+'-1" class="row py-2">'+
+                                            //     '<div class="col-2">'+
+                                            //         '<div class="row">'+
+                                            //             '<select id="ordersheet-'+rowjob_count+'-1" class="form-control col-8" style="font-size:14px"><option value="" selected disabled>Select order sheet</option></select>'+
+                                            //             '<div class="col-4 pt-1"><i class="bi bi-trash text-danger ordersheet-del" data-project="'+rowjob_count+'" data-ordersheet="1" style="font-size:25px;" ></i></div>'+
+                                            //         '</div>'+
+                                            //     '</div>'+
+                                            //     '<div id="description-'+rowjob_count+'-1" class="col-3"></div>'+
+                                            //     '<div id="qty-'+rowjob_count+'-1" class="col"></div>'+
+                                            //     '<div id="unit-'+rowjob_count+'-1" class="col text-center"></div>'+
+                                            //     '<div id="price-'+rowjob_count+'-1" class="col-2"></div>'+
+                                            //     '<div id="total-'+rowjob_count+'-1" class="col-2"></div> '+
+                                            // '</div>'+
                                         '</div>'+
                                     '</div>'+
                                 '</div>'+
                             '</div>')
             
-            
-                $(this).data('row',rowjob_count+1)
+                
 
             }
-
 
             async function render_project_data(){
                 for(let i = 0; i < project_id.length ; i++){
-
                     const project_data_con =  await projectFirestore.collection('Projects').doc(project_id[i]).get()
                     $('#row-job-'+rowjob_count).append(
-                        '<option value="'+project_data_con.id+'">'+project_data_con.data().JobNoFirst+'/'+project_data_con.data().JobNoSecond+'</option>'
+                        '<option value="'+project_data_con.id+'" data-name="'+project_data_con.data().ProjectName+'" data-row="'+rowjob_count+'">'+project_data_con.data().JobNoFirst+'/'+project_data_con.data().JobNoSecond+'</option>'
                     )
                 }
+                $(this).data('row',rowjob_count+1)
             }
             
         })
 
-
-        $('.add-ordersheet').on('click', async function(){
-            console.log('asdsd')
-            console.log($(this).data('pa'))
-            console.log($(this).data('ordersheet'))
+        $('#data').on('change','.job', async function(){
+            const project_name = $(this).find('option:selected').data('name')
+            const project_row = $(this).find('option:selected').data('row')
+            $('#projectname-'+project_row).val(project_name)
         })
 
+
+        $('#data').on('click','.add-ordersheet', async function(){
+            const project_count = $(this).data('pa')
+            const ordersheet_count = $(this).data('ordersheet')
+            const select_project = $('#row-job-'+project_count).find('option:selected').val()
+            const project_ordersheet_con = await projectFirestore.collection('Projects').doc(select_project).get()
+            
+            await render_ordersheet()
+            await render_ordersheet_con()
+
+            function render_ordersheet(){
+                $('#data-pa-'+project_count).append(
+                    '<div id="row-'+project_count+'-'+(ordersheet_count+1)+'" class="row py-2">'+
+                        '<div class="col-2">'+
+                            '<div class="row">'+
+                                '<select id="ordersheet-'+project_count+'-'+(ordersheet_count+1)+'" class="form-control col-8 ordersheet" style="font-size:14px"><option value="" selected disabled>Select order sheet</option></select>'+
+                                '<div class="col-4 pt-1"><i class="bi bi-trash text-danger ordersheet-del" data-project="'+project_count+'" data-ordersheet="'+(ordersheet_count+1)+'" style="font-size:25px;" ></i></div>'+
+                            '</div>'+
+                        '</div>'+
+                        '<div id="description-'+project_count+'-'+(ordersheet_count+1)+'" class="col-3"></div>'+
+                        '<div id="qty-'+project_count+'-'+(ordersheet_count+1)+'" class="col"></div>'+
+                        '<div id="unit-'+project_count+'-'+(ordersheet_count+1)+'" class="col text-center"></div>'+
+                        '<div id="price-'+project_count+'-'+(ordersheet_count+1)+'" class="col-2"></div>'+
+                        '<div id="total-'+project_count+'-'+(ordersheet_count+1)+'" class="col-2"></div> '+
+                    '</div>'
+                )
+            }
+            
+            function render_ordersheet_con(){
+
+                for(let i = 0; i < project_ordersheet_con.data().orderSheet.length; i++){
+                    if(project_ordersheet_con.data().orderSheet[i].origin == con_origin && project_ordersheet_con.data().orderSheet[i].warranty == con_warranty){
+                        $('#ordersheet-'+project_count+'-'+(ordersheet_count+1)).append(
+                            '<option value="'+project_ordersheet_con.data().orderSheet[i].no+'" data-row="'+project_count+'" data-ordersheet="'+(ordersheet_count+1)+'" data-project="'+project_ordersheet_con.id+'">'+project_ordersheet_con.data().JobNoFirst+'/'+project_ordersheet_con.data().JobNoSecond+'/'+project_ordersheet_con.data().orderSheet[i].no+'</option>'
+                        )
+                    }
+                }
+
+                
+            }
+
+            
+
+            $(this).data('ordersheet',ordersheet_count+1)
+        })
+
+
+        $('#data').on('change','.ordersheet',async function(){
+            const ordersheet_select = $(this).find('option:selected').val()
+            const project_select_id = $(this).find('option:selected').data('project')
+            const project_select_row = $(this).find('option:selected').data('row')
+            const project_select_ordersheet = $(this).find('option:selected').data('ordersheet')
+
+            const project_data_show =  await projectFirestore.collection('Projects').doc(project_select_id).get()
+            
+            for(let i = 0; i < project_data_show.data().orderSheet.length; i++){
+                if(project_data_show.data().orderSheet[i].no == ordersheet_select){
+                    for(let j = 0 ;j < project_data_show.data().orderSheet[i].battery.length;j++){
+                        $('#description-'+project_select_row+'-'+project_select_ordersheet).append(
+                            '<div class="col-12 my-1" style="height:40px">'+project_data_show.data().orderSheet[i].battery[j].series+'</div>'
+                        )
+                        $('#qty-'+project_select_row+'-'+project_select_ordersheet).append(
+                            '<div class="col-12 my-1"  style="height:40px">'+project_data_show.data().orderSheet[i].battery[j].order_amount+'</div>'
+                        )
+                        $('#unit-'+project_select_row+'-'+project_select_ordersheet).append(
+                            '<div class="col-12 my-1"  style="height:40px">Blk.</div>'
+                        )
+                        $('#price-'+project_select_row+'-'+project_select_ordersheet).append(
+                            '<input class="form-control my-1"  style="height:40px" value="" type="number" require />'
+                        )
+                        $('#total-'+project_select_row+'-'+project_select_ordersheet).append(
+                            '<input class="form-control my-1"  style="height:40px" value="" type="number" require disabled/>'
+                        )
+                        
+
+                    }
+                }
+            }
+        })
 
 
         const addform = document.querySelector('#addform');
