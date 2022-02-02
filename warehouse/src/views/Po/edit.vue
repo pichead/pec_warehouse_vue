@@ -141,14 +141,18 @@ import router from "@/router";
 export default {
     components: { Sidebar },
     mounted() {
+
         var url = window.location.pathname;
         var id = url.substring(url.lastIndexOf('/') + 1);
-        var project = []
+        var project_id = []
         var con_origin
         var con_warranty
         var con_delivery = ""
         const origin_option = ['China','Mexico']
 
+        function onlyUnique(value, index, self) {
+            return self.indexOf(value) === index;
+        }
 
         async function predata(){
             const Po = await projectFirestore.collection('Po').doc(id).get()
@@ -178,6 +182,8 @@ export default {
             var unew_date = uday + "-" + umonth + "-" + uyear;
             await render()
             await getdata()
+            await project_select()
+
 
             function render(){
                 $('company').html('<option selected disabled>choose company</option>')
@@ -210,19 +216,25 @@ export default {
                 $('#comment').val(Po.data().comment)
                 $('#createdate').html('Create Date: '+cnew_date)
                 $('#lastupdate').html('Last Update: '+unew_date)
-            }
-            async function getdata(){
                 con_origin = Po.data().origin
                 con_warranty = Po.data().warranty
+            }
+            async function getdata(){
                 
-                await projectFirestore.collection('Projects').get().then((projects)=>{
-                    projects.forEach((project)=>{
-                        console.log(project.data())
-                    })
+                const allproject = await  projectFirestore.collection('Projects').get()
+                allproject.forEach((project)=>{
+                    for(let i = 0 ; i  < project.data().orderSheet.length; i++){
+                        if(project.data().orderSheet[i].origin == con_origin && project.data().orderSheet[i].warranty == con_warranty){
+                            project_id.push(project.id)
+                        }
+                    }
                 })
 
+            }
 
-
+            function project_select(){
+                project_id = project_id.filter(onlyUnique)
+                console.log(project_id)
             }
 
         }
@@ -233,66 +245,86 @@ export default {
         $('#addjob').on('click', async function (){
 
             const rowjob_count = $(this).data('row')
+            
+            await render_project()
+            await render_project_data()
+            
 
-            $('#data').append('<div id="row-'+rowjob_count+'" class="row mb-4">'+
-                            '<div class="col-3">'+
-                                '<div class="row">'+
-                                    '<div class="col-5 col-form-label">Job No.</div>'+
-                                    '<div class="col-7">'+
-                                        '<select id="row-job-'+rowjob_count+'" class="col-12 form-control job"></select>'+
-                                    '</div>'+
-                                '</div>'+
-                            '</div>'+
-                            '<div class="col-4">'+
-                                '<div class="row">'+
-                                    '<div class="col-5 col-form-label">Project Name</div>'+
-                                    '<div class="col-7">'+
-                                        '<input id="projectname-'+rowjob_count+'" class="form-control col-12" value="" readonly/>'+
-                                    '</div>'+
-                                '</div>'+
-                            '</div>'+
-                            '<div class="col-5">'+
-                                '<div class="row">'+
-                                    '<div class="col-6">'+
-                                        '<button class="btn btn-danger col-12" data-row="'+rowjob_count+'" type="button">Remove Job No</button>'+
-                                    '</div>'+
-                                    '<div class="col-6">'+
-                                        '<button class="btn btn-primary col-12 add-ordersheet" data-pa="'+rowjob_count+'" data-ordersheet="1" type="button">Add Order Sheet</button>'+
-                                    '</div>'+
-                                '</div>'+
-                            '</div>'+
-                            '<div class="col-12 mt-3">'+
-                                '<div class="col-12 pb-2" style="border-bottom:solid 2px #707070">'+
-                                    '<div class="row py-2 text-center tablehead-color">'+
-                                        '<div class="col-2">Order Sheet</div>'+
-                                        '<div class="col-3">Description</div>'+
-                                        '<div class="col">Qty.</div>'+
-                                        '<div class="col">Unit</div>'+
-                                        '<div class="col-2">Unit Price (USD)</div>'+
-                                        '<div class="col-2">Amount (USD)</div>'+
-                                    '</div>'+
-                                    '<div id="data-pa-'+rowjob_count+'">'+
-                                        '<div id="row-'+rowjob_count+'-1" class="row py-2">'+
-                                            '<div class="col-2">'+
-                                                '<div class="row">'+
-                                                    '<select id="ordersheet-'+rowjob_count+'-1" class="form-control col-8" style="font-size:14px"></select>'+
-                                                    '<div class="col-4 pt-1"><i class="bi bi-trash text-danger ordersheet-del" data-project="'+rowjob_count+'" data-ordersheet="1" style="font-size:25px;" ></i></div>'+
-                                                '</div>'+
-                                            '</div>'+
-                                            '<div id="description-'+rowjob_count+'-1" class="col-3"></div>'+
-                                            '<div id="qty-'+rowjob_count+'-1" class="col"></div>'+
-                                            '<div id="unit-'+rowjob_count+'-1" class="col text-center"></div>'+
-                                            '<div id="price-'+rowjob_count+'-1" class="col-2"></div>'+
-                                            '<div id="total-'+rowjob_count+'-1" class="col-2"></div> '+
+            function render_project(){
+                    $('#data').append('<div id="row-'+rowjob_count+'" class="row mb-4">'+
+                                '<div class="col-3">'+
+                                    '<div class="row">'+
+                                        '<div class="col-5 col-form-label">Job No.</div>'+
+                                        '<div class="col-7">'+
+                                            '<select id="row-job-'+rowjob_count+'" class="col-12 form-control job">'+
+                                                '<option value="" selected disabled>Select Job No</option>'+
+                                            '</select>'+
                                         '</div>'+
                                     '</div>'+
                                 '</div>'+
-                            '</div>'+
-                        '</div>')
-        
-        
-            $(this).data('row',rowjob_count+1)
+                                '<div class="col-4">'+
+                                    '<div class="row">'+
+                                        '<div class="col-5 col-form-label">Project Name</div>'+
+                                        '<div class="col-7">'+
+                                            '<input id="projectname-'+rowjob_count+'" class="form-control col-12" value="" readonly/>'+
+                                        '</div>'+
+                                    '</div>'+
+                                '</div>'+
+                                '<div class="col-5">'+
+                                    '<div class="row">'+
+                                        '<div class="col-6">'+
+                                            '<button class="btn btn-danger col-12" data-row="'+rowjob_count+'" type="button">Remove Job No</button>'+
+                                        '</div>'+
+                                        '<div class="col-6">'+
+                                            '<button class="btn btn-primary col-12 add-ordersheet" data-pa="'+rowjob_count+'" data-ordersheet="1" type="button">Add Order Sheet</button>'+
+                                        '</div>'+
+                                    '</div>'+
+                                '</div>'+
+                                '<div class="col-12 mt-3">'+
+                                    '<div class="col-12 pb-2" style="border-bottom:solid 2px #707070">'+
+                                        '<div class="row py-2 text-center tablehead-color">'+
+                                            '<div class="col-2">Order Sheet</div>'+
+                                            '<div class="col-3">Description</div>'+
+                                            '<div class="col">Qty.</div>'+
+                                            '<div class="col">Unit</div>'+
+                                            '<div class="col-2">Unit Price (USD)</div>'+
+                                            '<div class="col-2">Amount (USD)</div>'+
+                                        '</div>'+
+                                        '<div id="data-pa-'+rowjob_count+'">'+
+                                            '<div id="row-'+rowjob_count+'-1" class="row py-2">'+
+                                                '<div class="col-2">'+
+                                                    '<div class="row">'+
+                                                        '<select id="ordersheet-'+rowjob_count+'-1" class="form-control col-8" style="font-size:14px"></select>'+
+                                                        '<div class="col-4 pt-1"><i class="bi bi-trash text-danger ordersheet-del" data-project="'+rowjob_count+'" data-ordersheet="1" style="font-size:25px;" ></i></div>'+
+                                                    '</div>'+
+                                                '</div>'+
+                                                '<div id="description-'+rowjob_count+'-1" class="col-3"></div>'+
+                                                '<div id="qty-'+rowjob_count+'-1" class="col"></div>'+
+                                                '<div id="unit-'+rowjob_count+'-1" class="col text-center"></div>'+
+                                                '<div id="price-'+rowjob_count+'-1" class="col-2"></div>'+
+                                                '<div id="total-'+rowjob_count+'-1" class="col-2"></div> '+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>')
+            
+            
+                $(this).data('row',rowjob_count+1)
 
+            }
+
+
+            async function render_project_data(){
+                for(let i = 0; i < project_id.length ; i++){
+
+                    const project_data_con =  await projectFirestore.collection('Projects').doc(project_id[i]).get()
+                    $('#row-job-'+rowjob_count).append(
+                        '<option value="'+project_data_con.id+'">'+project_data_con.data().JobNoFirst+'/'+project_data_con.data().JobNoSecond+'</option>'
+                    )
+                }
+            }
+            
         })
 
 

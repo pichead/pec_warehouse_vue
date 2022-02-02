@@ -853,7 +853,7 @@ export default {
                     var unilast = lastcondition.filter(onlyUnique);
                     console.log('unilast : ',unilast)
                     for(let i = 0;i < unilast.length; i++){
-                        OrderSheet.push({no:unilast[i],battery:[],lock:false,po:false})                    
+                        OrderSheet.push({no:unilast[i],battery:[],lock:false,po:false,warranty:null,deliverydate:null,origin:null})                    
                     }
 
                     
@@ -869,6 +869,9 @@ export default {
                     for(let j = 0; j < OrderSheet.length;j++){
                         for(let i = 0;i < uni_condition.length;i++){
                             if(uni_condition[i].no == OrderSheet[j].no){
+                                OrderSheet[j].warranty = order_battery[uni_condition[i].order].warranty
+                                OrderSheet[j].deliverydate = order_battery[uni_condition[i].order].deliverydate
+                                OrderSheet[j].origin = order_battery[uni_condition[i].order].origin
                                 OrderSheet[j].battery.push({
                                     no:order_battery[uni_condition[i].order].no,
                                     main:order_battery[uni_condition[i].order].main,
@@ -892,6 +895,9 @@ export default {
                     for(let j = 0; j < OrderSheet.length;j++){
                         for(let i = 0;i < new_uni_condition.length;i++){
                             if(new_uni_condition[i].no == OrderSheet[j].no){
+                            OrderSheet[j].warranty = new_order_battery[new_uni_condition[i].order].warranty
+                            OrderSheet[j].deliverydate = new_order_battery[new_uni_condition[i].order].deliverydate
+                            OrderSheet[j].origin = new_order_battery[new_uni_condition[i].order].origin
                              OrderSheet[j].battery.push({
                                     no:new_order_battery[new_uni_condition[i].order].no,
                                     main:new_order_battery[new_uni_condition[i].order].main,
