@@ -292,12 +292,12 @@ export default {
                                  $('#sum_data').append(
                                         '<tr height="30px">'+
                                             '<td class="text-center">'+(i+1)+'</td>'+
-                                            '<td>'+Project.data().orderSheet[j].battery[k].series+'</td>'+
+                                            '<td class="text-left">'+Project.data().orderSheet[j].battery[k].series+'</td>'+
                                             '<td class="text-right">'+(Project.data().orderSheet[j].battery[k].warranty)+' Mth</td>'+
                                             '<td class="text-right">'+Project.data().orderSheet[j].battery[k].order_amount+'</td>'+
                                             '<td class="text-center">Blks.</td>'+
-                                            '<td class="text-right">'+numeral(Po.data().battorder[i].batt_unit_price).format("0.00")+'</td>'+
-                                            '<td class="text-right">'+numeral((Project.data().orderSheet[j].battery[k].order_amount*Po.data().battorder[i].batt_unit_price)).format("0.00")+'</td>'+
+                                            '<td class="text-right">'+numeral(Po.data().battorder[i].batt_unit_price).format("0,0.00")+'</td>'+
+                                            '<td class="text-right">'+numeral((Project.data().orderSheet[j].battery[k].order_amount*Po.data().battorder[i].batt_unit_price)).format("0,0.00")+'</td>'+
                                         '</tr>'
                                     )
                                 sumbattprice = sumbattprice + (Project.data().orderSheet[j].battery[k].order_amount*Po.data().battorder[i].batt_unit_price)
@@ -317,15 +317,15 @@ export default {
                 $('#sum_data').append(
                     '<tr height="30px">'+
                         '<td class="text-center">'+(shipping_no)+'</td>'+
-                        '<td>Freight Charge : '+Po.data().shippingname+'</td>'+
+                        '<td class="text-left">Freight Charge : '+Po.data().shippingname+'</td>'+
                         '<td class="text-center"></td>'+
                         '<td class="text-center"></td>'+
                         '<td class="text-center"></td>'+
                         '<td class="text-center"></td>'+
-                        '<td class="text-right">'+numeral(Po.data().shippingprice).format("0.00")+'</td>'+
+                        '<td class="text-right">'+numeral(Po.data().shippingprice).format("0,0.00")+'</td>'+
                     '</tr>'
                 )
-                $('#sumprice').html( numeral( sumbattprice+ parseInt(Po.data().shippingprice)).format("0.00"))
+                $('#sumprice').html( numeral( sumbattprice+ parseFloat(Po.data().shippingprice)).format("0,0.00"))
             }
 
 

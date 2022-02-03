@@ -110,22 +110,41 @@
                         </div>
                     </div>
                 </form>
+                
+                <form id="ordersheet">
+                    <div class="col-12 border p-4">
+                        <div id="data" class="col-12">
 
-                <div class="col-12 border p-4">
-                    <div id="data" class="col-12">
+                        </div>
+                        <div class="col-12">
+                            <button id="addjob" class="btn btn-warning col-12 text-white" type="button" data-row="1" >Add Job No</button>
+                        </div>
 
                     </div>
-                    <div class="col-12">
-                        <button id="addjob" class="btn btn-warning col-12 text-white" type="button" data-row="1" >Add Job No</button>
+                    <div class="col-12 border p-4 mt-2">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-2 col-form-label">Freight Charge</div>
+                                <div class="col-3">
+                                    <input id="shipping" class="form-control col-12" type="text" />
+                                </div>
+                                <div class="col">
+                                    <input id="shipping-price" class="form-control col-12" type="number" step="0.01" value="0.00" />
+                                </div>
+                                <div class="col"></div>
+                                <div class="col-2 col-form-label">Total Price</div>
+                                <div  id="totalprice" class="col-2 col-form-label text-right">0.00</div>
+                            </div>
+                        </div>
+
                     </div>
 
-                </div>
+                    <div class="d-flex justify-content-center row-hl my-5">
+                        <a class="btn btn-secondary col-2 mr-2" type="button" href="/Battery/pecpoList">Cancel</a>
+                        <button class="btn btn-danger  col-2 " type="submit">Save</button>
 
-                <div class="d-flex justify-content-center row-hl my-5">
-                    <a class="btn btn-secondary col-2 mr-2" type="button" href="/Battery/pecpoList">Cancel</a>
-                    <button class="btn btn-danger  col-2 " type="submit">Save</button>
-
-                </div>
+                    </div>
+                </form>
 
             </div>
         </div>
@@ -138,6 +157,8 @@
 import Sidebar from "../../components/Sidebar.vue";
 import { projectFirestore, projectAuth } from "../../firebase/config";
 import router from "@/router";
+import numeral from "numeral";
+
 export default {
     components: { Sidebar },
     mounted() {
@@ -247,7 +268,7 @@ export default {
             
             await render_project()
             await render_project_data()
-            
+            await btndata($(this))
             function render_project(){
                     $('#data').append('<div id="row-'+rowjob_count+'" class="row mb-4">'+
                                 '<div class="col-3">'+
@@ -318,7 +339,11 @@ export default {
                         '<option value="'+project_data_con.id+'" data-name="'+project_data_con.data().ProjectName+'" data-row="'+rowjob_count+'">'+project_data_con.data().JobNoFirst+'/'+project_data_con.data().JobNoSecond+'</option>'
                     )
                 }
-                $(this).data('row',rowjob_count+1)
+                
+            }
+
+            function btndata(btn){
+                btn.data('row',rowjob_count+1)
             }
             
         })
@@ -391,16 +416,16 @@ export default {
                             '<div class="col-12 my-1" style="height:40px">'+project_data_show.data().orderSheet[i].battery[j].series+'</div>'
                         )
                         $('#qty-'+project_select_row+'-'+project_select_ordersheet).append(
-                            '<div class="col-12 my-1"  style="height:40px">'+project_data_show.data().orderSheet[i].battery[j].order_amount+'</div>'
+                            '<div id="amount-'+project_data_show.data().orderSheet[i].battery[j].no+'" class="col-12 my-1 text-right amount"  style="height:40px">'+project_data_show.data().orderSheet[i].battery[j].order_amount+'</div>'
                         )
                         $('#unit-'+project_select_row+'-'+project_select_ordersheet).append(
-                            '<div class="col-12 my-1"  style="height:40px">Blk.</div>'
+                            '<div class="col-12 my-1 text-center"  style="height:40px">Blk.</div>'
                         )
                         $('#price-'+project_select_row+'-'+project_select_ordersheet).append(
-                            '<input class="form-control my-1"  style="height:40px" value="" type="number" require />'
+                            '<input class="form-control my-1 price batt-price" data-project_id="'+project_data_show.id+'" data-ordersheet_no="'+project_data_show.data().orderSheet[i].no+'" data-id="'+project_data_show.data().orderSheet[i].battery[j].no+'" data-project="'+project_select_row+'" data-ordersheet="'+project_select_ordersheet+'" style="height:40px" value="0.00" type="number" step="0.01" require />'
                         )
                         $('#total-'+project_select_row+'-'+project_select_ordersheet).append(
-                            '<input class="form-control my-1"  style="height:40px" value="" type="number" require disabled/>'
+                            '<div id="price-total-'+project_data_show.data().orderSheet[i].battery[j].no+'" class="my-1 price-total-'+project_select_row+'-'+project_select_ordersheet+' totalprice"  style="height:40px" >0.00</div>'
                         )
                         
 
@@ -408,6 +433,53 @@ export default {
                 }
             }
         })
+
+        $('#data').on('change','.price',async function(){
+            const project_row_price = $(this).data('project')
+            const ordersheet_row_price = $(this).data('ordersheet')
+            const price_batt_id = $(this).data('id')
+            const price = $(this).val()
+            const amount = $('#amount-'+price_batt_id).html()
+            await sumrowprice()
+            await sumprice()
+
+            function sumrowprice(){
+                $('#price-total-'+price_batt_id).html(numeral(price*amount).format("0.00"))
+            }
+
+        })
+
+        $('#shipping-price').on('change',()=>{
+            sumprice()
+        })
+
+        async function sumprice(){
+            var sum_price = 0.00
+            const shipping_price = $('#shipping-price').val()
+            await sumbattprice()
+            await sumshippingprice()
+            await render_total_price()
+
+            function sumbattprice(){
+                $('.totalprice').each(function(){
+                    const get_row_price = parseFloat($(this).text())
+                    sum_price = sum_price + get_row_price
+                })                
+            }
+
+            function sumshippingprice(){
+                console.log('sum_price : ',sum_price)
+
+                console.log('shipping_price : ',shipping_price)
+                sum_price = parseFloat(sum_price) + parseFloat(shipping_price)
+            }
+
+            function render_total_price(){
+                console.log(sum_price)
+                $('#totalprice').html( numeral(sum_price).format('0,0.00'))
+            }
+
+        }
 
 
         const addform = document.querySelector('#addform');
@@ -441,8 +513,74 @@ export default {
 
         })
 
+        const orderSheetform = document.querySelector('#ordersheet');
+        orderSheetform.addEventListener('submit', async function(e){
+            e.preventDefault();
+            // const pecpono = $('#pecpono').val()
+            // const pecpoyear = $('#pecpoyear').val()
+            // const company = $('#company').find('option:selected').val()
+            // const tpayment = $('#Tpayment').val()
+            // const delivery_date = $('#delivery_date').val()
+            // const comment = $('#comment').val()
+            const update_time = Math.round(new Date().getTime() / 1000);
+            const orgin = $('#select_origin').find('option:selected').val()
+            const warranty = $('#warranty').val()
+            const shipping_name = $('#shipping').val()
+            const shipping_price = $('#shipping-price').val()
+            const battprice_count = $('.batt-price').length
+            var projectlist =  []
+            var battorder =  []
+            await getbattorder()
+            await savedata()
 
-        
+            function getbattorder(){
+                const batt = $('.batt-price')
+                for(let i = 0; i < battprice_count; i++){
+                    const project_id = $(batt[i]).data('project_id')
+                    const ordersheet_no = $(batt[i]).data('ordersheet_no')
+                    const batt_no = $(batt[i]).data('id')
+                    const batt_unit_price = $(batt[i]).val()
+                    const battdata = {project_id:project_id,orderSheet:ordersheet_no,batt_no:batt_no,batt_unit_price:batt_unit_price}
+                    battorder.push(battdata)
+                }
+            }
+
+            function savedata(){
+                var timestamp = Math.round(new Date().getTime() / 1000);
+                console.log(battorder)
+                projectFirestore.collection('Po').doc(id).update({
+                    update_time:update_time,
+                    shippingname:shipping_name,
+                    shippingprice:shipping_price,
+                    battorder:battorder
+
+                }).then(()=>{
+                    router.push({ 
+                        name: 'PECpoList',
+                        params: { mserror: true} 
+                    })
+                })
+
+
+            }
+
+            // projectFirestore.collection('Po').add({
+            //     pecpo_no:pecpono,
+            //     pecpo_year:pecpoyear,
+            //     company:company,
+            //     tpayment:tpayment,
+            //     delivery:delivery_date,
+            //     comment:comment,
+            //     update_time:update_time,
+            //     origin:orgin,
+            //     warranty:warranty,
+            //     visible:true
+
+            // }).then(()=>{ 
+            //     location.reload()
+            // })
+
+        })
 
     }
 }
