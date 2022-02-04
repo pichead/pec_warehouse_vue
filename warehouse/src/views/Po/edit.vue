@@ -208,6 +208,7 @@ export default {
             await project_select()
             await get_ordersheet_data_project()
             await get_ordersheet_data_project_render_project()
+            await get_ordersheet_data_project_render_ordersheet()
 
 
             function render(){
@@ -302,7 +303,7 @@ export default {
                                             '<div class="col-2">Unit Price (USD)</div>'+
                                             '<div class="col-2">Amount (USD)</div>'+
                                         '</div>'+
-                                        '<div id="data-pa-'+(i+1)+'">'+
+                                        '<div id="data-pa-'+(i+1)+'" class="project-'+ordersheet_list[i].project_id+'">'+
                                         '</div>'+
                                     '</div>'+
                                 '</div>'+
@@ -331,6 +332,45 @@ export default {
                     }
                 }
                 $('#addjob').data('row',ordersheet_list.length+1)
+            }
+
+            async function get_ordersheet_data_project_render_ordersheet(){
+                
+                var ordersheet_arr = []
+                
+                await get_array_ordersheet()
+                await uniq_array_ordersheet()
+
+
+                for(let i = 0 ; i < ordersheet_list.length;i++){
+                    
+                }
+
+                // for(let j = 0; j < ordersheet_list.length;j++){
+                //     for(let i = 0; i < project_id.length ; i++){
+                //         const pre_project_data_ordersheet =  await projectFirestore.collection('Projects').doc(project_id[i]).get()
+                //         if(ordersheet_list[i].project_id == $('#row-job-'+(j+1)).find('option:selected').val()){
+                //             if(ordersheet_list[i].orderSheet){}
+                //         }
+                //     }
+                // }
+
+        
+                // $('#data-pa-'+project_count).append(
+                //     '<div id="row-'+project_count+'-'+(ordersheet_count+1)+'" class="row py-2">'+
+                //         '<div class="col-2">'+
+                //             '<div class="row">'+
+                //                 '<select id="ordersheet-'+project_count+'-'+(ordersheet_count+1)+'" class="form-control col-8 ordersheet" style="font-size:14px"><option value="" selected disabled>Select order sheet</option></select>'+
+                //                 '<div class="col-4 pt-1"><i class="bi bi-trash text-danger ordersheet-del" data-project="'+project_count+'" data-ordersheet="'+(ordersheet_count+1)+'" style="font-size:25px;" ></i></div>'+
+                //             '</div>'+
+                //         '</div>'+
+                //         '<div id="description-'+project_count+'-'+(ordersheet_count+1)+'" class="col-3"></div>'+
+                //         '<div id="qty-'+project_count+'-'+(ordersheet_count+1)+'" class="col"></div>'+
+                //         '<div id="unit-'+project_count+'-'+(ordersheet_count+1)+'" class="col text-center"></div>'+
+                //         '<div id="price-'+project_count+'-'+(ordersheet_count+1)+'" class="col-2"></div>'+
+                //         '<div id="total-'+project_count+'-'+(ordersheet_count+1)+'" class="col-2"></div> '+
+                //     '</div>'
+                // )
             }
 
         }
