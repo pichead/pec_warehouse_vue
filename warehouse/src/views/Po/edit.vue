@@ -117,7 +117,7 @@
 
                         </div>
                         <div class="col-12">
-                            <button id="addjob" class="btn btn-warning col-12 text-white" type="button" data-row="1" >Add Job No</button>
+                            <button id="addjob" class="btn btn-warning col-12 text-white" type="button" data-row="'+(ordersheet_list.length +1)+'" >Add Job No</button>
                         </div>
 
                     </div>
@@ -178,6 +178,8 @@ export default {
         async function predata(){
             const Po = await projectFirestore.collection('Po').doc(id).get()
             const Companys = await projectFirestore.collection('ContactCompany').get()
+            const ordersheet_list = Po.data().battorder
+
             var cdate = new Date(Po.data().createdate*1000);
             var cday = cdate.getDate();
             var cmonth = cdate.getMonth() + 1;
@@ -204,6 +206,8 @@ export default {
             await render()
             await getdata()
             await project_select()
+            await get_ordersheet_data_project()
+            await get_ordersheet_data_project_render_project()
 
 
             function render(){
@@ -257,13 +261,85 @@ export default {
                 project_id = project_id.filter(onlyUnique)
             }
 
+            function get_ordersheet_data_project(){
+                for(let i = 0; i < ordersheet_list.length;i++){
+                    $('#data').append('<div id="row-'+(i+1)+'" class="row mb-4">'+
+                                '<div class="col-3">'+
+                                    '<div class="row">'+
+                                        '<div class="col-5 col-form-label">Job No.</div>'+
+                                        '<div class="col-7">'+
+                                            '<select id="row-job-'+(i+1)+'" class="col-12 form-control job">'+
+                                                // '<option value="" selected disabled>Select Job No</option>'+
+                                            '</select>'+
+                                        '</div>'+
+                                    '</div>'+
+                                '</div>'+
+                                '<div class="col-4">'+
+                                    '<div class="row">'+
+                                        '<div class="col-5 col-form-label">Project Name</div>'+
+                                        '<div class="col-7">'+
+                                            '<input id="projectname-'+(i+1)+'" class="form-control col-12" value="" readonly/>'+
+                                        '</div>'+
+                                    '</div>'+
+                                '</div>'+
+                                '<div class="col-5">'+
+                                    '<div class="row">'+
+                                        '<div class="col-6">'+
+                                            '<button class="btn btn-danger col-12" data-row="'+(i+1)+'" type="button">Remove Job No</button>'+
+                                        '</div>'+
+                                        '<div class="col-6">'+
+                                            '<button class="btn btn-primary col-12 add-ordersheet" data-pa="'+(i+1)+'" data-ordersheet="1" type="button">Add Order Sheet</button>'+
+                                        '</div>'+
+                                    '</div>'+
+                                '</div>'+
+                                '<div class="col-12 mt-3">'+
+                                    '<div class="col-12 pb-2" style="border-bottom:solid 2px #707070">'+
+                                        '<div class="row py-2 text-center tablehead-color">'+
+                                            '<div class="col-2">Order Sheet</div>'+
+                                            '<div class="col-3">Description</div>'+
+                                            '<div class="col">Qty.</div>'+
+                                            '<div class="col">Unit</div>'+
+                                            '<div class="col-2">Unit Price (USD)</div>'+
+                                            '<div class="col-2">Amount (USD)</div>'+
+                                        '</div>'+
+                                        '<div id="data-pa-'+(i+1)+'">'+
+                                        '</div>'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>')
+                
+                
+                }
+            }
+
+            async function get_ordersheet_data_project_render_project(){
+                for(let j = 0; j < ordersheet_list.length;j++){
+                    for(let i = 0; i < project_id.length ; i++){
+                        const pre_project_data_con =  await projectFirestore.collection('Projects').doc(project_id[i]).get()
+                        if(ordersheet_list[i].project_id == pre_project_data_con.id){
+                            $('#row-job-'+(j+1)).append(
+                                '<option value="'+pre_project_data_con.id+'" data-name="'+pre_project_data_con.data().ProjectName+'" data-row="'+(j+1)+'" selected >'+pre_project_data_con.data().JobNoFirst+'/'+pre_project_data_con.data().JobNoSecond+'</option>'
+                            )
+                            $('#projectname-'+(j+1)).val(pre_project_data_con.data().ProjectName)
+                        }
+                        else{
+                            $('#row-job-'+(j+1)).append(
+                                '<option value="'+pre_project_data_con.id+'" data-name="'+pre_project_data_con.data().ProjectName+'" data-row="'+(j+1)+'">'+pre_project_data_con.data().JobNoFirst+'/'+pre_project_data_con.data().JobNoSecond+'</option>'
+                            )
+                        }
+
+                    }
+                }
+                $('#addjob').data('row',ordersheet_list.length+1)
+            }
+
         }
 
         predata()
 
 
         $('#addjob').on('click', async function (){
-
+            console.log('click')
             const rowjob_count = $(this).data('row')
             
             await render_project()
@@ -516,12 +592,6 @@ export default {
         const orderSheetform = document.querySelector('#ordersheet');
         orderSheetform.addEventListener('submit', async function(e){
             e.preventDefault();
-            // const pecpono = $('#pecpono').val()
-            // const pecpoyear = $('#pecpoyear').val()
-            // const company = $('#company').find('option:selected').val()
-            // const tpayment = $('#Tpayment').val()
-            // const delivery_date = $('#delivery_date').val()
-            // const comment = $('#comment').val()
             const update_time = Math.round(new Date().getTime() / 1000);
             const orgin = $('#select_origin').find('option:selected').val()
             const warranty = $('#warranty').val()
