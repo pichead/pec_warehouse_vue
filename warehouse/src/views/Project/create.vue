@@ -106,8 +106,8 @@
                                                 <td>
                                                     <select id="origin-option-1" class="form-control form-control-sm"  data-no="1"   required>
                                                         <option selected disabled>Choose here</option>
-                                                        <option >จีน</option>
-                                                        <option >เม็กซิโก</option>
+                                                        <option >China</option>
+                                                        <option >Mexico</option>
                                                     </select>
                                                 </td>
                                                 <td>
@@ -230,8 +230,8 @@ export default {
                     '<td>'+
                         '<select id="origin-option-'+no+'" class="form-control form-control-sm"  data-no="'+no+'"   required>    '+
                             '<option selected disabled>Choose here</option>'+
-                            '<option >จีน</option>'+
-                            '<option >เม็กซิโก</option>'+
+                            '<option >China</option>'+
+                            '<option >Mexcico</option>'+
                         '</select>'+
                     '</td>'+
                     '<td>'+

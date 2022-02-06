@@ -400,7 +400,7 @@ export default {
 
             function batterydata(){
                     console.log('Project : ',Project)
-                    const originArr = ['จีน','เม็กซิโก']
+                    const originArr = ['China','Mexico']
                     for(let i = 0;i < no;i++){
                         for(let j = 0;j < originArr.length;j++){
                             if(originArr[j] == Project.data().battery[i].origin){
@@ -465,8 +465,8 @@ export default {
                         '<td>'+
                             '<select id="origin-option-'+no+'" class="form-control form-control-sm"  data-no="'+no+'"   required>    '+
                                 '<option selected disabled>Choose here</option>'+
-                                '<option >จีน</option>'+
-                                '<option >เม็กซิโก</option>'+
+                                '<option >China</option>'+
+                                '<option >Mexico</option>'+
                             '</select>'+
                         '</td>'+
                         '<td>'+

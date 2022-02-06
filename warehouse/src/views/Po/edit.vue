@@ -117,7 +117,7 @@
 
                         </div>
                         <div class="col-12">
-                            <button id="addjob" class="btn btn-warning col-12 text-white" type="button" data-row="'+(ordersheet_list.length +1)+'" >Add Job No</button>
+                            <button id="addjob" class="btn btn-warning col-12 text-white" type="button" data-row="0" >Add Job No</button>
                         </div>
 
                     </div>
@@ -206,9 +206,9 @@ export default {
             await render()
             await getdata()
             await project_select()
-            await get_ordersheet_data_project()
-            await get_ordersheet_data_project_render_project()
-            await get_ordersheet_data_project_render_ordersheet()
+            // await get_ordersheet_data_project()
+            // await get_ordersheet_data_project_render_project()
+            // await get_ordersheet_data_project_render_ordersheet()
 
 
             function render(){
@@ -379,9 +379,8 @@ export default {
 
 
         $('#addjob').on('click', async function (){
-            console.log('click')
-            const rowjob_count = $(this).data('row')
             
+            const rowjob_count = $(this).data('row')
             await render_project()
             await render_project_data()
             await btndata($(this))
@@ -449,11 +448,14 @@ export default {
             }
 
             async function render_project_data(){
+                
                 for(let i = 0; i < project_id.length ; i++){
                     const project_data_con =  await projectFirestore.collection('Projects').doc(project_id[i]).get()
                     $('#row-job-'+rowjob_count).append(
                         '<option value="'+project_data_con.id+'" data-name="'+project_data_con.data().ProjectName+'" data-row="'+rowjob_count+'">'+project_data_con.data().JobNoFirst+'/'+project_data_con.data().JobNoSecond+'</option>'
                     )
+                    
+                    
                 }
                 
             }
@@ -638,10 +640,21 @@ export default {
             const shipping_name = $('#shipping').val()
             const shipping_price = $('#shipping-price').val()
             const battprice_count = $('.batt-price').length
+            const job_count = $('.job').length
+            const ordersheet_count = $('.ordersheet').length
+
             var projectlist =  []
             var battorder =  []
+            var battarray = []
+            await arrayorder()
             await getbattorder()
             await savedata()
+            
+            function arrayorder(){
+                console.log('job_count : ',job_count)
+                console.log('ordersheet_count : ',ordersheet_count)
+
+            }
 
             function getbattorder(){
                 const batt = $('.batt-price')
@@ -658,18 +671,18 @@ export default {
             function savedata(){
                 var timestamp = Math.round(new Date().getTime() / 1000);
                 console.log(battorder)
-                projectFirestore.collection('Po').doc(id).update({
-                    update_time:update_time,
-                    shippingname:shipping_name,
-                    shippingprice:shipping_price,
-                    battorder:battorder
+                // projectFirestore.collection('Po').doc(id).update({
+                //     update_time:update_time,
+                //     shippingname:shipping_name,
+                //     shippingprice:shipping_price,
+                //     battorder:battorder
 
-                }).then(()=>{
-                    router.push({ 
-                        name: 'PECpoList',
-                        params: { mserror: true} 
-                    })
-                })
+                // }).then(()=>{
+                //     router.push({ 
+                //         name: 'PECpoList',
+                //         params: { mserror: true} 
+                //     })
+                // })
 
 
             }

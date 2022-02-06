@@ -263,7 +263,7 @@ export default {
 
                         console.log('***********order sheet***********')
                         if(all_batt.battery[i].main == true){
-                            battery.push({no:all_batt.battery[i].no,series:all_batt.battery[i].series,company:all_batt.battery[i].company,origin:all_batt.battery[i].origin,warranty:all_batt.battery[i].warranty,amount:all_batt.battery[i].amount,deliverydate:all_batt.battery[i].deliverydate,wh_stock:wh_stock,lock:true,main:all_batt.battery[i].main})
+                            battery.push({no:all_batt.battery[i].no,series:all_batt.battery[i].series,company:all_batt.battery[i].company,origin:all_batt.battery[i].origin,warranty:all_batt.battery[i].warranty,amount:all_batt.battery[i].amount,deliverydate:all_batt.battery[i].deliverydate,wh_stock:wh_stock,lock:all_batt.battery[i].lock,main:all_batt.battery[i].main})
                         }
                         else{
                             battery.push({no:all_batt.battery[i].no,series:all_batt.battery[i].series,company:all_batt.battery[i].company,origin:all_batt.battery[i].origin,warranty:all_batt.battery[i].warranty,amount:all_batt.battery[i].amount,deliverydate:all_batt.battery[i].deliverydate,wh_stock:wh_stock,lock:all_batt.battery[i].lock,main:all_batt.battery[i].main})
