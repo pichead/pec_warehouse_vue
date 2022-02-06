@@ -646,14 +646,28 @@ export default {
             var projectlist =  []
             var battorder =  []
             var battarray = []
-            await arrayorder()
+            await arrayorder_job()
+            await arrayorder_odersheet()
             await getbattorder()
             await savedata()
             
-            function arrayorder(){
-                console.log('job_count : ',job_count)
-                console.log('ordersheet_count : ',ordersheet_count)
+            function arrayorder_job(){
+                
+                for(let i = 0; i < job_count; i++){
+                    battarray.push({job:$($('.job')[i]).find('option:selected').val(),ordersheet:[],projectname:$($('.job')[i]).find('option:selected').data('name')})
+                }
 
+            }
+            function arrayorder_odersheet(){
+                const ordersheet_get = $('.ordersheet')
+                for(let i = 0; i < ordersheet_count; i++){
+                    for(let j = 0;j < battarray.length;j++){
+
+                        
+
+                    }
+                    // battarray.push({job:$($('.job')[i]).find('option:selected').val(),ordersheet:[],projectname:$($('.job')[i]).find('option:selected').data('name')})
+                }
             }
 
             function getbattorder(){
