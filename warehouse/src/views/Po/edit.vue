@@ -206,9 +206,9 @@ export default {
             await render()
             await getdata()
             await project_select()
-            // await get_ordersheet_data_project()
-            // await get_ordersheet_data_project_render_project()
-            // await get_ordersheet_data_project_render_ordersheet()
+            await get_ordersheet_data_project()
+            await get_ordersheet_data_project_render_project()
+            await get_ordersheet_data_project_render_ordersheet()
 
 
             function render(){
@@ -303,12 +303,30 @@ export default {
                                             '<div class="col-2">Unit Price (USD)</div>'+
                                             '<div class="col-2">Amount (USD)</div>'+
                                         '</div>'+
-                                        '<div id="data-pa-'+(i+1)+'" class="project-'+ordersheet_list[i].project_id+'">'+
+                                        '<div id="data-pa-'+(i+1)+'" class="project-'+ordersheet_list[i].job+'">'+
                                         '</div>'+
                                     '</div>'+
                                 '</div>'+
-                            '</div>')
-                
+                            '</div>'
+                    )
+
+                    for(let j = 0; j < ordersheet_list[i].ordersheet.length; j++){
+                        $('#data-pa-'+(i+1)).append(
+                            '<div id="row-'+(i+1)+'-'+(i+1)+'" class="row py-2">'+
+                                '<div class="col-2">'+
+                                    '<div class="row">'+
+                                        '<select id="ordersheet-'+(i+1)+'-'+(i+1)+'" class="form-control col-8 ordersheet" style="font-size:14px"><option value="" selected disabled>Select order sheet</option></select>'+
+                                        '<div class="col-4 pt-1"><i class="bi bi-trash text-danger ordersheet-del" data-project="'+(i+1)+'" data-ordersheet="'+(i+1)+'" style="font-size:25px;" ></i></div>'+
+                                    '</div>'+
+                                '</div>'+
+                                '<div id="description-'+(i+1)+'-'+(i+1)+'" class="col-3"></div>'+
+                                '<div id="qty-'+(i+1)+'-'+(i+1)+'" class="col"></div>'+
+                                '<div id="unit-'+(i+1)+'-'+(i+1)+'" class="col text-center"></div>'+
+                                '<div id="price-'+(i+1)+'-'+(i+1)+'" class="col-2"></div>'+
+                                '<div id="total-'+(i+1)+'-'+(i+1)+'" class="col-2"></div> '+
+                            '</div>'
+                        )
+                    }
                 
                 }
             }
@@ -317,7 +335,7 @@ export default {
                 for(let j = 0; j < ordersheet_list.length;j++){
                     for(let i = 0; i < project_id.length ; i++){
                         const pre_project_data_con =  await projectFirestore.collection('Projects').doc(project_id[i]).get()
-                        if(ordersheet_list[i].project_id == pre_project_data_con.id){
+                        if(ordersheet_list[i].job == pre_project_data_con.id){
                             $('#row-job-'+(j+1)).append(
                                 '<option value="'+pre_project_data_con.id+'" data-name="'+pre_project_data_con.data().ProjectName+'" data-row="'+(j+1)+'" selected >'+pre_project_data_con.data().JobNoFirst+'/'+pre_project_data_con.data().JobNoSecond+'</option>'
                             )
@@ -329,6 +347,46 @@ export default {
                             )
                         }
 
+                        for(let k = 0; k < ordersheet_list[j].ordersheet.length; k++){
+                            for(let l = 0 ; l < pre_project_data_con.data().orderSheet.length; l++){
+                                console.log(j,(k+1))
+                                if(pre_project_data_con.data().orderSheet[l].origin == con_origin && pre_project_data_con.data().orderSheet[l].warranty == con_warranty){
+                                    if(ordersheet_list[j].ordersheet[k].ordersheet == pre_project_data_con.data().orderSheet[l].no){
+                                        $('#ordersheet-'+(j+1)+'-'+(k+1)).append(
+                                            '<option value="'+pre_project_data_con.data().orderSheet[i].no+'" data-row="'+j+'" data-ordersheet="'+(k+1)+'" data-project="'+pre_project_data_con.id+'" selected >'+pre_project_data_con.data().JobNoFirst+'/'+pre_project_data_con.data().JobNoSecond+'/'+pre_project_data_con.data().orderSheet[l].no+'</option>'
+                                        )
+
+                                        for(let m = 0; m < ordersheet_list[j].ordersheet[k].battery.length; m++){
+                                            $('#description-'+(j+1)+'-'+(k+1)).append(
+                                                '<div class="col-12 my-1" style="height:40px">'+ordersheet_list[j].ordersheet[k].battery[m].series+'</div>'
+                                            )
+                                            $('#qty-'+(j+1)+'-'+(k+1)).append(
+                                                '<div id="amount-'+ordersheet_list[j].ordersheet[k].battery[m].batt_no+'" class="col-12 my-1 text-right amount"  style="height:40px">'+ordersheet_list[j].ordersheet[k].battery[m].order_amount+'</div>'
+                                            )
+                                            $('#unit-'+(j+1)+'-'+(k+1)).append(
+                                                '<div class="col-12 my-1 text-center"  style="height:40px">Blk.</div>'
+                                            )
+                                            $('#price-'+(j+1)+'-'+(k+1)).append(
+                                                '<input class="form-control my-1 price batt-price" data-project_id="'+ordersheet_list.job+'" data-ordersheet_no="'+ordersheet_list[j].ordersheet[k].ordersheet+'" data-id="'+ordersheet_list[j].ordersheet[k].battery[m].no+'" data-project="'+(j+1)+'" data-ordersheet="'+(k+1)+'" style="height:40px" value="'+numeral(ordersheet_list[j].ordersheet[k].battery[m].batt_unit_price).format('0,0.00')+'" type="number" step="0.01" require />'
+                                            )
+                                            $('#total-'+(j+1)+'-'+(k+1)).append(
+                                                '<div id="price-total-'+ordersheet_list[j].ordersheet[k].battery[m].batt_no+'" class="my-1 price-total-'+(j+1)+'-'+(k+1)+' totalprice"  style="height:40px" >0.00</div>'
+                                            )
+                                        }
+
+                                    }
+                                    else{
+                                        $('#ordersheet-'+(j+1)+'-'+(k+1)).append(
+                                            '<option value="'+pre_project_data_con.data().orderSheet[i].no+'" data-row="'+j+'" data-ordersheet="'+(k+1)+'" data-project="'+pre_project_data_con.id+'">'+pre_project_data_con.data().JobNoFirst+'/'+pre_project_data_con.data().JobNoSecond+'/'+pre_project_data_con.data().orderSheet[l].no+'</option>'
+                                        )
+                                    }
+                                        
+                                }
+                                
+
+                            }
+                        }
+
                     }
                 }
                 $('#addjob').data('row',ordersheet_list.length+1)
@@ -336,41 +394,10 @@ export default {
 
             async function get_ordersheet_data_project_render_ordersheet(){
                 
-                var ordersheet_arr = []
-                
-                await get_array_ordersheet()
-                await uniq_array_ordersheet()
+                for(let i = 0; i < ordersheet_list.length; i++){
 
-
-                for(let i = 0 ; i < ordersheet_list.length;i++){
-                    
                 }
 
-                // for(let j = 0; j < ordersheet_list.length;j++){
-                //     for(let i = 0; i < project_id.length ; i++){
-                //         const pre_project_data_ordersheet =  await projectFirestore.collection('Projects').doc(project_id[i]).get()
-                //         if(ordersheet_list[i].project_id == $('#row-job-'+(j+1)).find('option:selected').val()){
-                //             if(ordersheet_list[i].orderSheet){}
-                //         }
-                //     }
-                // }
-
-        
-                // $('#data-pa-'+project_count).append(
-                //     '<div id="row-'+project_count+'-'+(ordersheet_count+1)+'" class="row py-2">'+
-                //         '<div class="col-2">'+
-                //             '<div class="row">'+
-                //                 '<select id="ordersheet-'+project_count+'-'+(ordersheet_count+1)+'" class="form-control col-8 ordersheet" style="font-size:14px"><option value="" selected disabled>Select order sheet</option></select>'+
-                //                 '<div class="col-4 pt-1"><i class="bi bi-trash text-danger ordersheet-del" data-project="'+project_count+'" data-ordersheet="'+(ordersheet_count+1)+'" style="font-size:25px;" ></i></div>'+
-                //             '</div>'+
-                //         '</div>'+
-                //         '<div id="description-'+project_count+'-'+(ordersheet_count+1)+'" class="col-3"></div>'+
-                //         '<div id="qty-'+project_count+'-'+(ordersheet_count+1)+'" class="col"></div>'+
-                //         '<div id="unit-'+project_count+'-'+(ordersheet_count+1)+'" class="col text-center"></div>'+
-                //         '<div id="price-'+project_count+'-'+(ordersheet_count+1)+'" class="col-2"></div>'+
-                //         '<div id="total-'+project_count+'-'+(ordersheet_count+1)+'" class="col-2"></div> '+
-                //     '</div>'
-                // )
             }
 
         }
@@ -540,7 +567,7 @@ export default {
                             '<div class="col-12 my-1 text-center"  style="height:40px">Blk.</div>'
                         )
                         $('#price-'+project_select_row+'-'+project_select_ordersheet).append(
-                            '<input class="form-control my-1 price batt-price" data-project_id="'+project_data_show.id+'" data-ordersheet_no="'+project_data_show.data().orderSheet[i].no+'" data-id="'+project_data_show.data().orderSheet[i].battery[j].no+'" data-project="'+project_select_row+'" data-ordersheet="'+project_select_ordersheet+'" style="height:40px" value="0.00" type="number" step="0.01" require />'
+                            '<input class="form-control my-1 price batt-price" data-orderamount="'+project_data_show.data().orderSheet[i].battery[j].order_amount+'" data-series="'+project_data_show.data().orderSheet[i].battery[j].series+'" data-project_id="'+project_data_show.id+'" data-ordersheet_no="'+project_data_show.data().orderSheet[i].no+'" data-id="'+project_data_show.data().orderSheet[i].battery[j].no+'" data-project="'+project_select_row+'" data-ordersheet="'+project_select_ordersheet+'" style="height:40px" value="0.00" type="number" step="0.01" require />'
                         )
                         $('#total-'+project_select_row+'-'+project_select_ordersheet).append(
                             '<div id="price-total-'+project_data_show.data().orderSheet[i].battery[j].no+'" class="my-1 price-total-'+project_select_row+'-'+project_select_ordersheet+' totalprice"  style="height:40px" >0.00</div>'
@@ -648,7 +675,7 @@ export default {
             var battarray = []
             await arrayorder_job()
             await arrayorder_odersheet()
-            await getbattorder()
+            await arrayorder_batt()
             await savedata()
             
             function arrayorder_job(){
@@ -662,60 +689,57 @@ export default {
                 const ordersheet_get = $('.ordersheet')
                 for(let i = 0; i < ordersheet_count; i++){
                     for(let j = 0;j < battarray.length;j++){
-
-                        
-
+                        if(battarray[j].job == $(ordersheet_get[i]).find('option:selected').data('project')){
+                            battarray[j].ordersheet.push({ordersheet:$(ordersheet_get[i]).find('option:selected').val(),battery:[]})
+                        }
                     }
                     // battarray.push({job:$($('.job')[i]).find('option:selected').val(),ordersheet:[],projectname:$($('.job')[i]).find('option:selected').data('name')})
                 }
             }
 
-            function getbattorder(){
+            function arrayorder_batt(){
                 const batt = $('.batt-price')
                 for(let i = 0; i < battprice_count; i++){
                     const project_id = $(batt[i]).data('project_id')
                     const ordersheet_no = $(batt[i]).data('ordersheet_no')
+                    const ordersheet_orderamount = $(batt[i]).data('orderamount')
+                    const ordersheet_series = $(batt[i]).data('series')
                     const batt_no = $(batt[i]).data('id')
                     const batt_unit_price = $(batt[i]).val()
-                    const battdata = {project_id:project_id,orderSheet:ordersheet_no,batt_no:batt_no,batt_unit_price:batt_unit_price}
-                    battorder.push(battdata)
+                    const battdata = {project_id:project_id,orderSheet:ordersheet_no,batt_no:batt_no,batt_unit_price:batt_unit_price,order_amount:ordersheet_orderamount,series:ordersheet_series}
+                    for(let j = 0;j < battarray.length;j++){
+                        for(let k = 0; k < battarray[j].ordersheet.length; k++){
+                            if(project_id == battarray[j].job && ordersheet_no == battarray[j].ordersheet[k].ordersheet){
+                                battarray[j].ordersheet[k].battery.push(battdata)
+                            }
+                        }
+                    }
                 }
+                
             }
+
 
             function savedata(){
                 var timestamp = Math.round(new Date().getTime() / 1000);
-                console.log(battorder)
-                // projectFirestore.collection('Po').doc(id).update({
-                //     update_time:update_time,
-                //     shippingname:shipping_name,
-                //     shippingprice:shipping_price,
-                //     battorder:battorder
 
-                // }).then(()=>{
-                //     router.push({ 
-                //         name: 'PECpoList',
-                //         params: { mserror: true} 
-                //     })
-                // })
+                console.log('save')
+                console.log('timestamp : ',timestamp)
+                console.log('battarray : ',battarray)
+
+
+                projectFirestore.collection('Po').doc(id).update({
+                    update_time:timestamp,
+                    battorder:battarray,
+                    
+                }).then(()=>{
+                    router.push({ 
+                        name: 'PECpoList',
+                        params: { mserror: true} 
+                    })
+                })
 
 
             }
-
-            // projectFirestore.collection('Po').add({
-            //     pecpo_no:pecpono,
-            //     pecpo_year:pecpoyear,
-            //     company:company,
-            //     tpayment:tpayment,
-            //     delivery:delivery_date,
-            //     comment:comment,
-            //     update_time:update_time,
-            //     origin:orgin,
-            //     warranty:warranty,
-            //     visible:true
-
-            // }).then(()=>{ 
-            //     location.reload()
-            // })
 
         })
 
