@@ -12,6 +12,9 @@
                 <div class="h3 mt-5 font-weight-bold">แก้ไข PEC PO</div>
                 <form id="addform" class="border mt-5 mb-2 p-5 bg-white">
                     <div class="row">
+                        <div class="col-12 text-right">
+                            <i id="top-data-edit" class="bi bi-pencil-square mb-3" type="button" style="font-size:25px;color:grey;"></i>
+                        </div>
                         <div class="col-6">
                             <div class="form-group row">
                                 <label class="col-4 col-form-label font-weight-bold">Company</label >
@@ -113,6 +116,10 @@
                 
                 <form id="ordersheet">
                     <div class="col-12 border p-4">
+        
+                        <div class="col-12 text-right">
+                            <i  id="low-data-edit" class="bi bi-pencil-square mb-3" type="button" style="font-size:25px;color:grey;"></i>
+                        </div>
                         <div id="data" class="col-12">
 
                         </div>
@@ -124,14 +131,8 @@
                     <div class="col-12 border p-4 mt-2">
                         <div class="col-12">
                             <div class="row">
-                                <div class="col-2 col-form-label">Freight Charge</div>
-                                <div class="col-3">
-                                    <input id="shipping" class="form-control col-12" type="text" />
-                                </div>
-                                <div class="col">
-                                    <input id="shipping-price" class="form-control col-12" type="number" step="0.01" value="0.00" />
-                                </div>
-                                <div class="col"></div>
+      
+                                <div class="col-8"></div>
                                 <div class="col-2 col-form-label">Total Price</div>
                                 <div  id="totalprice" class="col-2 col-form-label text-right">0.00</div>
                             </div>
@@ -166,6 +167,7 @@ export default {
         var url = window.location.pathname;
         var id = url.substring(url.lastIndexOf('/') + 1);
         var project_id = []
+        var project_ordersheet = []
         var con_origin
         var con_warranty
         var con_delivery = ""
@@ -208,8 +210,7 @@ export default {
             await project_select()
             await get_ordersheet_data_project()
             await get_ordersheet_data_project_render_project()
-            await get_ordersheet_data_project_render_ordersheet()
-
+            await render_price()
 
             function render(){
                 $('company').html('<option selected disabled>choose company</option>')
@@ -252,6 +253,7 @@ export default {
                     for(let i = 0 ; i  < project.data().orderSheet.length; i++){
                         if(project.data().orderSheet[i].origin == con_origin && project.data().orderSheet[i].warranty == con_warranty){
                             project_id.push(project.id)
+                            project_ordersheet.push({project_id:project.id,ordersheet:[]})
                         }
                     }
                 })
@@ -286,7 +288,7 @@ export default {
                                 '<div class="col-5">'+
                                     '<div class="row">'+
                                         '<div class="col-6">'+
-                                            '<button class="btn btn-danger col-12" data-row="'+(i+1)+'" type="button">Remove Job No</button>'+
+                                            '<button class="btn btn-danger col-12 del-row-btn" data-row="'+(i+1)+'" type="button">Remove Job No</button>'+
                                         '</div>'+
                                         '<div class="col-6">'+
                                             '<button class="btn btn-primary col-12 add-ordersheet" data-pa="'+(i+1)+'" data-ordersheet="1" type="button">Add Order Sheet</button>'+
@@ -309,24 +311,24 @@ export default {
                                 '</div>'+
                             '</div>'
                     )
-
                     for(let j = 0; j < ordersheet_list[i].ordersheet.length; j++){
                         $('#data-pa-'+(i+1)).append(
-                            '<div id="row-'+(i+1)+'-'+(i+1)+'" class="row py-2">'+
+                            '<div id="row-'+(i+1)+'-'+(j+1)+'" class="row py-2">'+
                                 '<div class="col-2">'+
                                     '<div class="row">'+
-                                        '<select id="ordersheet-'+(i+1)+'-'+(i+1)+'" class="form-control col-8 ordersheet" style="font-size:14px"><option value="" selected disabled>Select order sheet</option></select>'+
-                                        '<div class="col-4 pt-1"><i class="bi bi-trash text-danger ordersheet-del" data-project="'+(i+1)+'" data-ordersheet="'+(i+1)+'" style="font-size:25px;" ></i></div>'+
+                                        '<select id="ordersheet-'+(i+1)+'-'+(j+1)+'" class="form-control col-8 ordersheet" style="font-size:14px"><option value="" selected disabled>Select order sheet</option></select>'+
+                                        '<div class="col-4 pt-1"><i type="button" class="bi bi-trash text-danger ordersheet-del" data-project="'+(i+1)+'" data-ordersheet="'+(j+1)+'" style="font-size:25px;" ></i></div>'+
                                     '</div>'+
                                 '</div>'+
-                                '<div id="description-'+(i+1)+'-'+(i+1)+'" class="col-3"></div>'+
-                                '<div id="qty-'+(i+1)+'-'+(i+1)+'" class="col"></div>'+
-                                '<div id="unit-'+(i+1)+'-'+(i+1)+'" class="col text-center"></div>'+
-                                '<div id="price-'+(i+1)+'-'+(i+1)+'" class="col-2"></div>'+
-                                '<div id="total-'+(i+1)+'-'+(i+1)+'" class="col-2"></div> '+
+                                '<div id="description-'+(i+1)+'-'+(j+1)+'" class="col-3"></div>'+
+                                '<div id="qty-'+(i+1)+'-'+(j+1)+'" class="col"></div>'+
+                                '<div id="unit-'+(i+1)+'-'+(j+1)+'" class="col text-center"></div>'+
+                                '<div id="price-'+(i+1)+'-'+(j+1)+'" class="col-2"></div>'+
+                                '<div id="total-'+(i+1)+'-'+(j+1)+'" class="col-2"></div> '+
                             '</div>'
                         )
                     }
+                    
                 
                 }
             }
@@ -335,11 +337,54 @@ export default {
                 for(let j = 0; j < ordersheet_list.length;j++){
                     for(let i = 0; i < project_id.length ; i++){
                         const pre_project_data_con =  await projectFirestore.collection('Projects').doc(project_id[i]).get()
-                        if(ordersheet_list[i].job == pre_project_data_con.id){
+                        if(ordersheet_list[j].job == pre_project_data_con.id){
                             $('#row-job-'+(j+1)).append(
                                 '<option value="'+pre_project_data_con.id+'" data-name="'+pre_project_data_con.data().ProjectName+'" data-row="'+(j+1)+'" selected >'+pre_project_data_con.data().JobNoFirst+'/'+pre_project_data_con.data().JobNoSecond+'</option>'
                             )
                             $('#projectname-'+(j+1)).val(pre_project_data_con.data().ProjectName)
+
+                            for(let k = 0; k < ordersheet_list[j].ordersheet.length; k++){
+                                for(let l = 0 ; l < pre_project_data_con.data().orderSheet.length; l++){
+                                    if(pre_project_data_con.data().orderSheet[l].origin == con_origin && pre_project_data_con.data().orderSheet[l].warranty == con_warranty){
+                                        if( ordersheet_list[j].job == project_id[i] && ordersheet_list[j].ordersheet[k].ordersheet == pre_project_data_con.data().orderSheet[l].no){
+                                            
+                                            $('#ordersheet-'+(j+1)+'-'+(k+1)).append(
+                                                '<option value="'+pre_project_data_con.data().orderSheet[l].no+'" data-row="'+(j+1)+'" data-ordersheet="'+(k+1)+'" data-project="'+pre_project_data_con.id+'" selected >'+pre_project_data_con.data().JobNoFirst+'/'+pre_project_data_con.data().JobNoSecond+'/'+pre_project_data_con.data().orderSheet[l].no+'</option>'
+                                            )
+
+                                            for(let m = 0; m < ordersheet_list[j].ordersheet[k].battery.length; m++){
+                                                $('#description-'+(j+1)+'-'+(k+1)).append(
+                                                    '<div class="col-12 my-1" style="height:40px">'+ordersheet_list[j].ordersheet[k].battery[m].series+'</div>'
+                                                )
+                                                $('#qty-'+(j+1)+'-'+(k+1)).append(
+                                                    '<div id="amount-'+ordersheet_list[j].ordersheet[k].battery[m].batt_no+'" class="col-12 my-1 text-right amount"  style="height:40px">'+ordersheet_list[j].ordersheet[k].battery[m].order_amount+'</div>'
+                                                )
+                                                $('#unit-'+(j+1)+'-'+(k+1)).append(
+                                                    '<div class="col-12 my-1 text-center"  style="height:40px">Blk.</div>'
+                                                )
+                                                $('#price-'+(j+1)+'-'+(k+1)).append(
+                                                    '<input class="form-control my-1 price batt-price" data-series="'+ordersheet_list[j].ordersheet[k].battery[m].series+'" data-orderamount="'+ordersheet_list[j].ordersheet[k].battery[m].order_amount+'" data-project_id="'+ordersheet_list[j].job+'" data-ordersheet_no="'+ordersheet_list[j].ordersheet[k].ordersheet+'" data-id="'+ordersheet_list[j].ordersheet[k].battery[m].batt_no+'" data-project="'+(j+1)+'" data-ordersheet="'+(k+1)+'" style="height:40px" value="'+numeral(ordersheet_list[j].ordersheet[k].battery[m].batt_unit_price).format('0,0.00')+'" type="number" step="0.01" require />'
+                                                )
+                                                $('#total-'+(j+1)+'-'+(k+1)).append(
+                                                    '<div id="price-total-'+ordersheet_list[j].ordersheet[k].battery[m].batt_no+'" class="my-1 price-total-'+(j+1)+'-'+(k+1)+' totalprice"  style="height:40px" >'+numeral(ordersheet_list[j].ordersheet[k].battery[m].order_amount * ordersheet_list[j].ordersheet[k].battery[m].batt_unit_price).format('0,0.00')+'</div>'
+                                                )
+                                            }
+
+                                        }
+                                        else{
+                                            $('#ordersheet-'+(j+1)+'-'+(k+1)).append(
+                                                '<option value="'+pre_project_data_con.data().orderSheet[l].no+'" data-row="'+(j+1)+'" data-ordersheet="'+(k+1)+'" data-project="'+pre_project_data_con.id+'">'+pre_project_data_con.data().JobNoFirst+'/'+pre_project_data_con.data().JobNoSecond+'/'+pre_project_data_con.data().orderSheet[l].no+'</option>'
+                                            )
+                                            
+                                        }
+                                    
+                                            
+                                    }
+                                    
+
+                                }
+                            }
+
                         }
                         else{
                             $('#row-job-'+(j+1)).append(
@@ -347,57 +392,15 @@ export default {
                             )
                         }
 
-                        for(let k = 0; k < ordersheet_list[j].ordersheet.length; k++){
-                            for(let l = 0 ; l < pre_project_data_con.data().orderSheet.length; l++){
-                                console.log(j,(k+1))
-                                if(pre_project_data_con.data().orderSheet[l].origin == con_origin && pre_project_data_con.data().orderSheet[l].warranty == con_warranty){
-                                    if(ordersheet_list[j].ordersheet[k].ordersheet == pre_project_data_con.data().orderSheet[l].no){
-                                        $('#ordersheet-'+(j+1)+'-'+(k+1)).append(
-                                            '<option value="'+pre_project_data_con.data().orderSheet[i].no+'" data-row="'+j+'" data-ordersheet="'+(k+1)+'" data-project="'+pre_project_data_con.id+'" selected >'+pre_project_data_con.data().JobNoFirst+'/'+pre_project_data_con.data().JobNoSecond+'/'+pre_project_data_con.data().orderSheet[l].no+'</option>'
-                                        )
-
-                                        for(let m = 0; m < ordersheet_list[j].ordersheet[k].battery.length; m++){
-                                            $('#description-'+(j+1)+'-'+(k+1)).append(
-                                                '<div class="col-12 my-1" style="height:40px">'+ordersheet_list[j].ordersheet[k].battery[m].series+'</div>'
-                                            )
-                                            $('#qty-'+(j+1)+'-'+(k+1)).append(
-                                                '<div id="amount-'+ordersheet_list[j].ordersheet[k].battery[m].batt_no+'" class="col-12 my-1 text-right amount"  style="height:40px">'+ordersheet_list[j].ordersheet[k].battery[m].order_amount+'</div>'
-                                            )
-                                            $('#unit-'+(j+1)+'-'+(k+1)).append(
-                                                '<div class="col-12 my-1 text-center"  style="height:40px">Blk.</div>'
-                                            )
-                                            $('#price-'+(j+1)+'-'+(k+1)).append(
-                                                '<input class="form-control my-1 price batt-price" data-project_id="'+ordersheet_list.job+'" data-ordersheet_no="'+ordersheet_list[j].ordersheet[k].ordersheet+'" data-id="'+ordersheet_list[j].ordersheet[k].battery[m].no+'" data-project="'+(j+1)+'" data-ordersheet="'+(k+1)+'" style="height:40px" value="'+numeral(ordersheet_list[j].ordersheet[k].battery[m].batt_unit_price).format('0,0.00')+'" type="number" step="0.01" require />'
-                                            )
-                                            $('#total-'+(j+1)+'-'+(k+1)).append(
-                                                '<div id="price-total-'+ordersheet_list[j].ordersheet[k].battery[m].batt_no+'" class="my-1 price-total-'+(j+1)+'-'+(k+1)+' totalprice"  style="height:40px" >0.00</div>'
-                                            )
-                                        }
-
-                                    }
-                                    else{
-                                        $('#ordersheet-'+(j+1)+'-'+(k+1)).append(
-                                            '<option value="'+pre_project_data_con.data().orderSheet[i].no+'" data-row="'+j+'" data-ordersheet="'+(k+1)+'" data-project="'+pre_project_data_con.id+'">'+pre_project_data_con.data().JobNoFirst+'/'+pre_project_data_con.data().JobNoSecond+'/'+pre_project_data_con.data().orderSheet[l].no+'</option>'
-                                        )
-                                    }
-                                        
-                                }
-                                
-
-                            }
-                        }
+                       
 
                     }
                 }
                 $('#addjob').data('row',ordersheet_list.length+1)
             }
 
-            async function get_ordersheet_data_project_render_ordersheet(){
-                
-                for(let i = 0; i < ordersheet_list.length; i++){
-
-                }
-
+            function render_price(){
+                sumprice()
             }
 
         }
@@ -434,7 +437,7 @@ export default {
                                 '<div class="col-5">'+
                                     '<div class="row">'+
                                         '<div class="col-6">'+
-                                            '<button class="btn btn-danger col-12" data-row="'+rowjob_count+'" type="button">Remove Job No</button>'+
+                                            '<button class="btn btn-danger col-12 del-row-btn" data-row="'+rowjob_count+'" type="button">Remove Job No</button>'+
                                         '</div>'+
                                         '<div class="col-6">'+
                                             '<button class="btn btn-primary col-12 add-ordersheet" data-pa="'+rowjob_count+'" data-ordersheet="1" type="button">Add Order Sheet</button>'+
@@ -497,8 +500,8 @@ export default {
             const project_name = $(this).find('option:selected').data('name')
             const project_row = $(this).find('option:selected').data('row')
             $('#projectname-'+project_row).val(project_name)
+            $('#data-pa-'+project_row).html('')
         })
-
 
         $('#data').on('click','.add-ordersheet', async function(){
             const project_count = $(this).data('pa')
@@ -515,7 +518,7 @@ export default {
                         '<div class="col-2">'+
                             '<div class="row">'+
                                 '<select id="ordersheet-'+project_count+'-'+(ordersheet_count+1)+'" class="form-control col-8 ordersheet" style="font-size:14px"><option value="" selected disabled>Select order sheet</option></select>'+
-                                '<div class="col-4 pt-1"><i class="bi bi-trash text-danger ordersheet-del" data-project="'+project_count+'" data-ordersheet="'+(ordersheet_count+1)+'" style="font-size:25px;" ></i></div>'+
+                                '<div class="col-4 pt-1"><i type="button" class="bi bi-trash text-danger ordersheet-del" data-project="'+project_count+'" data-ordersheet="'+(ordersheet_count+1)+'" style="font-size:25px;" ></i></div>'+
                             '</div>'+
                         '</div>'+
                         '<div id="description-'+project_count+'-'+(ordersheet_count+1)+'" class="col-3"></div>'+
@@ -547,36 +550,59 @@ export default {
 
 
         $('#data').on('change','.ordersheet',async function(){
+            console.log('ordersheet change')
             const ordersheet_select = $(this).find('option:selected').val()
             const project_select_id = $(this).find('option:selected').data('project')
             const project_select_row = $(this).find('option:selected').data('row')
             const project_select_ordersheet = $(this).find('option:selected').data('ordersheet')
 
             const project_data_show =  await projectFirestore.collection('Projects').doc(project_select_id).get()
-            
-            for(let i = 0; i < project_data_show.data().orderSheet.length; i++){
-                if(project_data_show.data().orderSheet[i].no == ordersheet_select){
-                    for(let j = 0 ;j < project_data_show.data().orderSheet[i].battery.length;j++){
-                        $('#description-'+project_select_row+'-'+project_select_ordersheet).append(
-                            '<div class="col-12 my-1" style="height:40px">'+project_data_show.data().orderSheet[i].battery[j].series+'</div>'
-                        )
-                        $('#qty-'+project_select_row+'-'+project_select_ordersheet).append(
-                            '<div id="amount-'+project_data_show.data().orderSheet[i].battery[j].no+'" class="col-12 my-1 text-right amount"  style="height:40px">'+project_data_show.data().orderSheet[i].battery[j].order_amount+'</div>'
-                        )
-                        $('#unit-'+project_select_row+'-'+project_select_ordersheet).append(
-                            '<div class="col-12 my-1 text-center"  style="height:40px">Blk.</div>'
-                        )
-                        $('#price-'+project_select_row+'-'+project_select_ordersheet).append(
-                            '<input class="form-control my-1 price batt-price" data-orderamount="'+project_data_show.data().orderSheet[i].battery[j].order_amount+'" data-series="'+project_data_show.data().orderSheet[i].battery[j].series+'" data-project_id="'+project_data_show.id+'" data-ordersheet_no="'+project_data_show.data().orderSheet[i].no+'" data-id="'+project_data_show.data().orderSheet[i].battery[j].no+'" data-project="'+project_select_row+'" data-ordersheet="'+project_select_ordersheet+'" style="height:40px" value="0.00" type="number" step="0.01" require />'
-                        )
-                        $('#total-'+project_select_row+'-'+project_select_ordersheet).append(
-                            '<div id="price-total-'+project_data_show.data().orderSheet[i].battery[j].no+'" class="my-1 price-total-'+project_select_row+'-'+project_select_ordersheet+' totalprice"  style="height:40px" >0.00</div>'
-                        )
-                        
+            await clear_row()
+            await add_new_row_data()
+            console.log(project_select_row)
+            console.log(project_select_ordersheet)
 
+            function clear_row(){
+                console.log('clear')
+
+                $('#description-'+project_select_row+'-'+project_select_ordersheet).html('')
+                $('#qty-'+project_select_row+'-'+project_select_ordersheet).html('')
+                $('#unit-'+project_select_row+'-'+project_select_ordersheet).html('')
+                $('#price-'+project_select_row+'-'+project_select_ordersheet).html('')
+                $('#total-'+project_select_row+'-'+project_select_ordersheet).html('')
+            }
+            
+            function add_new_row_data(){
+                
+                for(let i = 0; i < project_data_show.data().orderSheet.length; i++){
+                    if(project_data_show.data().orderSheet[i].no == ordersheet_select){
+                        for(let j = 0 ;j < project_data_show.data().orderSheet[i].battery.length;j++){
+                            console.log('render')
+                            console.log(project_data_show.data().orderSheet[i].battery[j])
+                            console.log(project_data_show.data().orderSheet[i].battery[j].series)
+                            $('#description-'+project_select_row+'-'+project_select_ordersheet).append(
+                                '<div class="col-12 my-1" style="height:40px">'+project_data_show.data().orderSheet[i].battery[j].series+'</div>'
+                            )
+                            $('#qty-'+project_select_row+'-'+project_select_ordersheet).append(
+                                '<div id="amount-'+project_data_show.data().orderSheet[i].battery[j].no+'" class="col-12 my-1 text-right amount"  style="height:40px">'+project_data_show.data().orderSheet[i].battery[j].order_amount+'</div>'
+                            )
+                            $('#unit-'+project_select_row+'-'+project_select_ordersheet).append(
+                                '<div class="col-12 my-1 text-center"  style="height:40px">Blk.</div>'
+                            )
+                            $('#price-'+project_select_row+'-'+project_select_ordersheet).append(
+                                '<input class="form-control my-1 price batt-price" data-orderamount="'+project_data_show.data().orderSheet[i].battery[j].order_amount+'" data-series="'+project_data_show.data().orderSheet[i].battery[j].series+'" data-project_id="'+project_data_show.id+'" data-ordersheet_no="'+project_data_show.data().orderSheet[i].no+'" data-id="'+project_data_show.data().orderSheet[i].battery[j].no+'" data-project="'+project_select_row+'" data-ordersheet="'+project_select_ordersheet+'" style="height:40px" value="0.00" type="number" step="0.01" require />'
+                            )
+                            $('#total-'+project_select_row+'-'+project_select_ordersheet).append(
+                                '<div id="price-total-'+project_data_show.data().orderSheet[i].battery[j].no+'" class="my-1 price-total-'+project_select_row+'-'+project_select_ordersheet+' totalprice"  style="height:40px" >0.00</div>'
+                            )
+                            
+
+                        }
                     }
                 }
             }
+
+            
         })
 
         $('#data').on('change','.price',async function(){
@@ -589,9 +615,26 @@ export default {
             await sumprice()
 
             function sumrowprice(){
-                $('#price-total-'+price_batt_id).html(numeral(price*amount).format("0.00"))
+                console.log(price_batt_id)
+                console.log(price)
+                console.log(amount)
+
+
+                $('#price-total-'+price_batt_id).html(numeral(price*amount).format("0,0.00"))
             }
 
+        })
+
+        $('#data').on('click', '.del-row-btn', function(){
+            const del_row_no = $(this).data('row')
+            $('#row-'+del_row_no).remove()
+        })
+
+        $('#data').on('click', '.ordersheet-del', function(){
+            console.log('ordersheet del')
+            const del_ordersheet_project_no = $(this).data('project')
+            const del_ordersheet_ordersheet_no = $(this).data('ordersheet')
+            $('#row-'+del_ordersheet_project_no+'-'+del_ordersheet_ordersheet_no).remove(   )
         })
 
         $('#shipping-price').on('change',()=>{
@@ -600,27 +643,27 @@ export default {
 
         async function sumprice(){
             var sum_price = 0.00
-            const shipping_price = $('#shipping-price').val()
+            var new_sum_price = 0.00
+
             await sumbattprice()
             await sumshippingprice()
             await render_total_price()
 
             function sumbattprice(){
                 $('.totalprice').each(function(){
-                    const get_row_price = parseFloat($(this).text())
+                    const get_row_price = numeral($(this).text()).value()
                     sum_price = sum_price + get_row_price
+                    
+                    console.log(get_row_price)
                 })                
             }
 
             function sumshippingprice(){
-                console.log('sum_price : ',sum_price)
-
-                console.log('shipping_price : ',shipping_price)
-                sum_price = parseFloat(sum_price) + parseFloat(shipping_price)
+                
+                sum_price = parseFloat(sum_price)
             }
 
             function render_total_price(){
-                console.log(sum_price)
                 $('#totalprice').html( numeral(sum_price).format('0,0.00'))
             }
 
