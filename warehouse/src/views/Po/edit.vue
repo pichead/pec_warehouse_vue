@@ -3,6 +3,13 @@
         background-color:#707070;
         color: #FAFAFA;
     }
+    .blue-btn{
+        background-color:#779cff;
+        color: #FAFAFA;
+    }
+    .blue-btn:hover {
+        color: #FAFAFA;
+    }
 </style>
 <template>
     <Sidebar />
@@ -19,7 +26,7 @@
                             <div class="form-group row">
                                 <label class="col-4 col-form-label font-weight-bold">Company</label >
                                 <div class="col-8">
-                                    <select id="company" class="form-control  series-option" disabled required>
+                                    <select id="company" class="form-control  series-option top-data" disabled required>
                                         <option selected disabled>choose company</option>
                                     </select>
                                 </div>
@@ -29,7 +36,7 @@
                             <div class="form-group row">
                                 <label class="col-4 col-form-label font-weight-bold">Term of payment</label >
                                 <div class="col-4">
-                                    <input id="Tpayment" class="form-control" type="number" disabled required/>
+                                    <input id="Tpayment" class="form-control top-data" type="number" disabled required/>
                                 </div>
                                 <div class="col-4 col-form-label">days</div>
                             </div>
@@ -38,11 +45,11 @@
                             <div class="form-group row">
                                 <label class="col-4 col-form-label font-weight-bold">PEC PO</label >
                                 <div class="col">
-                                    <input id="pecpono" class="form-control pecpo" placeholder="000" type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" minlength="3" maxlength="3" disabled required/>
+                                    <input id="pecpono" class="form-control pecpo top-data" placeholder="000" type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" minlength="3" maxlength="3" disabled required/>
                                 </div>
                                 <div class="col-1 h2">/</div>
                                 <div class="col">
-                                    <input id="pecpoyear" class="form-control pecpo" placeholder="0000" type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" minlength="4" maxlength="4" disabled required/>
+                                    <input id="pecpoyear" class="form-control pecpo top-data" placeholder="0000" type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" minlength="4" maxlength="4" disabled required/>
                                 </div>
                             </div>
                         </div>
@@ -51,7 +58,7 @@
                             <div class="form-group row">
                                 <label class="col-4 col-form-label font-weight-bold">Delivery date</label >
                                 <div class="col-4">
-                                    <input id="delivery_date" class="form-control" type="number" disabled required/>
+                                    <input id="delivery_date" class="form-control top-data" type="number" disabled required/>
                                 </div>
                                 <div class="col-4 col-form-label">days</div>
                                 
@@ -61,7 +68,7 @@
                             <div class="form-group row">
                                 <label class="col-4 col-form-label font-weight-bold">Origin</label >
                                 <div class="col-8">
-                                    <select id="select_origin" class="col-12 form-control" disabled required>
+                                    <select id="select_origin" class="col-12 form-control top-data" disabled required>
                                         <option selected disabled value="">Select Origin</option>
                                         
                                     </select> 
@@ -73,7 +80,7 @@
                             <div class="form-group row">
                                 <label class="col-4 col-form-label font-weight-bold">Warranty</label >
                                 <div class="col-4">
-                                    <input id="warranty" class="form-control" type="number" disabled required/>
+                                    <input id="warranty" class="form-control top-data" type="number" disabled required/>
                                 </div>
                                 <div class="col-4 col-form-label">Months</div>
                             </div>
@@ -84,7 +91,7 @@
                             <div class="form-group row mb-0">
                                 <label class="col-2 col-form-label font-weight-bold">Remark</label >
                                 <div class="col-10">
-                                    <textarea  id="comment" class="form-control" disabled rows="3" placeholder="note..."></textarea>
+                                    <textarea  id="comment" class="form-control top-data" disabled rows="3" placeholder="note..."></textarea>
                                 </div>
                             </div>
                         </div>
@@ -99,13 +106,13 @@
                                 <div class="col-5">
                                     <div class="row">
                                         <div class="col-4">
-                                            <button id="cancel-btn" class="btn btn-danger col-12" type="button" >Cancel</button>
+                                            <button id="cancel-btn" class="btn btn-danger col-12 top-data" disabled type="button" >Cancel</button>
                                         </div>
                                         <div class="col-4">
-                                            <button id="save-btn" class="btn btn-primary col-12" type="submit" >Save</button>
+                                            <button id="save-btn" class="btn blue-btn col-12 top-data" disabled type="submit" >Save</button>
                                         </div>
                                         <div class="col-4">
-                                            <button id="print-btn" class="btn btn-info col-12" type="button">Print</button>
+                                            <button id="print-btn" class="btn btn-info col-12 top-data" disabled type="button">Print</button>
                                         </div>
                                     </div>
                                 </div>
@@ -114,17 +121,17 @@
                     </div>
                 </form>
                 
-                <form id="ordersheet">
+                <form id="ordersheet" >
                     <div class="col-12 border p-4">
         
                         <div class="col-12 text-right">
                             <i  id="low-data-edit" class="bi bi-pencil-square mb-3" type="button" style="font-size:25px;color:grey;"></i>
                         </div>
-                        <div id="data" class="col-12">
+                        <div id="data" class="col-12" >
 
                         </div>
                         <div class="col-12">
-                            <button id="addjob" class="btn btn-warning col-12 text-white" type="button" data-row="0" >Add Job No</button>
+                            <button id="addjob" class="btn btn-warning col-12 text-white low-data" type="button" data-row="0" >Add Job No</button>
                         </div>
 
                     </div>
@@ -140,10 +147,10 @@
 
                     </div>
 
-                    <div class="d-flex justify-content-center row-hl my-5">
+                    <div class="d-flex flex-row-reverse row-hl my-5">
+                        <button class="btn blue-btn  col-2 low-data" type="submit">Save</button>
                         <a class="btn btn-secondary col-2 mr-2" type="button" href="/Battery/pecpoList">Cancel</a>
-                        <button class="btn btn-danger  col-2 " type="submit">Save</button>
-
+                        
                     </div>
                 </form>
 
@@ -271,7 +278,7 @@ export default {
                                     '<div class="row">'+
                                         '<div class="col-5 col-form-label">Job No.</div>'+
                                         '<div class="col-7">'+
-                                            '<select id="row-job-'+(i+1)+'" class="col-12 form-control job">'+
+                                            '<select id="row-job-'+(i+1)+'" class="col-12 form-control job low-data" >'+
                                                 // '<option value="" selected disabled>Select Job No</option>'+
                                             '</select>'+
                                         '</div>'+
@@ -288,10 +295,10 @@ export default {
                                 '<div class="col-5">'+
                                     '<div class="row">'+
                                         '<div class="col-6">'+
-                                            '<button class="btn btn-danger col-12 del-row-btn" data-row="'+(i+1)+'" type="button">Remove Job No</button>'+
+                                            '<button class="btn btn-danger col-12 del-row-btn low-data" data-row="'+(i+1)+'" type="button">Remove Job No</button>'+
                                         '</div>'+
                                         '<div class="col-6">'+
-                                            '<button class="btn btn-primary col-12 add-ordersheet" data-pa="'+(i+1)+'" data-ordersheet="1" type="button">Add Order Sheet</button>'+
+                                            '<button class="btn blue-btn col-12 add-ordersheet low-data" data-pa="'+(i+1)+'" data-ordersheet="1" type="button">Add Order Sheet</button>'+
                                         '</div>'+
                                     '</div>'+
                                 '</div>'+
@@ -316,8 +323,8 @@ export default {
                             '<div id="row-'+(i+1)+'-'+(j+1)+'" class="row py-2">'+
                                 '<div class="col-2">'+
                                     '<div class="row">'+
-                                        '<select id="ordersheet-'+(i+1)+'-'+(j+1)+'" class="form-control col-8 ordersheet" style="font-size:14px"><option value="" selected disabled>Select order sheet</option></select>'+
-                                        '<div class="col-4 pt-1"><i type="button" class="bi bi-trash text-danger ordersheet-del" data-project="'+(i+1)+'" data-ordersheet="'+(j+1)+'" style="font-size:25px;" ></i></div>'+
+                                        '<select id="ordersheet-'+(i+1)+'-'+(j+1)+'" class="low-data form-control col-8 ordersheet" style="font-size:14px"><option value="" selected disabled>Select order sheet</option></select>'+
+                                        '<div class="col-4 pt-1"><i type="button" class="bi bi-trash text-danger ordersheet-del low-data" data-project="'+(i+1)+'" data-ordersheet="'+(j+1)+'" style="font-size:25px;" ></i></div>'+
                                     '</div>'+
                                 '</div>'+
                                 '<div id="description-'+(i+1)+'-'+(j+1)+'" class="col-3"></div>'+
@@ -363,7 +370,7 @@ export default {
                                                     '<div class="col-12 my-1 text-center"  style="height:40px">Blk.</div>'
                                                 )
                                                 $('#price-'+(j+1)+'-'+(k+1)).append(
-                                                    '<input class="form-control my-1 price batt-price" data-series="'+ordersheet_list[j].ordersheet[k].battery[m].series+'" data-orderamount="'+ordersheet_list[j].ordersheet[k].battery[m].order_amount+'" data-project_id="'+ordersheet_list[j].job+'" data-ordersheet_no="'+ordersheet_list[j].ordersheet[k].ordersheet+'" data-id="'+ordersheet_list[j].ordersheet[k].battery[m].batt_no+'" data-project="'+(j+1)+'" data-ordersheet="'+(k+1)+'" style="height:40px" value="'+numeral(ordersheet_list[j].ordersheet[k].battery[m].batt_unit_price).format('0,0.00')+'" type="number" step="0.01" require />'
+                                                    '<input class="form-control my-1 price batt-price low-data" data-series="'+ordersheet_list[j].ordersheet[k].battery[m].series+'" data-orderamount="'+ordersheet_list[j].ordersheet[k].battery[m].order_amount+'" data-project_id="'+ordersheet_list[j].job+'" data-ordersheet_no="'+ordersheet_list[j].ordersheet[k].ordersheet+'" data-id="'+ordersheet_list[j].ordersheet[k].battery[m].batt_no+'" data-project="'+(j+1)+'" data-ordersheet="'+(k+1)+'" style="height:40px" value="'+numeral(ordersheet_list[j].ordersheet[k].battery[m].batt_unit_price).format('0,0.00')+'" type="number" step="0.01" require />'
                                                 )
                                                 $('#total-'+(j+1)+'-'+(k+1)).append(
                                                     '<div id="price-total-'+ordersheet_list[j].ordersheet[k].battery[m].batt_no+'" class="my-1 price-total-'+(j+1)+'-'+(k+1)+' totalprice"  style="height:40px" >'+numeral(ordersheet_list[j].ordersheet[k].battery[m].order_amount * ordersheet_list[j].ordersheet[k].battery[m].batt_unit_price).format('0,0.00')+'</div>'
@@ -401,6 +408,9 @@ export default {
 
             function render_price(){
                 sumprice()
+                $('.low-data').attr('disabled',true)
+                $('.bi-trash').addClass('d-none')
+
             }
 
         }
@@ -420,7 +430,7 @@ export default {
                                     '<div class="row">'+
                                         '<div class="col-5 col-form-label">Job No.</div>'+
                                         '<div class="col-7">'+
-                                            '<select id="row-job-'+rowjob_count+'" class="col-12 form-control job">'+
+                                            '<select id="row-job-'+rowjob_count+'" class="col-12 form-control job low-data">'+
                                                 '<option value="" selected disabled>Select Job No</option>'+
                                             '</select>'+
                                         '</div>'+
@@ -437,10 +447,10 @@ export default {
                                 '<div class="col-5">'+
                                     '<div class="row">'+
                                         '<div class="col-6">'+
-                                            '<button class="btn btn-danger col-12 del-row-btn" data-row="'+rowjob_count+'" type="button">Remove Job No</button>'+
+                                            '<button class="btn btn-danger col-12 del-row-btn low-data" data-row="'+rowjob_count+'" type="button">Remove Job No</button>'+
                                         '</div>'+
                                         '<div class="col-6">'+
-                                            '<button class="btn btn-primary col-12 add-ordersheet" data-pa="'+rowjob_count+'" data-ordersheet="1" type="button">Add Order Sheet</button>'+
+                                            '<button class="btn blue-btn col-12 add-ordersheet low-data" data-pa="'+rowjob_count+'" data-ordersheet="1" type="button">Add Order Sheet</button>'+
                                         '</div>'+
                                     '</div>'+
                                 '</div>'+
@@ -517,8 +527,8 @@ export default {
                     '<div id="row-'+project_count+'-'+(ordersheet_count+1)+'" class="row py-2">'+
                         '<div class="col-2">'+
                             '<div class="row">'+
-                                '<select id="ordersheet-'+project_count+'-'+(ordersheet_count+1)+'" class="form-control col-8 ordersheet" style="font-size:14px"><option value="" selected disabled>Select order sheet</option></select>'+
-                                '<div class="col-4 pt-1"><i type="button" class="bi bi-trash text-danger ordersheet-del" data-project="'+project_count+'" data-ordersheet="'+(ordersheet_count+1)+'" style="font-size:25px;" ></i></div>'+
+                                '<select id="ordersheet-'+project_count+'-'+(ordersheet_count+1)+'" class="form-control low-data col-8 ordersheet" style="font-size:14px"><option value="" selected disabled>Select order sheet</option></select>'+
+                                '<div class="col-4 pt-1"><i type="button" class="bi bi-trash text-danger low-data ordersheet-del" data-project="'+project_count+'" data-ordersheet="'+(ordersheet_count+1)+'" style="font-size:25px;" ></i></div>'+
                             '</div>'+
                         '</div>'+
                         '<div id="description-'+project_count+'-'+(ordersheet_count+1)+'" class="col-3"></div>'+
@@ -590,7 +600,7 @@ export default {
                                 '<div class="col-12 my-1 text-center"  style="height:40px">Blk.</div>'
                             )
                             $('#price-'+project_select_row+'-'+project_select_ordersheet).append(
-                                '<input class="form-control my-1 price batt-price" data-orderamount="'+project_data_show.data().orderSheet[i].battery[j].order_amount+'" data-series="'+project_data_show.data().orderSheet[i].battery[j].series+'" data-project_id="'+project_data_show.id+'" data-ordersheet_no="'+project_data_show.data().orderSheet[i].no+'" data-id="'+project_data_show.data().orderSheet[i].battery[j].no+'" data-project="'+project_select_row+'" data-ordersheet="'+project_select_ordersheet+'" style="height:40px" value="0.00" type="number" step="0.01" require />'
+                                '<input class="form-control low-data my-1 price batt-price" data-orderamount="'+project_data_show.data().orderSheet[i].battery[j].order_amount+'" data-series="'+project_data_show.data().orderSheet[i].battery[j].series+'" data-project_id="'+project_data_show.id+'" data-ordersheet_no="'+project_data_show.data().orderSheet[i].no+'" data-id="'+project_data_show.data().orderSheet[i].battery[j].no+'" data-project="'+project_select_row+'" data-ordersheet="'+project_select_ordersheet+'" style="height:40px" value="0.00" type="number" step="0.01" require />'
                             )
                             $('#total-'+project_select_row+'-'+project_select_ordersheet).append(
                                 '<div id="price-total-'+project_data_show.data().orderSheet[i].battery[j].no+'" class="my-1 price-total-'+project_select_row+'-'+project_select_ordersheet+' totalprice"  style="height:40px" >0.00</div>'
@@ -641,6 +651,43 @@ export default {
             sumprice()
         })
 
+        $('#top-data-edit').on('click',function(){
+
+            if($('.top-data').prop('disabled') == true){
+                $('.low-data').attr('disabled',true)
+                $('.top-data').attr('disabled',false)
+                $('.bi-trash').addClass('d-none')
+
+            }
+            else{
+                $('.low-data').attr('disabled',true)
+                $('.top-data').attr('disabled',true)
+                $('.bi-trash').addClass('d-none')
+
+            }
+            // console.log($('.low-data').attr('disabled'))
+
+        
+        })
+
+        $('#low-data-edit').on('click',function(){
+            if($('.low-data').prop('disabled') == true){
+                $('.low-data').attr('disabled',false)
+                $('.top-data').attr('disabled',true)
+                $('.bi-trash').removeClass('d-none')
+            }
+            else{
+                $('.low-data').attr('disabled',true)
+                $('.top-data').attr('disabled',true)
+                $('.bi-trash').addClass('d-none')
+
+            }
+
+            
+
+        })
+
+
         async function sumprice(){
             var sum_price = 0.00
             var new_sum_price = 0.00
@@ -683,7 +730,7 @@ export default {
             const orgin = $('#select_origin').find('option:selected').val()
             const warranty = $('#warranty').val()
 
-            projectFirestore.collection('Po').add({
+            projectFirestore.collection('Po').doc(id).update({
                 pecpo_no:pecpono,
                 pecpo_year:pecpoyear,
                 company:company,
