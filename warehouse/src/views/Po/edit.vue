@@ -203,6 +203,7 @@ export default {
         var id = url.substring(url.lastIndexOf('/') + 1);
         var project_id = []
         var project_ordersheet = []
+        var project_ordersheet_use = []
         var con_origin
         var con_warranty
         var con_delivery = ""
@@ -243,6 +244,8 @@ export default {
             await render()
             await getdata()
             await project_select()
+            await project_select2()
+            await project_select3()
             await get_ordersheet_data_project()
             await get_ordersheet_data_project_render_project()
             await render_price()
@@ -288,7 +291,6 @@ export default {
                     for(let i = 0 ; i  < project.data().orderSheet.length; i++){
                         if(project.data().orderSheet[i].origin == con_origin && project.data().orderSheet[i].warranty == con_warranty){
                             project_id.push(project.id)
-                            project_ordersheet.push({project_id:project.id,ordersheet:[]})
                         }
                     }
                 })
@@ -297,9 +299,29 @@ export default {
 
             function project_select(){
                 project_id = project_id.filter(onlyUnique)
+                
+            }
+            function project_select2(){
+                for(let i = 0; i < project_id.length;i++){
+                    project_ordersheet.push({project_id:project_id[i],ordersheet:[]})
+                    project_ordersheet_use.push({project_id:project_id[i],ordersheet:[]})
+
+                }
+            }
+            async function project_select3(){
+                for(let i = 0; i < project_ordersheet.length; i++){
+                    const project_data_con =  await projectFirestore.collection('Projects').doc(project_id[i]).get()
+                    for(let l = 0 ; l < project_data_con.data().orderSheet.length; l++){
+                        if(project_data_con.data().orderSheet[l].origin == con_origin && project_data_con.data().orderSheet[l].warranty == con_warranty){
+                            project_ordersheet[i].ordersheet.push(project_data_con.data().orderSheet[l].no)
+                        }
+
+                    }
+                }
             }
 
             function get_ordersheet_data_project(){
+                
                 for(let i = 0; i < ordersheet_list.length;i++){
                     $('#data').append('<div id="row-'+(i+1)+'" class="row mb-4">'+
                                 '<div class="col-3">'+
@@ -307,7 +329,6 @@ export default {
                                         '<div class="col-5 col-form-label">Job No.</div>'+
                                         '<div class="col-7">'+
                                             '<select id="row-job-'+(i+1)+'" class="col-12 form-control job low-data" >'+
-                                                // '<option value="" selected disabled>Select Job No</option>'+
                                             '</select>'+
                                         '</div>'+
                                     '</div>'+
@@ -366,9 +387,11 @@ export default {
                     
                 
                 }
+                
             }
 
             async function get_ordersheet_data_project_render_project(){
+                
                 for(let j = 0; j < ordersheet_list.length;j++){
                     for(let i = 0; i < project_id.length ; i++){
                         const pre_project_data_con =  await projectFirestore.collection('Projects').doc(project_id[i]).get()
@@ -381,10 +404,11 @@ export default {
                             for(let k = 0; k < ordersheet_list[j].ordersheet.length; k++){
                                 for(let l = 0 ; l < pre_project_data_con.data().orderSheet.length; l++){
                                     if(pre_project_data_con.data().orderSheet[l].origin == con_origin && pre_project_data_con.data().orderSheet[l].warranty == con_warranty){
+
                                         if( ordersheet_list[j].job == project_id[i] && ordersheet_list[j].ordersheet[k].ordersheet == pre_project_data_con.data().orderSheet[l].no){
                                             
                                             $('#ordersheet-'+(j+1)+'-'+(k+1)).append(
-                                                '<option value="'+pre_project_data_con.data().orderSheet[l].no+'" data-row="'+(j+1)+'" data-ordersheet="'+(k+1)+'" data-project="'+pre_project_data_con.id+'" selected >'+pre_project_data_con.data().JobNoFirst+'/'+pre_project_data_con.data().JobNoSecond+'/'+pre_project_data_con.data().orderSheet[l].no+'</option>'
+                                                '<option class="option-ordersheet" value="'+pre_project_data_con.data().orderSheet[l].no+'" data-row="'+(j+1)+'" data-ordersheet="'+(k+1)+'" data-project="'+pre_project_data_con.id+'" selected >'+pre_project_data_con.data().JobNoFirst+'/'+pre_project_data_con.data().JobNoSecond+'/'+pre_project_data_con.data().orderSheet[l].no+'</option>'
                                             )
 
                                             for(let m = 0; m < ordersheet_list[j].ordersheet[k].battery.length; m++){
@@ -408,7 +432,7 @@ export default {
                                         }
                                         else{
                                             $('#ordersheet-'+(j+1)+'-'+(k+1)).append(
-                                                '<option value="'+pre_project_data_con.data().orderSheet[l].no+'" data-row="'+(j+1)+'" data-ordersheet="'+(k+1)+'" data-project="'+pre_project_data_con.id+'">'+pre_project_data_con.data().JobNoFirst+'/'+pre_project_data_con.data().JobNoSecond+'/'+pre_project_data_con.data().orderSheet[l].no+'</option>'
+                                                '<option class="option-ordersheet" value="'+pre_project_data_con.data().orderSheet[l].no+'" data-row="'+(j+1)+'" data-ordersheet="'+(k+1)+'" data-project="'+pre_project_data_con.id+'">'+pre_project_data_con.data().JobNoFirst+'/'+pre_project_data_con.data().JobNoSecond+'/'+pre_project_data_con.data().orderSheet[l].no+'</option>'
                                             )
                                             
                                         }
@@ -436,6 +460,7 @@ export default {
 
             function render_price(){
                 sumprice()
+                ordersheet_check()
                 $('.low-data').attr('disabled',true)
                 $('.bi-trash').addClass('d-none')
 
@@ -493,19 +518,7 @@ export default {
                                             '<div class="col-2">Amount (USD)</div>'+
                                         '</div>'+
                                         '<div id="data-pa-'+rowjob_count+'">'+
-                                            // '<div id="row-'+rowjob_count+'-1" class="row py-2">'+
-                                            //     '<div class="col-2">'+
-                                            //         '<div class="row">'+
-                                            //             '<select id="ordersheet-'+rowjob_count+'-1" class="form-control col-8" style="font-size:14px"><option value="" selected disabled>Select order sheet</option></select>'+
-                                            //             '<div class="col-4 pt-1"><i class="bi bi-trash text-danger ordersheet-del" data-project="'+rowjob_count+'" data-ordersheet="1" style="font-size:25px;" ></i></div>'+
-                                            //         '</div>'+
-                                            //     '</div>'+
-                                            //     '<div id="description-'+rowjob_count+'-1" class="col-3"></div>'+
-                                            //     '<div id="qty-'+rowjob_count+'-1" class="col"></div>'+
-                                            //     '<div id="unit-'+rowjob_count+'-1" class="col text-center"></div>'+
-                                            //     '<div id="price-'+rowjob_count+'-1" class="col-2"></div>'+
-                                            //     '<div id="total-'+rowjob_count+'-1" class="col-2"></div> '+
-                                            // '</div>'+
+
                                         '</div>'+
                                     '</div>'+
                                 '</div>'+
@@ -549,7 +562,7 @@ export default {
             
             await render_ordersheet()
             await render_ordersheet_con()
-
+            await ordersheet_check()
             function render_ordersheet(){
                 $('#data-pa-'+project_count).append(
                     '<div id="row-'+project_count+'-'+(ordersheet_count+1)+'" class="row py-2">'+
@@ -573,7 +586,7 @@ export default {
                 for(let i = 0; i < project_ordersheet_con.data().orderSheet.length; i++){
                     if(project_ordersheet_con.data().orderSheet[i].origin == con_origin && project_ordersheet_con.data().orderSheet[i].warranty == con_warranty){
                         $('#ordersheet-'+project_count+'-'+(ordersheet_count+1)).append(
-                            '<option value="'+project_ordersheet_con.data().orderSheet[i].no+'" data-row="'+project_count+'" data-ordersheet="'+(ordersheet_count+1)+'" data-project="'+project_ordersheet_con.id+'">'+project_ordersheet_con.data().JobNoFirst+'/'+project_ordersheet_con.data().JobNoSecond+'/'+project_ordersheet_con.data().orderSheet[i].no+'</option>'
+                            '<option class="option-ordersheet" value="'+project_ordersheet_con.data().orderSheet[i].no+'" data-row="'+project_count+'" data-ordersheet="'+(ordersheet_count+1)+'" data-project="'+project_ordersheet_con.id+'">'+project_ordersheet_con.data().JobNoFirst+'/'+project_ordersheet_con.data().JobNoSecond+'/'+project_ordersheet_con.data().orderSheet[i].no+'</option>'
                         )
                     }
                 }
@@ -586,9 +599,7 @@ export default {
             $(this).data('ordersheet',ordersheet_count+1)
         })
 
-
         $('#data').on('change','.ordersheet',async function(){
-            console.log('ordersheet change')
             const ordersheet_select = $(this).find('option:selected').val()
             const project_select_id = $(this).find('option:selected').data('project')
             const project_select_row = $(this).find('option:selected').data('row')
@@ -596,12 +607,10 @@ export default {
 
             const project_data_show =  await projectFirestore.collection('Projects').doc(project_select_id).get()
             await clear_row()
+            await ordersheet_check()
             await add_new_row_data()
-            console.log(project_select_row)
-            console.log(project_select_ordersheet)
 
             function clear_row(){
-                console.log('clear')
 
                 $('#description-'+project_select_row+'-'+project_select_ordersheet).html('')
                 $('#qty-'+project_select_row+'-'+project_select_ordersheet).html('')
@@ -615,9 +624,6 @@ export default {
                 for(let i = 0; i < project_data_show.data().orderSheet.length; i++){
                     if(project_data_show.data().orderSheet[i].no == ordersheet_select){
                         for(let j = 0 ;j < project_data_show.data().orderSheet[i].battery.length;j++){
-                            console.log('render')
-                            console.log(project_data_show.data().orderSheet[i].battery[j])
-                            console.log(project_data_show.data().orderSheet[i].battery[j].series)
                             $('#description-'+project_select_row+'-'+project_select_ordersheet).append(
                                 '<div class="col-12 my-1" style="height:40px">'+project_data_show.data().orderSheet[i].battery[j].series+'</div>'
                             )
@@ -642,6 +648,55 @@ export default {
 
             
         })
+        
+        async function ordersheet_check(){
+            var ordersheet_valid = []
+            const ordersheet_check = $('.ordersheet')
+            const ordersheet_option = $('.option-ordersheet')
+            await set_ordersheet_array()
+            await set_ordersheet_valid()
+            await set_ordersheet_option()
+
+            function set_ordersheet_array(){
+                for(let i = 0; i < project_ordersheet_use.length; i++){
+                    ordersheet_valid.push({project_id:project_ordersheet_use[i].project_id,ordersheet:[]})
+                }
+            }
+
+            function set_ordersheet_valid(){
+                for(let i = 0; i < ordersheet_check.length;i++){
+                    const ordersheet_check_val = $(ordersheet_check[i]).find('option:selected').val()
+                    const ordersheet_check_id = $(ordersheet_check[i]).find('option:selected').data('project')
+                    for(let j = 0 ; j < ordersheet_valid.length; j++){
+                        if(ordersheet_check_id == ordersheet_valid[j].project_id){
+                            ordersheet_valid[j].ordersheet.push(ordersheet_check_val)
+                        }
+                    }
+
+                }
+            }
+            function set_ordersheet_option(){
+                for(let i = 0 ; i < ordersheet_option.length; i++){
+                    for(let j = 0; j < ordersheet_valid.length;j++){
+                        for(let k = 0; k < ordersheet_valid[j].ordersheet.length;k++){
+                            if($(ordersheet_option[i]).is(':selected')){
+                                
+                            }
+                            else{
+                                if($(ordersheet_option[i]).val() == ordersheet_valid[j].ordersheet[k] && $(ordersheet_option[i]).data('project') == ordersheet_valid[j].project_id){
+                                    $(ordersheet_option[i]).attr('disabled',true)
+                                }
+                                
+                            }
+                        }
+                    }
+                    
+
+                }
+            }
+            
+
+        }
 
         $('#data').on('change','.price',async function(){
             const project_row_price = $(this).data('project')
@@ -738,9 +793,7 @@ export default {
             function sumbattprice(){
                 $('.totalprice').each(function(){
                     const get_row_price = numeral($(this).text()).value()
-                    sum_price = sum_price + get_row_price
-                    
-                    console.log(get_row_price)
+                    sum_price = sum_price + get_row_price                    
                 })                
             }
 
