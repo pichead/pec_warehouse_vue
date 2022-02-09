@@ -10,6 +10,21 @@
     .blue-btn:hover {
         color: #FAFAFA;
     }
+    .red-btn{
+        background-color:#ff7777;
+        color: #FAFAFA;
+    }
+    .red-btn:hover {
+        color: #FAFAFA;
+    }
+    .yellow-btn{
+        background-color:#ffb753;
+        color: #FAFAFA;
+    }
+    .yellow-btn:hover {
+        color: #FAFAFA;
+    }
+    
 </style>
 <template>
     <Sidebar />
@@ -17,11 +32,16 @@
         <div>
             <div class="container">
                 <div class="h3 mt-5 font-weight-bold">แก้ไข PEC PO</div>
-                <form id="addform" class="border mt-5 mb-2 p-5 bg-white">
+                <form id="addform" class="border mt-5 mb-2 p-5 fwhite">
                     <div class="row">
-                        <div class="col-12 text-right">
+                        
+                        <div class="col-10">
+                            <div id="danger-text" class="text-danger d-none h5">*Origin หรือ Warranty ถูกเปลี่ยน สามารถคลิก Save เพื่อบันทึก หรือคลิก Reset เพื่อคืนค่า</div>
+                        </div>
+                        <div class="col-2 text-right">
                             <i id="top-data-edit" class="bi bi-pencil-square mb-3" type="button" style="font-size:25px;color:grey;"></i>
                         </div>
+                        
                         <div class="col-6">
                             <div class="form-group row">
                                 <label class="col-4 col-form-label font-weight-bold">Company</label >
@@ -103,16 +123,13 @@
                                 <div class="col">
                                     <div id="lastupdate">Last Update: - </div>
                                 </div>
-                                <div class="col-5">
+                                <div class="col-4">
                                     <div class="row">
-                                        <div class="col-4">
-                                            <button id="cancel-btn" class="btn btn-danger col-12 top-data" disabled type="button" >Cancel</button>
+                                        <div class="col-6">
+                                            <button id="reset-btn" class="btn red-btn col-12 top-data" disabled type="button" >Reset</button>
                                         </div>
-                                        <div class="col-4">
+                                        <div class="col-6">
                                             <button id="save-btn" class="btn blue-btn col-12 top-data" disabled type="submit" >Save</button>
-                                        </div>
-                                        <div class="col-4">
-                                            <button id="print-btn" class="btn btn-info col-12 top-data" disabled type="button">Print</button>
                                         </div>
                                     </div>
                                 </div>
@@ -131,17 +148,28 @@
 
                         </div>
                         <div class="col-12">
-                            <button id="addjob" class="btn btn-warning col-12 text-white low-data" type="button" data-row="0" >Add Job No</button>
+                            <button id="addjob" class="btn yellow-btn col-12 text-white low-data" type="button" data-row="0" >Add Job No</button>
                         </div>
 
                     </div>
-                    <div class="col-12 border p-4 mt-2">
+                    <div id="sumprice-row" class="col-12 border p-4 mt-2">
                         <div class="col-12">
                             <div class="row">
       
                                 <div class="col-8"></div>
                                 <div class="col-2 col-form-label">Total Price</div>
                                 <div  id="totalprice" class="col-2 col-form-label text-right">0.00</div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div id="con-edit" class="col-12 border p-4 mt-2 d-none">
+                        <div class="col-12">
+                            <div class="row">
+      
+                                <div class="col-8"></div>
+                                <div class="col-2 col-form-label">Total Price</div>
+                                <div class="col-2 col-form-label text-right">0.00</div>
                             </div>
                         </div>
 
@@ -295,7 +323,7 @@ export default {
                                 '<div class="col-5">'+
                                     '<div class="row">'+
                                         '<div class="col-6">'+
-                                            '<button class="btn btn-danger col-12 del-row-btn low-data" data-row="'+(i+1)+'" type="button">Remove Job No</button>'+
+                                            '<button class="btn red-btn col-12 del-row-btn low-data" data-row="'+(i+1)+'" type="button">Remove Job No</button>'+
                                         '</div>'+
                                         '<div class="col-6">'+
                                             '<button class="btn blue-btn col-12 add-ordersheet low-data" data-pa="'+(i+1)+'" data-ordersheet="1" type="button">Add Order Sheet</button>'+
@@ -447,7 +475,7 @@ export default {
                                 '<div class="col-5">'+
                                     '<div class="row">'+
                                         '<div class="col-6">'+
-                                            '<button class="btn btn-danger col-12 del-row-btn low-data" data-row="'+rowjob_count+'" type="button">Remove Job No</button>'+
+                                            '<button class="btn red-btn col-12 del-row-btn low-data" data-row="'+rowjob_count+'" type="button">Remove Job No</button>'+
                                         '</div>'+
                                         '<div class="col-6">'+
                                             '<button class="btn blue-btn col-12 add-ordersheet low-data" data-pa="'+rowjob_count+'" data-ordersheet="1" type="button">Add Order Sheet</button>'+
@@ -638,13 +666,15 @@ export default {
         $('#data').on('click', '.del-row-btn', function(){
             const del_row_no = $(this).data('row')
             $('#row-'+del_row_no).remove()
+            sumprice()
         })
 
         $('#data').on('click', '.ordersheet-del', function(){
             console.log('ordersheet del')
             const del_ordersheet_project_no = $(this).data('project')
             const del_ordersheet_ordersheet_no = $(this).data('ordersheet')
-            $('#row-'+del_ordersheet_project_no+'-'+del_ordersheet_ordersheet_no).remove(   )
+            $('#row-'+del_ordersheet_project_no+'-'+del_ordersheet_ordersheet_no).remove()
+            sumprice()
         })
 
         $('#shipping-price').on('change',()=>{
@@ -653,40 +683,49 @@ export default {
 
         $('#top-data-edit').on('click',function(){
 
-            if($('.top-data').prop('disabled') == true){
-                $('.low-data').attr('disabled',true)
-                $('.top-data').attr('disabled',false)
-                $('.bi-trash').addClass('d-none')
+            if(con_origin != $('#select_origin').find('option:selected').val() || con_warranty != $('#warranty').val()){
 
             }
             else{
-                $('.low-data').attr('disabled',true)
-                $('.top-data').attr('disabled',true)
-                $('.bi-trash').addClass('d-none')
+                if($('.top-data').prop('disabled') == true){
+                    $('.low-data').attr('disabled',true)
+                    $('.top-data').attr('disabled',false)
+                    $('.bi-trash').addClass('d-none')
 
+                }
+                else{
+                    $('.low-data').attr('disabled',true)
+                    $('.top-data').attr('disabled',true)
+                    $('.bi-trash').addClass('d-none')
+
+                }
             }
+            
             // console.log($('.low-data').attr('disabled'))
 
         
         })
 
         $('#low-data-edit').on('click',function(){
-            if($('.low-data').prop('disabled') == true){
-                $('.low-data').attr('disabled',false)
-                $('.top-data').attr('disabled',true)
-                $('.bi-trash').removeClass('d-none')
+            if(con_origin != $('#select_origin').find('option:selected').val() || con_warranty != $('#warranty').val()){
             }
             else{
-                $('.low-data').attr('disabled',true)
-                $('.top-data').attr('disabled',true)
-                $('.bi-trash').addClass('d-none')
+                if($('.low-data').prop('disabled') == true){
+                    $('.low-data').attr('disabled',false)
+                    $('.top-data').attr('disabled',true)
+                    $('.bi-trash').removeClass('d-none')
+                }
+                else{
+                    $('.low-data').attr('disabled',true)
+                    $('.top-data').attr('disabled',true)
+                    $('.bi-trash').addClass('d-none')
 
+                }
             }
 
             
 
         })
-
 
         async function sumprice(){
             var sum_price = 0.00
@@ -716,6 +755,37 @@ export default {
 
         }
 
+        $('#select_origin').on('change',function(){
+            condition_change()
+        })
+
+        $('#warranty').on('change',function(){
+            condition_change()
+        })
+
+        function condition_change(){
+            const select_origin_data = $('#select_origin').find('option:selected').val()
+            const warranty_data = $('#warranty').val()
+
+            if(con_origin != select_origin_data || con_warranty != warranty_data){
+                $('#con-edit').removeClass('d-none')
+                $('#danger-text').removeClass('d-none')
+                $('#sumprice-row').addClass('d-none')
+                $('#data').addClass('d-none')
+            }
+            else{
+                $('#con-edit').addClass('d-none')
+                $('#danger-text').addClass('d-none')
+                $('#sumprice-row').removeClass('d-none')
+                $('#data').removeClass('d-none')
+
+            }
+        }
+
+        $('#reset-btn').on('click',()=>{
+            location.reload()
+        })
+        
 
         const addform = document.querySelector('#addform');
         addform.addEventListener('submit', async function(e){
@@ -730,21 +800,44 @@ export default {
             const orgin = $('#select_origin').find('option:selected').val()
             const warranty = $('#warranty').val()
 
-            projectFirestore.collection('Po').doc(id).update({
-                pecpo_no:pecpono,
-                pecpo_year:pecpoyear,
-                company:company,
-                tpayment:tpayment,
-                delivery:delivery_date,
-                comment:comment,
-                update_time:update_time,
-                origin:orgin,
-                warranty:warranty,
-                visible:true
+            if(con_origin != $('#select_origin').find('option:selected').val() || con_warranty != $('#warranty').val()){
+                    projectFirestore.collection('Po').doc(id).update({
+                    pecpo_no:pecpono,
+                    pecpo_year:pecpoyear,
+                    company:company,
+                    tpayment:tpayment,
+                    delivery:delivery_date,
+                    comment:comment,
+                    update_time:update_time,
+                    origin:orgin,
+                    warranty:warranty,
+                    battorder:[],
+                    visible:true
 
-            }).then(()=>{ 
-                location.reload()
-            })
+                }).then(()=>{ 
+                    location.reload()
+                })
+            }
+            else{
+                projectFirestore.collection('Po').doc(id).update({
+                    pecpo_no:pecpono,
+                    pecpo_year:pecpoyear,
+                    company:company,
+                    tpayment:tpayment,
+                    delivery:delivery_date,
+                    comment:comment,
+                    update_time:update_time,
+                    origin:orgin,
+                    warranty:warranty,
+                    visible:true
+
+                }).then(()=>{ 
+                    location.reload()
+                })
+                
+            }
+
+            
 
         })
 
