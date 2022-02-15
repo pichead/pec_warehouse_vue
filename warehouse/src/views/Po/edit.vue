@@ -147,33 +147,64 @@
                         <div id="data" class="col-12" >
 
                         </div>
-                        <div class="col-12">
+                        <div class="col-12 mb-4">
                             <button id="addjob" class="btn yellow-btn col-12 text-white low-data" type="button" data-row="0" >Add Job No</button>
                         </div>
-
-                    </div>
-                    <div id="sumprice-row" class="col-12 border p-4 mt-2">
-                        <div class="col-12">
-                            <div class="row">
-      
-                                <div class="col-8"></div>
-                                <div class="col-2 col-form-label">Total Price</div>
-                                <div  id="totalprice" class="col-2 col-form-label text-right">0.00</div>
+                        <div id="shipment" class="col-12">
+                            <div id="" class="row mb-4">
+                                <div class="col-7">
+                                    <div class="h2 font-weight-bold">Shipment</div>
+                                </div>
+                                <div class="col-5">
+                                    <div class="row">
+                                        <div class="col-6">
+                                        </div>
+                                        <div class="col-6">
+                                            <button id="add-shipment" class="btn blue-btn col-12 add-ordersheet low-data"  type="button">Add Shipment</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 mt-3">
+                                    <div class="col-12 pb-2" style="border-bottom:solid 2px #707070">
+                                        <div class="row py-2 text-center tablehead-color">
+                                            <div class="col-2">Shipment</div>
+                                            <div class="col-3">Description</div>
+                                            <div class="col">Qty.</div>
+                                            <div class="col">Unit</div>
+                                            <div class="col-2">Unit Price (USD)</div>
+                                            <div class="col-2">Amount (USD)</div>
+                                        </div>
+                                        <div id="data-shipment">
+                                            
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
-                    </div>
-                    <div id="con-edit" class="col-12 border p-4 mt-2 d-none">
-                        <div class="col-12">
-                            <div class="row">
-      
-                                <div class="col-8"></div>
-                                <div class="col-2 col-form-label">Total Price</div>
-                                <div class="col-2 col-form-label text-right">0.00</div>
+                        <div id="sumprice-row" class="col-12 border p-4 mt-2">
+                            <div class="col-12">
+                                <div class="row">
+        
+                                    <div class="col-8"></div>
+                                    <div class="col-2 col-form-label">Total Price</div>
+                                    <div  id="totalprice" class="col-2 col-form-label text-right">0.00</div>
+                                </div>
                             </div>
-                        </div>
 
+                        </div>
+                        <div id="con-edit" class="col-12 border p-4 mt-2 d-none">
+                            <div class="col-12">
+                                <div class="row">
+        
+                                    <div class="col-8"></div>
+                                    <div class="col-2 col-form-label">Total Price</div>
+                                    <div class="col-2 col-form-label text-right">0.00</div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
+                    
 
                     <div class="d-flex flex-row-reverse row-hl my-5">
                         <button class="btn blue-btn  col-2 low-data" type="submit">Save</button>
@@ -837,6 +868,33 @@ export default {
 
         $('#reset-btn').on('click',()=>{
             location.reload()
+        })
+
+        $('#add-shipment').on('click',()=>{
+            $('#data-shipment').append(
+                '<div class="row py-2">'+
+                    '<div class="col-2">'+
+                        '<select class="form-control">'+
+                            '<option disabled selected>select shipment</option>'+
+                        '</select>'+
+                    '</div>'+
+                    '<div class="col-3">'+
+                        '<input class="form-control" type="text" />'+
+                    '</div>'+
+                    '<div class="col">'+
+                        '<input class="form-control" type="number" />'+
+                    '</div>'+
+                    '<div class="col">'+
+                        '<input class="form-control" type="text" />'+
+                    '</div>'+
+                    '<div class="col-2">'+
+                        '<input class="form-control" type="number" />'+
+                    '</div>'+
+                    '<div class="col-2">'+
+                        '<input class="form-control" type="number" />'+
+                    '</div>'+
+                '</div>'
+            )
         })
         
 
