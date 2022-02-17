@@ -160,7 +160,7 @@
                                         <div class="col-6">
                                         </div>
                                         <div class="col-6">
-                                            <button id="add-shipment" class="btn blue-btn col-12 add-ordersheet low-data"  type="button">Add Shipment</button>
+                                            <button id="add-shipment" class="btn blue-btn col-12 low-data" data-row="1"  type="button">Add Shipment</button>
                                         </div>
                                     </div>
                                 </div>
@@ -239,6 +239,7 @@ export default {
         var con_warranty
         var con_delivery = ""
         const origin_option = ['China','Mexico']
+        var shipmentprice = 0
 
         function onlyUnique(value, index, self) {
             return self.indexOf(value) === index;
@@ -820,17 +821,17 @@ export default {
             await sumbattprice()
             await sumshippingprice()
             await render_total_price()
-
+            console.log('shipmentprice : ',shipmentprice)
             function sumbattprice(){
                 $('.totalprice').each(function(){
                     const get_row_price = numeral($(this).text()).value()
-                    sum_price = sum_price + get_row_price                    
+                    sum_price = sum_price + get_row_price          
                 })                
             }
 
             function sumshippingprice(){
                 
-                sum_price = parseFloat(sum_price)
+                sum_price = parseFloat(sum_price)+ parseFloat(shipmentprice) 
             }
 
             function render_total_price(){
@@ -871,31 +872,65 @@ export default {
         })
 
         $('#add-shipment').on('click',()=>{
+            const shipment_row = $('#add-shipment').data('row')
             $('#data-shipment').append(
-                '<div class="row py-2">'+
+                '<div id="shipment-row-'+shipment_row+'" data-row="'+shipment_row+'" class="row py-2 shipment-row">'+
                     '<div class="col-2">'+
-                        '<select class="form-control">'+
+                        '<select id="shipment-option-'+shipment_row+'" class="form-control">'+
                             '<option disabled selected>select shipment</option>'+
+                            '<option value="CombimedCif">Combimed to CIF</option>'+
+                            '<option value="Other">Other</option>'+
                         '</select>'+
                     '</div>'+
                     '<div class="col-3">'+
-                        '<input class="form-control" type="text" />'+
+                        '<input id="shipment-des-'+shipment_row+'" class="form-control" type="text" />'+
                     '</div>'+
                     '<div class="col">'+
-                        '<input class="form-control" type="number" />'+
+                        '<input id="shipment-amount-'+shipment_row+'" class="form-control shipmentdata" data-row="'+shipment_row+'" value="0" type="number" />'+
                     '</div>'+
                     '<div class="col">'+
-                        '<input class="form-control" type="text" />'+
+                        '<input id="shipment-unit-'+shipment_row+'" class="form-control" type="text" />'+
                     '</div>'+
                     '<div class="col-2">'+
-                        '<input class="form-control" type="number" />'+
+                        '<input id="shipment-price-'+shipment_row+'" class="form-control shipmentdata" data-row="'+shipment_row+'" value="0" type="number" />'+
                     '</div>'+
-                    '<div class="col-2">'+
-                        '<input class="form-control" type="number" />'+
+                    '<div  id="shipment-totalprice-'+shipment_row+'" class="col-2 shipment-totoal-price">'+
+                        
                     '</div>'+
                 '</div>'
             )
+            $('#add-shipment').data('row',parseInt(shipment_row)+1)
         })
+
+        $('#data-shipment').on('change' ,'.shipmentdata', function(){
+            const change_Shipment_row = $(this).data('row')
+            const change_amount = $('#shipment-amount-'+change_Shipment_row)
+            const change_price = $('#shipment-price-'+change_Shipment_row)
+            const change_totalprice = parseFloat(change_amount.val()) * parseFloat(change_price.val())
+            $('#shipment-totalprice-'+change_Shipment_row).html(change_totalprice)
+            shipment_sum()
+        })
+
+
+        async function shipment_sum(){
+
+            await pre_shipment()
+            await sum_shipment()
+            await sumprice()
+
+            function pre_shipment(){
+                shipmentprice = 0
+            }
+
+            function sum_shipment(){
+                for(let i =0 ; i < $('.shipment-totoal-price').length;i++){
+                    shipmentprice = shipmentprice + parseFloat($($('.shipment-totoal-price')[i]).html())
+                }
+            }
+
+
+            
+        }
         
 
         const addform = document.querySelector('#addform');
@@ -963,7 +998,7 @@ export default {
             const battprice_count = $('.batt-price').length
             const job_count = $('.job').length
             const ordersheet_count = $('.ordersheet').length
-
+            var shipment_array =  []
             var projectlist =  []
             var battorder =  []
             var battarray = []
