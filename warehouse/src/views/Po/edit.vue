@@ -207,7 +207,8 @@
                     
 
                     <div class="d-flex flex-row-reverse row-hl my-5">
-                        <button class="btn blue-btn  col-2 low-data" type="submit">Save</button>
+                        <button class="btn btn-info col-2 low-data " type="button">Approve</button>
+                        <button class="btn blue-btn  col-2 low-data mr-2" type="submit">Save</button>
                         <a class="btn btn-secondary col-2 mr-2" type="button" href="/Battery/pecpoList">Cancel</a>
                         
                     </div>
@@ -240,7 +241,7 @@ export default {
         var con_delivery = ""
         const origin_option = ['China','Mexico']
         var shipmentprice = 0
-
+        const shipment_list = ['CombimedCif','Other']
         function onlyUnique(value, index, self) {
             return self.indexOf(value) === index;
         }
@@ -315,8 +316,91 @@ export default {
                 $('#lastupdate').html('Last Update: '+unew_date)
                 con_origin = Po.data().origin
                 con_warranty = Po.data().warranty
+                $('#add-shipment').data('row',(Po.data().shipment.length+1))
+                for(let i = 0 ;i < Po.data().shipment.length; i++){
+                    $('#data-shipment').append(
+                        '<div id="shipment-row-'+(i+1)+'" data-row="'+(i+1)+'" class="row py-2 shipment-row">'+
+                            '<div class="col-2">'+
+                                '<div class="row">'+
+                                    '<select id="shipment-option-'+(i+1)+'" class="form-control col-8 shipment-option">'+
+                                        '<option disabled selected>select shipment</option>'+
+                                    '</select>'+
+                                    '<div class="col-4 pt-1"><i type="button" class="bi bi-trash text-danger shipment-del low-data" data-row="'+(i+1)+'" style="font-size:25px;" ></i></div>'+
+                                '</div>'+
+                            '</div>'+
+                            '<div class="col-3">'+
+                                '<input id="shipment-des-'+(i+1)+'" class="form-control shipment-description" type="text" />'+
+                            '</div>'+
+                            '<div class="col">'+
+                                '<input id="shipment-amount-'+(i+1)+'" class="form-control shipmentdata shipment-amount" data-row="'+(i+1)+'" value="0" type="number" />'+
+                            '</div>'+
+                            '<div class="col">'+
+                                '<input id="shipment-unit-'+(i+1)+'" class="form-control shipment-unit" type="text" />'+
+                            '</div>'+
+                            '<div class="col-2">'+
+                                '<input id="shipment-price-'+(i+1)+'" class="form-control shipmentdata shipment-price" data-row="'+(i+1)
+                                +'" value="0" type="number" />'+
+                            '</div>'+
+                            '<div  id="shipment-totalprice-'+(i+1)+'" class="col-2 shipment-totoal-price text-right">'+
+                                
+                            '</div>'+
+                        '</div>'
+                    )
+                    
+
+                }
+
+
             }
             async function getdata(){
+                for(let i = 0 ;i < Po.data().shipment.length; i++){
+                    for(let j = 0; j  < shipment_list.length; j++){
+                        
+                        if(shipment_list[j] == Po.data().shipment[i].shipment){
+                            
+                            if(Po.data().shipment[i].shipment == 'CombimedCif'){
+                                $('#shipment-option-'+(i+1)).append(
+                                    '<option value="CombimedCif" selected>Combimed to CIF</option>'
+                                )
+                                console.log(i)
+                                console.log('data : ',Po.data().shipment[i].shipment)
+                                console.log('CombimedCif')
+                            }
+                            else{
+                                $('#shipment-option-'+(i+1)).append(
+                                    '<option value="Other" selected>Other</option>'
+                                )
+                                console.log(i)
+                                console.log('data : ',Po.data().shipment[i].shipment)
+
+                                console.log('Other')
+                            }
+                        }
+                        else{
+                            if(Po.data().shipment[i].shipment == 'CombimedCif'){
+                                $('#shipment-option-'+(i+1)).append(
+                                    '<option value="CombimedCif" >Combimed to CIF</option>'
+                                )
+                                console.log(i)
+                                console.log('data : ',Po.data().shipment[i].shipment)
+
+                                console.log('CombimedCif none')
+                                
+                            }
+                            else{
+                                $('#shipment-option-'+(i+1)).append(
+                                    '<option value="Other" >Other</option>'
+                                )
+                                console.log(i)
+                                console.log('data : ',Po.data().shipment[i].shipment)
+
+                                console.log('Other none')
+                            }
+                        }
+                    }
+                }
+
+                
                 
                 const allproject = await  projectFirestore.collection('Projects').get()
                 allproject.forEach((project)=>{
@@ -412,13 +496,15 @@ export default {
                                 '<div id="qty-'+(i+1)+'-'+(j+1)+'" class="col"></div>'+
                                 '<div id="unit-'+(i+1)+'-'+(j+1)+'" class="col text-center"></div>'+
                                 '<div id="price-'+(i+1)+'-'+(j+1)+'" class="col-2"></div>'+
-                                '<div id="total-'+(i+1)+'-'+(j+1)+'" class="col-2"></div> '+
+                                '<div id="total-'+(i+1)+'-'+(j+1)+'" class="col-2 text-right"></div> '+
                             '</div>'
                         )
                     }
                     
                 
                 }
+
+
                 
             }
 
@@ -669,7 +755,7 @@ export default {
                                 '<input class="form-control low-data my-1 price batt-price" data-orderamount="'+project_data_show.data().orderSheet[i].battery[j].order_amount+'" data-series="'+project_data_show.data().orderSheet[i].battery[j].series+'" data-project_id="'+project_data_show.id+'" data-ordersheet_no="'+project_data_show.data().orderSheet[i].no+'" data-id="'+project_data_show.data().orderSheet[i].battery[j].no+'" data-project="'+project_select_row+'" data-ordersheet="'+project_select_ordersheet+'" style="height:40px" value="0.00" type="number" step="0.01" require />'
                             )
                             $('#total-'+project_select_row+'-'+project_select_ordersheet).append(
-                                '<div id="price-total-'+project_data_show.data().orderSheet[i].battery[j].no+'" class="my-1 price-total-'+project_select_row+'-'+project_select_ordersheet+' totalprice"  style="height:40px" >0.00</div>'
+                                '<div id="price-total-'+project_data_show.data().orderSheet[i].battery[j].no+'" class="my-1 price-total-'+project_select_row+'-'+project_select_ordersheet+' totalprice text-right"  style="height:40px" >0.00</div>'
                             )
                             
 
@@ -876,25 +962,28 @@ export default {
             $('#data-shipment').append(
                 '<div id="shipment-row-'+shipment_row+'" data-row="'+shipment_row+'" class="row py-2 shipment-row">'+
                     '<div class="col-2">'+
-                        '<select id="shipment-option-'+shipment_row+'" class="form-control">'+
-                            '<option disabled selected>select shipment</option>'+
-                            '<option value="CombimedCif">Combimed to CIF</option>'+
-                            '<option value="Other">Other</option>'+
-                        '</select>'+
+                        '<div class="row">'+
+                            '<select id="shipment-option-'+shipment_row+'" class="form-control col-8 shipment-option">'+
+                                '<option disabled selected>select shipment</option>'+
+                                '<option value="CombimedCif">Combimed to CIF</option>'+
+                                '<option value="Other">Other</option>'+
+                            '</select>'+
+                            '<div class="col-4 pt-1"><i type="button" class="bi bi-trash text-danger shipment-del low-data" data-row="'+shipment_row+'" style="font-size:25px;" ></i></div>'+
+                        '</div>'+
                     '</div>'+
                     '<div class="col-3">'+
-                        '<input id="shipment-des-'+shipment_row+'" class="form-control" type="text" />'+
+                        '<input id="shipment-des-'+shipment_row+'" class="form-control shipment-description" type="text" />'+
                     '</div>'+
                     '<div class="col">'+
-                        '<input id="shipment-amount-'+shipment_row+'" class="form-control shipmentdata" data-row="'+shipment_row+'" value="0" type="number" />'+
+                        '<input id="shipment-amount-'+shipment_row+'" class="form-control shipmentdata shipment-amount" data-row="'+shipment_row+'" value="0" type="number" />'+
                     '</div>'+
                     '<div class="col">'+
-                        '<input id="shipment-unit-'+shipment_row+'" class="form-control" type="text" />'+
+                        '<input id="shipment-unit-'+shipment_row+'" class="form-control shipment-unit" type="text" />'+
                     '</div>'+
                     '<div class="col-2">'+
-                        '<input id="shipment-price-'+shipment_row+'" class="form-control shipmentdata" data-row="'+shipment_row+'" value="0" type="number" />'+
+                        '<input id="shipment-price-'+shipment_row+'" class="form-control shipmentdata shipment-price" data-row="'+shipment_row+'" value="0" type="number" />'+
                     '</div>'+
-                    '<div  id="shipment-totalprice-'+shipment_row+'" class="col-2 shipment-totoal-price">'+
+                    '<div  id="shipment-totalprice-'+shipment_row+'" class="col-2 shipment-totoal-price text-right">'+
                         
                     '</div>'+
                 '</div>'
@@ -910,7 +999,12 @@ export default {
             $('#shipment-totalprice-'+change_Shipment_row).html(change_totalprice)
             shipment_sum()
         })
+        
 
+        $('#data-shipment').on('click','.shipment-del',function(){
+            const shipment_del_row = $(this).data('row')
+            $('#shipment-row-'+shipment_del_row).remove()
+        })
 
         async function shipment_sum(){
 
@@ -1013,6 +1107,16 @@ export default {
                     battarray.push({job:$($('.job')[i]).find('option:selected').val(),ordersheet:[],projectname:$($('.job')[i]).find('option:selected').data('name')})
                 }
 
+                for(let i = 0; i  <  $('.shipment-totoal-price').length; i++){
+                    shipment_array.push({
+                        shipment:$($('.shipment-option')[i]).find('option:selected').val() ,
+                        description:$($('.shipment-description')[i]).val(),
+                        amount:$($('.shipment-amount')[i]).val(),
+                        unit:$($('.shipment-unit')[i]).val(),
+                        price:$($('.shipment-price')[i]).val()
+                    })
+                }
+
             }
             function arrayorder_odersheet(){
                 const ordersheet_get = $('.ordersheet')
@@ -1059,7 +1163,7 @@ export default {
                 projectFirestore.collection('Po').doc(id).update({
                     update_time:timestamp,
                     battorder:battarray,
-                    
+                    shipment:shipment_array
                 }).then(()=>{
                     router.push({ 
                         name: 'PECpoList',
