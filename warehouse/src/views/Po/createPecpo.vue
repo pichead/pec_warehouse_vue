@@ -383,7 +383,8 @@ export default {
                 update_time:createdate,
                 origin:orgin,
                 warranty:warranty,
-                visible:true
+                visible:true,
+                approve_status:false
 
             }).then( function(docRef){
                 router.push({ 

@@ -192,7 +192,7 @@
                             </div>
 
                         </div>
-                        <div id="con-edit" class="col-12 border p-4 mt-2 d-none">
+                        <!-- <div id="con-edit" class="col-12 border p-4 mt-2 d-none">
                             <div class="col-12">
                                 <div class="row">
         
@@ -202,17 +202,34 @@
                                 </div>
                             </div>
 
-                        </div>
+                        </div> -->
                     </div>
                     
 
                     <div class="d-flex flex-row-reverse row-hl my-5">
-                        <button class="btn btn-info col-2 low-data " type="button">Approve</button>
+                        <button class="btn btn-info col-2 " type="button" data-toggle="modal" data-target="#approve-modal">Approve</button>
                         <button class="btn blue-btn  col-2 low-data mr-2" type="submit">Save</button>
                         <a class="btn btn-secondary col-2 mr-2" type="button" href="/Battery/pecpoList">Cancel</a>
                         
                     </div>
                 </form>
+                <div class="modal" id="approve-modal" aria-hidden="true" style="display: none;">
+                    <div class="modal-dialog">
+                        <form id="approve_form" class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Approve</h5>
+                                <button class="close" data-dismiss="modal">×</button>
+                            </div>
+                            <div id="approve-modal-body" class="modal-body col-10 mx-auto">
+                                
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn red-btn" data-dismiss="modal">Close</button>
+                                <button class="btn blue-btn" type="submit">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
 
             </div>
         </div>
@@ -250,6 +267,34 @@ export default {
             const Po = await projectFirestore.collection('Po').doc(id).get()
             const Companys = await projectFirestore.collection('ContactCompany').get()
             const ordersheet_list = Po.data().battorder
+            const approve_status = Po.data().approve_status
+
+            if(approve_status == true){
+                $('#approve-modal-body').html(
+                    '<div class="form-check">'+
+                        '<input class="form-check-input" type="radio" name="approve_status" id="approve1" value="true" checked>'+
+                        '<label class="form-check-label" for="approve1">Approved</label>'+
+                    '</div>'+
+                    '<div class="form-check">'+
+                        '<input class="form-check-input" type="radio" name="approve_status" id="approve2" value="false">'+
+                        '<label class="form-check-label" for="approve2">Not Approved</label>'+
+                    '</div>'
+                )
+            }
+            else{
+                $('#approve-modal-body').html(
+                    '<div class="form-check">'+
+                        '<input class="form-check-input" type="radio" name="approve_status" id="approve1" value="true">'+
+                        '<label class="form-check-label" for="approve1">Approved</label>'+
+                    '</div>'+
+                    '<div class="form-check">'+
+                        '<input class="form-check-input" type="radio" name="approve_status" id="approve2" value="false" checked>'+
+                        '<label class="form-check-label" for="approve2">Not Approved</label>'+
+                    '</div>'
+                )
+            }
+
+            
 
             var cdate = new Date(Po.data().createdate*1000);
             var cday = cdate.getDate();
@@ -322,27 +367,26 @@ export default {
                         '<div id="shipment-row-'+(i+1)+'" data-row="'+(i+1)+'" class="row py-2 shipment-row">'+
                             '<div class="col-2">'+
                                 '<div class="row">'+
-                                    '<select id="shipment-option-'+(i+1)+'" class="form-control col-8 shipment-option">'+
+                                    '<select id="shipment-option-'+(i+1)+'" class="form-control col-8 shipment-option low-data">'+
                                         '<option disabled selected>select shipment</option>'+
                                     '</select>'+
                                     '<div class="col-4 pt-1"><i type="button" class="bi bi-trash text-danger shipment-del low-data" data-row="'+(i+1)+'" style="font-size:25px;" ></i></div>'+
                                 '</div>'+
                             '</div>'+
                             '<div class="col-3">'+
-                                '<input id="shipment-des-'+(i+1)+'" class="form-control shipment-description" type="text" />'+
+                                '<input id="shipment-des-'+(i+1)+'" class="form-control shipment-description low-data" type="text" value="'+Po.data().shipment[i].description+'" />'+
                             '</div>'+
                             '<div class="col">'+
-                                '<input id="shipment-amount-'+(i+1)+'" class="form-control shipmentdata shipment-amount" data-row="'+(i+1)+'" value="0" type="number" />'+
+                                '<input id="shipment-amount-'+(i+1)+'" class="form-control shipmentdata low-data shipment-amount" data-row="'+(i+1)+'" type="number" value="'+parseInt(Po.data().shipment[i].amount)+'" />'+
                             '</div>'+
                             '<div class="col">'+
-                                '<input id="shipment-unit-'+(i+1)+'" class="form-control shipment-unit" type="text" />'+
+                                '<input id="shipment-unit-'+(i+1)+'" class="form-control shipment-unit low-data" type="text" value="'+Po.data().shipment[i].unit+'" />'+
                             '</div>'+
                             '<div class="col-2">'+
-                                '<input id="shipment-price-'+(i+1)+'" class="form-control shipmentdata shipment-price" data-row="'+(i+1)
-                                +'" value="0" type="number" />'+
+                                '<input id="shipment-price-'+(i+1)+'" class="form-control shipmentdata shipment-price low-data" data-row="'+(i+1)+'" value="'+parseFloat(Po.data().shipment[i].price)+'" type="number" />'+
                             '</div>'+
-                            '<div  id="shipment-totalprice-'+(i+1)+'" class="col-2 shipment-totoal-price text-right">'+
-                                
+                            '<div  id="shipment-totalprice-'+(i+1)+'" class="col-2 shipment-totoal-price text-right" >'+
+                                parseFloat(Po.data().shipment[i].price) * parseInt(Po.data().shipment[i].amount) +
                             '</div>'+
                         '</div>'
                     )
@@ -355,46 +399,32 @@ export default {
             async function getdata(){
                 for(let i = 0 ;i < Po.data().shipment.length; i++){
                     for(let j = 0; j  < shipment_list.length; j++){
-                        
+
                         if(shipment_list[j] == Po.data().shipment[i].shipment){
                             
                             if(Po.data().shipment[i].shipment == 'CombimedCif'){
                                 $('#shipment-option-'+(i+1)).append(
                                     '<option value="CombimedCif" selected>Combimed to CIF</option>'
                                 )
-                                console.log(i)
-                                console.log('data : ',Po.data().shipment[i].shipment)
-                                console.log('CombimedCif')
+
                             }
                             else{
                                 $('#shipment-option-'+(i+1)).append(
                                     '<option value="Other" selected>Other</option>'
                                 )
-                                console.log(i)
-                                console.log('data : ',Po.data().shipment[i].shipment)
-
-                                console.log('Other')
                             }
                         }
                         else{
                             if(Po.data().shipment[i].shipment == 'CombimedCif'){
-                                $('#shipment-option-'+(i+1)).append(
-                                    '<option value="CombimedCif" >Combimed to CIF</option>'
-                                )
-                                console.log(i)
-                                console.log('data : ',Po.data().shipment[i].shipment)
-
-                                console.log('CombimedCif none')
-                                
-                            }
-                            else{
-                                $('#shipment-option-'+(i+1)).append(
+                               $('#shipment-option-'+(i+1)).append(
                                     '<option value="Other" >Other</option>'
                                 )
-                                console.log(i)
-                                console.log('data : ',Po.data().shipment[i].shipment)
-
-                                console.log('Other none')
+                            }
+                            else{
+                                
+                                 $('#shipment-option-'+(i+1)).append(
+                                    '<option value="CombimedCif" >Combimed to CIF</option>'
+                                )
                             }
                         }
                     }
@@ -577,6 +607,7 @@ export default {
             }
 
             function render_price(){
+                shipment_sum()
                 sumprice()
                 ordersheet_check()
                 $('.low-data').attr('disabled',true)
@@ -941,15 +972,16 @@ export default {
             if(con_origin != select_origin_data || con_warranty != warranty_data){
                 $('#con-edit').removeClass('d-none')
                 $('#danger-text').removeClass('d-none')
-                $('#sumprice-row').addClass('d-none')
+                // $('#sumprice-row').addClass('d-none')
                 $('#data').addClass('d-none')
+                shipment_sum()
             }
             else{
-                $('#con-edit').addClass('d-none')
+                // $('#con-edit').addClass('d-none')
                 $('#danger-text').addClass('d-none')
                 $('#sumprice-row').removeClass('d-none')
                 $('#data').removeClass('d-none')
-
+                shipment_sum()
             }
         }
 
@@ -1004,6 +1036,7 @@ export default {
         $('#data-shipment').on('click','.shipment-del',function(){
             const shipment_del_row = $(this).data('row')
             $('#shipment-row-'+shipment_del_row).remove()
+            shipment_sum()
         })
 
         async function shipment_sum(){
@@ -1022,8 +1055,6 @@ export default {
                 }
             }
 
-
-            
         }
         
 
@@ -1069,7 +1100,8 @@ export default {
                     update_time:update_time,
                     origin:orgin,
                     warranty:warranty,
-                    visible:true
+                    visible:true,
+                    approve_status:false
 
                 }).then(()=>{ 
                     location.reload()
@@ -1163,7 +1195,8 @@ export default {
                 projectFirestore.collection('Po').doc(id).update({
                     update_time:timestamp,
                     battorder:battarray,
-                    shipment:shipment_array
+                    shipment:shipment_array,
+                    approve_status:false
                 }).then(()=>{
                     router.push({ 
                         name: 'PECpoList',
@@ -1175,6 +1208,41 @@ export default {
             }
 
         })
+        
+        
+        const approve_form = document.querySelector('#approve_form');
+        approve_form.addEventListener('submit', async function(e){
+            e.preventDefault();
+            const appove_select = $('input[name=approve_status]:checked', '#approve_form').val()
+             $('#approve-modal').modal('toggle');
+            if(appove_select == 'true'){
+                var timestamp = Math.round(new Date().getTime() / 1000);
+                projectFirestore.collection('Po').doc(id).update({
+                    update_time:timestamp,
+                    approve_status:true
+                }).then(()=>{
+                    router.push({ 
+                        name: 'PECpoList',
+                        params: { mserror: true} 
+                    })
+                })
+            }
+            else{
+                var timestamp = Math.round(new Date().getTime() / 1000);
+                projectFirestore.collection('Po').doc(id).update({
+                    update_time:timestamp,
+                    approve_status:false
+                }).then(()=>{
+                    router.push({ 
+                        name: 'PECpoList',
+                        params: { mserror: true} 
+                    })
+                })
+            }
+
+
+        })
+
 
     }
 }
