@@ -248,14 +248,7 @@ export default {
 
         async function renderData() {
             const Po = await projectFirestore.collection("Po").doc(dataid).get()
-            // <div class="col-5 border px-4 py-2">Term of Payment</div>
-            // <div id="tpayment" class="col-7 border px-4 py-2"></div>
-            // <div class="col-5 border px-4 py-2">Delivery Date</div>
-            // <div id="deliverydate" class="col-7 border px-4 py-2"></div>
-            // <div class="col-5 border px-4 py-2">Origin</div>
-            // <div id="Origin" class="col-7 border px-4 py-2">China</div>
-            // <div class="col-5 border px-4 py-2">Project</div>
-            // <div id="project" class="col-7 border px-4 py-2"></div>
+
             $('#pono').html(Po.data().pecpo_no+"/"+Po.data().pecpo_year)
             $('#tpayment').html(Po.data().tpayment+' Days')
             $('#deliverydate').html(Po.data().delivery+' Days')
@@ -289,7 +282,7 @@ export default {
                     for(let j = 0; j < Project.data().orderSheet.length; j++){
                         for(let k = 0; k < Project.data().orderSheet[j].battery.length; k++){
                             if(Po.data().battorder[i].orderSheet == Project.data().orderSheet[j].no && Po.data().battorder[i].batt_no == Project.data().orderSheet[j].battery[k].no){
-                                 $('#sum_data').append(
+                                $('#sum_data').append(
                                         '<tr height="30px">'+
                                             '<td class="text-center">'+(i+1)+'</td>'+
                                             '<td class="text-left">'+Project.data().orderSheet[j].battery[k].series+'</td>'+
@@ -299,7 +292,7 @@ export default {
                                             '<td class="text-right">'+numeral(Po.data().battorder[i].batt_unit_price).format("0,0.00")+'</td>'+
                                             '<td class="text-right">'+numeral((Project.data().orderSheet[j].battery[k].order_amount*Po.data().battorder[i].batt_unit_price)).format("0,0.00")+'</td>'+
                                         '</tr>'
-                                    )
+                                )
                                 sumbattprice = sumbattprice + (Project.data().orderSheet[j].battery[k].order_amount*Po.data().battorder[i].batt_unit_price)
                             }
                         }
@@ -327,14 +320,10 @@ export default {
                 )
                 $('#sumprice').html( numeral( sumbattprice+ parseFloat(Po.data().shippingprice)).format("0,0.00"))
             }
-
-
-
         }
 
 
         renderData()
-
         $('#print').on('click',()=>{
              window.print();
         })
