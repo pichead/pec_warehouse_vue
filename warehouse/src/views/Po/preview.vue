@@ -121,7 +121,7 @@
                                 <div class="col-5 border px-4 py-2 bg-top">Origin</div>
                                 <div id="Origin" class="col-7 border px-4 py-2">China</div>
                                 <div class="col-5 border px-4 py-2 bg-top">Project</div>
-                                <div id="project" class="col-7 border px-4 py-2"></div>
+                                <div id="project" class="col-7 border px-4"></div>
                             </div>
                         </div>
                     </div>
@@ -204,7 +204,7 @@
                 </div>
                 <div class="row" style="margin-top:150px">
                     <div class="col-4">
-                        <div class="text-center my-2">Ananda Khamsuwatana</div>
+                        <div class="text-center my-2">Teeranai Sukemoke</div>
                         <div class="text-center my-2">International Correspondence</div>
 
                     </div>
@@ -244,6 +244,8 @@ export default {
             return self.indexOf(value) === index;
         }
 
+        var projectName_list = []
+
 
 
         async function renderData() {
@@ -266,40 +268,37 @@ export default {
                 month = "0" + month;
             }
             var new_date = day + "/" + month + "/" + year;
-
+            var run_number = 0
             var sumbattprice = 0 
             const shipping_no = Po.data().battorder.length+1
             $('#date').html(new_date)
             await renderdata()
             await renderfooter()
-
+            await renderSum()
 
             async function renderdata(){
 
                 for(let i = 0; i < Po.data().battorder.length;i++){
-                    const Project = await projectFirestore.collection("Projects").doc(Po.data().battorder[i].project_id).get()
-                    // console.log(Project.data())
-                    for(let j = 0; j < Project.data().orderSheet.length; j++){
-                        for(let k = 0; k < Project.data().orderSheet[j].battery.length; k++){
-                            if(Po.data().battorder[i].orderSheet == Project.data().orderSheet[j].no && Po.data().battorder[i].batt_no == Project.data().orderSheet[j].battery[k].no){
-                                $('#sum_data').append(
-                                        '<tr height="30px">'+
-                                            '<td class="text-center">'+(i+1)+'</td>'+
-                                            '<td class="text-left">'+Project.data().orderSheet[j].battery[k].series+'</td>'+
-                                            '<td class="text-right">'+(Project.data().orderSheet[j].battery[k].warranty)+' Mth</td>'+
-                                            '<td class="text-right">'+Project.data().orderSheet[j].battery[k].order_amount+'</td>'+
-                                            '<td class="text-center">Blks.</td>'+
-                                            '<td class="text-right">'+numeral(Po.data().battorder[i].batt_unit_price).format("0,0.00")+'</td>'+
-                                            '<td class="text-right">'+numeral((Project.data().orderSheet[j].battery[k].order_amount*Po.data().battorder[i].batt_unit_price)).format("0,0.00")+'</td>'+
-                                        '</tr>'
-                                )
-                                sumbattprice = sumbattprice + (Project.data().orderSheet[j].battery[k].order_amount*Po.data().battorder[i].batt_unit_price)
-                            }
+                    projectName_list.push(Po.data().battorder[i].projectname)
+                    for(let j = 0; j < Po.data().battorder[i].ordersheet.length;j++){
+                        for(let k = 0; k < Po.data().battorder[i].ordersheet[j].battery.length; k++){
+                            run_number = run_number + 1
+                            
+                            $('#sum_data').append(
+                                '<tr height="30px">'+
+                                    '<td class="text-center">'+run_number+'</td>'+
+                                    '<td class="text-left">'+Po.data().battorder[i].ordersheet[j].battery[k].series+'</td>'+
+                                    '<td class="text-right">'+Po.data().warranty+' Mth</td>'+
+                                    '<td class="text-right">'+Po.data().battorder[i].ordersheet[j].battery[k].order_amount+'</td>'+
+                                    '<td class="text-center">Blks.</td>'+
+                                    '<td class="text-right">'+numeral(Po.data().battorder[i].ordersheet[j].battery[k].batt_unit_price).format("0,0.00")+'</td>'+
+                                    '<td class="text-right">'+numeral((Po.data().battorder[i].ordersheet[j].battery[k].order_amount*Po.data().battorder[i].ordersheet[j].battery[k].batt_unit_price)).format("0,0.00")+'</td>'+
+                                '</tr>'
+                            )
+                            sumbattprice = sumbattprice + (Po.data().battorder[i].ordersheet[j].battery[k].order_amount*Po.data().battorder[i].ordersheet[j].battery[k].batt_unit_price)
                         }
-                        
                     }
-                    // const order_amount = Po.data().battery[i].amount - Po.data().battery[i].wh_stock
-                   
+
                 }
 
             
@@ -307,18 +306,42 @@ export default {
             }
 
             function renderfooter(){
-                $('#sum_data').append(
-                    '<tr height="30px">'+
-                        '<td class="text-center">'+(shipping_no)+'</td>'+
-                        '<td class="text-left">Freight Charge : '+Po.data().shippingname+'</td>'+
-                        '<td class="text-center"></td>'+
-                        '<td class="text-center"></td>'+
-                        '<td class="text-center"></td>'+
-                        '<td class="text-center"></td>'+
-                        '<td class="text-right">'+numeral(Po.data().shippingprice).format("0,0.00")+'</td>'+
-                    '</tr>'
-                )
-                $('#sumprice').html( numeral( sumbattprice+ parseFloat(Po.data().shippingprice)).format("0,0.00"))
+                for(let i = 0; i < projectName_list.length ; i++){
+                    if(i > 0){
+                        $('#project').append(
+                            ', '+projectName_list[i]
+                        )
+                    }
+                    else{
+                        $('#project').append(
+                            projectName_list[i]
+                        )
+                    }
+                    
+                }
+
+                for(let i = 0; i < Po.data().shipment.length; i++){
+                    run_number = run_number + 1
+                    $('#sum_data').append(
+                        '<tr height="30px">'+
+                            '<td class="text-center">'+run_number+'</td>'+
+                            '<td class="text-left">'+Po.data().shipment[i].shipment+' : '+Po.data().shipment[i].description+'</td>'+
+                            '<td class="text-center"></td>'+
+                            '<td class="text-right">'+numeral(Po.data().shipment[i].amount).format("0,0.00")+'</td>'+
+                            '<td class="text-center">'+Po.data().shipment[i].unit+'</td>'+
+                            '<td class="text-right">'+numeral(Po.data().shipment[i].price).format("0,0.00")+'</td>'+
+                            '<td class="text-right">'+numeral(Po.data().shipment[i].price * Po.data().shipment[i].amount).format("0,0.00")+'</td>'+
+                        '</tr>'
+                    )
+                    sumbattprice = sumbattprice + (Po.data().shipment[i].price * Po.data().shipment[i].amount)
+                }
+
+                
+            }
+
+            function renderSum(){
+                $('#sumprice').html( numeral( sumbattprice).format("0,0.00"))
+               
             }
         }
 

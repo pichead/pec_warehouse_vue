@@ -82,7 +82,7 @@ export default {
             projectFirestore.collection('Users').doc(projectAuth.currentUser.uid).set({
                 email: projectAuth.currentUser.email,
                 name:displayName.value,
-                admin: false,
+                activation: false,
             }).then(function() {
                 console.log('regis pass')
                 projectAuth.signOut()

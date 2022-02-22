@@ -34,8 +34,10 @@ import BatteryEdit from '../views/Battery/editbattery.vue'
 
 // PO
 import PECpoList from '../views/Po/pecpoList.vue'
+import PecPoConfirmList from '../views/Po/pecpo_confirm_list.vue'
 import CreatePecpo from '../views/Po/createPecpo.vue'
 import EditPecpo from '../views/Po/edit.vue'
+import ConfirmPecpo from '../views/Po/confirm.vue'
 // import EditPecpo from '../views/Po/editPecpo.vue'
 import PrintPecpo from '../views/Po/preview.vue'
 
@@ -57,8 +59,8 @@ const requireAuth = (to, from, next) => {
       next({ name: 'Welcome'})
     } else {
       projectFirestore.collection('Users').doc(user.uid).get().then( role =>{
-        const admin =  role.data().admin
-        if(admin == true){
+        const activation =  role.data().activation
+        if(activation == true){
           next()
         }
         else{
@@ -78,7 +80,7 @@ projectAuth.onAuthStateChanged((user) => {
     if (user) {
       projectFirestore.collection('Users').doc(user.uid).get().then( role =>{
         const admin =  role.data().admin
-        if(admin == true){
+        if(activation == true){
           next({ name: 'Home'})
         }
         else{
@@ -210,6 +212,12 @@ const routes = [
     beforeEnter: requireAuth
   },
   {
+    path: '/pecpo_confirm_list',
+    name: 'PecPoConfirmList',
+    component: PecPoConfirmList,
+    beforeEnter: requireAuth
+  },
+  {
     path: '/createPecpo',
     name: 'CreatePecpo',
     component: CreatePecpo,
@@ -219,6 +227,12 @@ const routes = [
     path: '/editPecpo/:id',
     name: 'EditPecpo',
     component: EditPecpo,
+    beforeEnter: requireAuth
+  },
+  {
+    path: '/confirmPecpo/:id',
+    name: 'ConfirmPecpo',
+    component: ConfirmPecpo,
     beforeEnter: requireAuth
   },
   {

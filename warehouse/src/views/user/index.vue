@@ -28,7 +28,7 @@
 
 
         <div class="modal" id="editModal" aria-hidden="true" style="display: none;">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
 
                 <div class="modal-content">
                     <div class="modal-header">
@@ -46,8 +46,8 @@
                             </div>
                         </div>
                         <br>
-                        <!-- <div class="font-weight-bold mb-2">การเข้าถึง</div> -->
-                        <!-- <div id="modal-edit-role" class="border p-3 col-10 mx-auto disable" >
+                        <div class="font-weight-bold mb-2">การเข้าถึง</div>
+                        <div id="modal-edit-role" class="border p-3 col-10 mx-auto disable" >
 
                                 <div class="col-12 pl-5 font-weight-bold">Warehouse</div>
                                 <div class="row">
@@ -58,6 +58,15 @@
                                     <input type="checkbox" class="col-1 offset-3 my-1" style="width: 25px; height: 25px"/>
                                     <div class="col-8 my-1">Project Order</div>
                                     
+                                </div>
+                                <div class="col-12 mt-2 pl-5 font-weight-bold">PEC PO</div>
+                                <div class="row">
+                                    <input type="checkbox" class="col-1 offset-3 my-1 permis" value="create pecpo" style="width: 25px; height: 25px"/>
+                                    <div class="col-8 my-1">Create PEC PO</div>
+                                    <input type="checkbox" class="col-1 offset-3 my-1 permis" value="confirm pecpo manager" style="width: 25px; height: 25px"/>
+                                    <div class="col-8 my-1">Confirm PEC PO (Manager)</div>
+                                    <input type="checkbox" class="col-1 offset-3 my-1 permis" value="confirm pecpo general manager" style="width: 25px; height: 25px"/>
+                                    <div class="col-8 my-1">Confirm PEC PO (Gengeral Manager)</div>
                                 </div>
 
                                 <div class="col-12 mt-2 pl-5 font-weight-bold">Site</div>
@@ -76,7 +85,7 @@
 
 
 
-                        </div> -->
+                        </div>
                     </div>
                     <div id="modalfooter" class="modal-footer">
                         
@@ -100,7 +109,7 @@ export default {
             var i = 1
             $('#data').html('')
             Users.forEach((user) => {
-                    if(user.data().admin == true){
+                    if(user.data().activation == true){
                         $('#data').append(
                             '<tr>'+
                                 '<td class="text-center">'+i+'</td>'+
@@ -108,7 +117,7 @@ export default {
                                 '<td class="">'+user.data().email+'</td>'+
                                 '<td class="text-center text-success">เปิดใช้งานแล้ว</td>'+
                                 '<td>'+
-                                    '<button class="btn btn-warning font-weight-bold col-8 ml-4 edit-btn" value="'+user.id+'" data-toggle="modal" data-target="#editModal" >Edit</button>'+
+                                    '<button class="btn btn-warning font-weight-bold col-8 ml-4 edit-btn text-white" value="'+user.id+'" data-toggle="modal" data-target="#editModal" >Edit</button>'+
                                 '</td>'+
                             '</tr>'
                         )
@@ -121,7 +130,7 @@ export default {
                                 '<td class="">'+user.data().email+'</td>'+
                                 '<td class="text-center text-danger">ไม่ได้ใช้งาน</td>'+
                                 '<td>'+
-                                    '<button class="btn btn-warning font-weight-bold col-8 ml-4 edit-btn" value="'+user.id+'" data-toggle="modal" data-target="#editModal" >Edit</button>'+
+                                    '<button class="btn btn-warning font-weight-bold col-8 ml-4 text-white edit-btn" value="'+user.id+'" data-toggle="modal" data-target="#editModal" >Edit</button>'+
                                 '</td>'+
                             '</tr>'
                         )
@@ -143,7 +152,7 @@ export default {
                 $('#model_head').text('แก้ไข user : '+ user_data.data().name)
                 
 
-                if(user_data.data().admin == true){
+                if(user_data.data().activation == true){
                     $('#modal-edit-option').append(
                         '<option value="true" selected>เปิดใช้งาน</option>'+
                         '<option value="false">ปิด</option>'
@@ -170,9 +179,11 @@ export default {
           editUser(e.target.value);
         });
 
-        function editUser(UserId) {
+        async function editUser(UserId) {
             const activated = get_act()
-
+            var permission_arr = []
+            await get_permisison()
+            await saveUser()
             function get_act(){
                 if($('#modal-edit-option').find('option:selected').val() == 'true'){
                     return true
@@ -181,12 +192,25 @@ export default {
                     return false
                 }
             }
+
+            function get_permisison(){
+                for(let i = 0; i < $('.permis').length; i++){
+                    if ($($('.permis')[i]).is(':checked')) {
+                        permission_arr.push($($('.permis')[i]).val())
+                    }
+                }
+            }
             
-            projectFirestore.collection('Users').doc(UserId).update({
-                admin:activated,
-            }).then(function () {
-                location.reload();
-            })
+            function saveUser(){
+                // console.log()
+                projectFirestore.collection('Users').doc(UserId).update({
+                    activation:activated,
+                    permission:permission_arr
+                }).then(function () {
+                    location.reload();
+                })
+            }
+            
         }
 
         $('#searchbar').on('keyup',function(){
