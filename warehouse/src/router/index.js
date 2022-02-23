@@ -37,6 +37,7 @@ import PECpoList from '../views/Po/pecpoList.vue'
 import PecPoConfirmList from '../views/Po/pecpo_confirm_list.vue'
 import CreatePecpo from '../views/Po/createPecpo.vue'
 import EditPecpo from '../views/Po/edit.vue'
+import ViewPecpo from '../views/Po/view.vue'
 import ConfirmPecpo from '../views/Po/confirm.vue'
 // import EditPecpo from '../views/Po/editPecpo.vue'
 import PrintPecpo from '../views/Po/preview.vue'
@@ -227,6 +228,12 @@ const routes = [
     path: '/editPecpo/:id',
     name: 'EditPecpo',
     component: EditPecpo,
+    beforeEnter: requireAuth
+  },
+  {
+    path: '/viewPecpo/:id',
+    name: 'ViewPecpo',
+    component: ViewPecpo,
     beforeEnter: requireAuth
   },
   {

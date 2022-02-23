@@ -384,7 +384,10 @@ export default {
                 origin:orgin,
                 warranty:warranty,
                 visible:true,
-                approve_status:false
+                approve_status:false,
+                manager_approve_status:false,
+                generalmanager_approve_status:false
+
 
             }).then( function(docRef){
                 router.push({ 

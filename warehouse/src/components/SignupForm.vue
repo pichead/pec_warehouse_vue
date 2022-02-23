@@ -83,6 +83,7 @@ export default {
                 email: projectAuth.currentUser.email,
                 name:displayName.value,
                 activation: false,
+                permission: [],
             }).then(function() {
                 console.log('regis pass')
                 projectAuth.signOut()

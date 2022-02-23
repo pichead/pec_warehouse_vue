@@ -49,10 +49,11 @@
             <div class="col">
                 <div id="head" class="row border-top pt-4 pb-3 font-weight-bold text-center">
                     <div class="col">PO NO.</div>
-                    <div class="col-2">Company</div>
                     <div class="col">Date</div>
                     <div class="col-2">Validation</div>
-                    <div class="col-2">Print</div>
+                    <div class="col-2">Validation Manager</div>
+                    <div class="col-3">Validation General Manager</div>
+                    <div class="col-2"></div>
                 </div>
                 <div id="polist">
                     
@@ -69,38 +70,48 @@ import Sidebar from "../../components/Sidebar.vue";
 import router from "@/router";
 export default {
     components: { Sidebar },
-    mounted() {
-        const auth = projectAuth;
-        const user_email = auth.currentUser.email;
-        const user_role = get_user_role()
-        console.log(user_role)
-        async function get_user_role(){
-            const get_user_list = await projectFirestore.collection("Users").get()
-            var role_array = []
-            await find_user_role()
-            await return_role()
+    beforeCreate(){
+        pre_render()
+        async function pre_render(){
+            const auth = projectAuth;
+            const user_email = auth.currentUser.email;
+            const get_user_list = await projectFirestore.collection("Users").where("email", '==', user_email).get()
+            var user_permission
 
+            await get_permission()
+            await get_render_page()
 
-            function find_user_role(){
+            function get_permission(){
                 get_user_list.forEach((user)=>{
-                    if(user.data().email == user_email){
-                        role_array = user.data().permission
-                    }
+                    user_permission = user.data().permission
                 })
-
             }
+            function get_render_page(){
+                if(user_permission && user_permission.includes('confirm pecpo manager') || user_permission.includes('confirm pecpo general manager')){
 
-            function return_role(){
-                return role_array
+                }
+                else{
+                    
+                    router.push({ 
+                        name: 'Home',
+                        params: { mserror: true} 
+                    })
+                }
             }
+            // const user_permission = await get_user_list.data().email
+            // console.log(get_user_list.data())
+                
         }
         
+    },
+    mounted() {
+        
 
-        projectFirestore.collection("Po").get().then((Pos) => {
+        projectFirestore.collection("Po").orderBy('createdate','desc').get().then((Pos) => {
             
                 
             $('#polist').html('')
-            Pos.forEach(async function(po){   
+            Pos.forEach(async function(po){ 
                 // var creatdate = eval((PmData.data().create_date)*1000);
                 var crdate = new Date(po.data().createdate*1000);
                 var crday = crdate.getDate();
@@ -115,13 +126,52 @@ export default {
                 var new_crdate = crday + "-" + crmonth + "-" + cryear;
                 
                 const company = await projectFirestore.collection('ContactCompany').doc(po.data().company).get()
+                const view_btn = get_view_btn()
+                const approve_status = get_approve_status()
+                const manager_approve_status = get_manager_approve_status()
+                const general_mangager_approve_status = get_generalmanager_approve_status()
+
+                function get_view_btn(){
+                    if(po.data().approve_status == true){
+                        return '<button class="btn btn-warning p-1 mr-2 col-5"><a class=" text-white text-decoration-none" href="/viewPecpo/'+po.id+'">View</a></button>'
+                    }
+                    else{
+                        return '<button class="btn btn-warning text-white p-1 mr-2 col-5" disabled>View</button>'
+                    }
+                }
+                function get_approve_status(){
+                    if(po.data().approve_status == true){
+                        return '<div class="col-2 my-auto text-success">'+po.data().approve_status+'</div>'
+                    }
+                    else{
+                        return '<div class="col-2 my-auto text-danger">'+po.data().approve_status+'</div>'
+                    }                                                                                                  
+                }
+                function get_manager_approve_status(){
+                    if(po.data().manager_approve_status == true){
+                        return '<div class="col-2 my-auto text-success">'+po.data().manager_approve_status+'</div>'
+                    }
+                    else{
+                        return '<div class="col-2 my-auto text-danger">'+po.data().manager_approve_status+'</div>'
+                    }
+                }
+                function get_generalmanager_approve_status(){
+                    if(po.data().generalmanager_approve_status == true){
+                        return '<div class="col-3 my-auto text-success">'+po.data().generalmanager_approve_status+'</div>'
+                    }
+                    else{
+                        return '<div class="col-3 my-auto text-danger">'+po.data().generalmanager_approve_status+'</div>'
+                    }
+                }
+
                 $('#polist').append('<div class="row py-2 font-weight-bold border mb-2 rounded text-center"  style="background: #f4f4f4;">'+
                         '<div class="col my-auto">'+po.data().pecpo_no+'/'+po.data().pecpo_year+'</div>'+
-                        '<div class="col-2 my-auto">'+company.data().CompanyName+'</div>'+
                         '<div class="col my-auto">'+new_crdate+'</div>'+
-                        '<div class="col-2 my-auto">no validation</div>'+
+                        approve_status+
+                        manager_approve_status+
+                        general_mangager_approve_status+
                         '<div class="col-2 d-flex justify-content-center row-hl">'+
-                            '<a class="btn btn-warning text-white p-1 mr-2 col-5" href="/editPecpo/'+po.id+'">Edit</a>'+
+                            view_btn +
                             '<a class="btn btn-info p-1 col-5" href="/pecpo_print/'+po.id+'">Print</a>'+
                         '</div>'+
                     '</div>')
