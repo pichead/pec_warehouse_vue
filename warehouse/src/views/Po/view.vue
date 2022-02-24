@@ -241,54 +241,80 @@ export default {
         function onlyUnique(value, index, self) {
             return self.indexOf(value) === index;
         }
+        var user_role
 
-        // pre_approve_btn()
-        // async function pre_approve_btn(){
-        //     const auth = projectAuth;
-        //     const user_email = auth.currentUser.email;
-        //     const get_user_list = await projectFirestore.collection("Users").where("email", '==', user_email).get()
-        //     var user_permission
+        pre_approve_btn()
+        async function pre_approve_btn(){
+            const auth = projectAuth;
+            const user_email = auth.currentUser.email;
+            const get_user_list = await projectFirestore.collection("Users").where("email", '==', user_email).get()
+            const user_permission = get_permission(get_user_list)
+            const role = await render_permission(user_permission)
 
-        //     await get_permission()
-        //     await get_permission()
+            await render_permission_data()
 
-        //     function get_permission(){
-        //         get_user_list.forEach((user)=>{
-        //             user_permission = user.data().permission
-        //         })
-        //     }            
-        // }
+            function get_permission(){
+                var user_permission_arr = []
+                get_user_list.forEach((user)=>{
+                    user_permission_arr = user.data().permission
+                })
+                return user_permission_arr
+                
+
+            }
+            function render_permission(){
+                if(user_permission.includes('confirm pecpo manager')){
+                    user_role = 'manager'
+                    return 'manager'
+                }
+                else{
+                    user_role = 'general manager'
+                    return 'general manager'
+                }
+            }
+            async function render_permission_data(){
+                const Po_confirm = await projectFirestore.collection('Po').doc(id).get()
+                const approve_status = await get_confirm_status()
+                function get_confirm_status(){
+                    if(role == 'manager'){
+                        return Po_confirm.data().manager_approve_status
+                    }
+                    else{
+                        return Po_confirm.data().generalmanager_approve_status
+                    }
+                }
+                if(approve_status == true){
+                    $('#approve-modal-body').html(
+                        '<div class="form-check">'+
+                            '<input class="form-check-input" type="radio" name="approve_status" id="approve1" value="true" checked>'+
+                            '<label class="form-check-label" for="approve1">Approved</label>'+
+                        '</div>'+
+                        '<div class="form-check">'+
+                            '<input class="form-check-input" type="radio" name="approve_status" id="approve2" value="false">'+
+                            '<label class="form-check-label" for="approve2">Not Approved</label>'+
+                        '</div>'
+                    )
+                }
+                else{
+                    $('#approve-modal-body').html(
+                        '<div class="form-check">'+
+                            '<input class="form-check-input" type="radio" name="approve_status" id="approve1" value="true">'+
+                            '<label class="form-check-label" for="approve1">Approved</label>'+
+                        '</div>'+
+                        '<div class="form-check">'+
+                            '<input class="form-check-input" type="radio" name="approve_status" id="approve2" value="false" checked>'+
+                            '<label class="form-check-label" for="approve2">Not Approved</label>'+
+                        '</div>'
+                    )
+                }
+            }
+        }
 
         async function predata(){
             const Po = await projectFirestore.collection('Po').doc(id).get()
             const Companys = await projectFirestore.collection('ContactCompany').get()
             const ordersheet_list = Po.data().battorder
-            const approve_status = Po.data().approve_status
-
-            if(approve_status == true){
-                $('#approve-modal-body').html(
-                    '<div class="form-check">'+
-                        '<input class="form-check-input" type="radio" name="approve_status" id="approve1" value="true" checked>'+
-                        '<label class="form-check-label" for="approve1">Approved</label>'+
-                    '</div>'+
-                    '<div class="form-check">'+
-                        '<input class="form-check-input" type="radio" name="approve_status" id="approve2" value="false">'+
-                        '<label class="form-check-label" for="approve2">Not Approved</label>'+
-                    '</div>'
-                )
-            }
-            else{
-                $('#approve-modal-body').html(
-                    '<div class="form-check">'+
-                        '<input class="form-check-input" type="radio" name="approve_status" id="approve1" value="true">'+
-                        '<label class="form-check-label" for="approve1">Approved</label>'+
-                    '</div>'+
-                    '<div class="form-check">'+
-                        '<input class="form-check-input" type="radio" name="approve_status" id="approve2" value="false" checked>'+
-                        '<label class="form-check-label" for="approve2">Not Approved</label>'+
-                    '</div>'
-                )
-            }
+            
 
             
 
@@ -379,7 +405,7 @@ export default {
                                 '<input id="shipment-unit-'+(i+1)+'" class="form-control shipment-unit low-data" type="text" value="'+Po.data().shipment[i].unit+'" />'+
                             '</div>'+
                             '<div class="col-2">'+
-                                '<input id="shipment-price-'+(i+1)+'" class="form-control shipmentdata shipment-price low-data" data-row="'+(i+1)+'" value="'+parseFloat(Po.data().shipment[i].price)+'" type="number" />'+
+                                '<input id="shipment-price-'+(i+1)+'" class="form-control shipmentdata shipment-price low-data" style="text-align: right; " data-row="'+(i+1)+'" value="'+parseFloat(Po.data().shipment[i].price)+'" type="number" />'+
                             '</div>'+
                             '<div  id="shipment-totalprice-'+(i+1)+'" class="col-2 shipment-totoal-price text-right" >'+
                                 parseFloat(Po.data().shipment[i].price) * parseInt(Po.data().shipment[i].amount) +
@@ -559,7 +585,7 @@ export default {
                                                     '<div class="col-12 my-1 text-center"  style="height:40px">Blk.</div>'
                                                 )
                                                 $('#price-'+(j+1)+'-'+(k+1)).append(
-                                                    '<input class="form-control my-1 price batt-price low-data" data-series="'+ordersheet_list[j].ordersheet[k].battery[m].series+'" data-orderamount="'+ordersheet_list[j].ordersheet[k].battery[m].order_amount+'" data-project_id="'+ordersheet_list[j].job+'" data-ordersheet_no="'+ordersheet_list[j].ordersheet[k].ordersheet+'" data-id="'+ordersheet_list[j].ordersheet[k].battery[m].batt_no+'" data-project="'+(j+1)+'" data-ordersheet="'+(k+1)+'" style="height:40px" value="'+numeral(ordersheet_list[j].ordersheet[k].battery[m].batt_unit_price).format('0,0.00')+'" type="number" step="0.01" require />'
+                                                    '<input class="form-control my-1 price batt-price low-data" style="text-align: right; " data-series="'+ordersheet_list[j].ordersheet[k].battery[m].series+'" data-orderamount="'+ordersheet_list[j].ordersheet[k].battery[m].order_amount+'" data-project_id="'+ordersheet_list[j].job+'" data-ordersheet_no="'+ordersheet_list[j].ordersheet[k].ordersheet+'" data-id="'+ordersheet_list[j].ordersheet[k].battery[m].batt_no+'" data-project="'+(j+1)+'" data-ordersheet="'+(k+1)+'" style="height:40px" value="'+numeral(ordersheet_list[j].ordersheet[k].battery[m].batt_unit_price).format('0,0.00')+'" type="number" step="0.01" require />'
                                                 )
                                                 $('#total-'+(j+1)+'-'+(k+1)).append(
                                                     '<div id="price-total-'+ordersheet_list[j].ordersheet[k].battery[m].batt_no+'" class="my-1 price-total-'+(j+1)+'-'+(k+1)+' totalprice"  style="height:40px" >'+numeral(ordersheet_list[j].ordersheet[k].battery[m].order_amount * ordersheet_list[j].ordersheet[k].battery[m].batt_unit_price).format('0,0.00')+'</div>'
@@ -603,6 +629,96 @@ export default {
                 $('.bi-trash').addClass('d-none')
 
             }
+            
+
+        }
+        async function shipment_sum(){
+
+            await pre_shipment()
+            await sum_shipment()
+            await sumprice()
+
+            function pre_shipment(){
+                shipmentprice = 0
+            }
+
+            function sum_shipment(){
+                for(let i =0 ; i < $('.shipment-totoal-price').length;i++){
+                    shipmentprice = shipmentprice + parseFloat($($('.shipment-totoal-price')[i]).html())
+                }
+            }
+
+        }
+        async function sumprice(){
+            var sum_price = 0.00
+            var new_sum_price = 0.00
+
+            await sumbattprice()
+            await sumshippingprice()
+            await render_total_price()
+            function sumbattprice(){
+                $('.totalprice').each(function(){
+                    const get_row_price = numeral($(this).text()).value()
+                    sum_price = sum_price + get_row_price          
+                })                
+            }
+
+            function sumshippingprice(){
+                
+                sum_price = parseFloat(sum_price)+ parseFloat(shipmentprice) 
+            }
+
+            function render_total_price(){
+                $('#totalprice').html( numeral(sum_price).format('0,0.00'))
+            }
+
+        }
+        async function ordersheet_check(){
+            var ordersheet_valid = []
+            const ordersheet_check = $('.ordersheet')
+            const ordersheet_option = $('.option-ordersheet')
+            await set_ordersheet_array()
+            await set_ordersheet_valid()
+            await set_ordersheet_option()
+
+            function set_ordersheet_array(){
+                for(let i = 0; i < project_ordersheet_use.length; i++){
+                    ordersheet_valid.push({project_id:project_ordersheet_use[i].project_id,ordersheet:[]})
+                }
+            }
+
+            function set_ordersheet_valid(){
+                for(let i = 0; i < ordersheet_check.length;i++){
+                    const ordersheet_check_val = $(ordersheet_check[i]).find('option:selected').val()
+                    const ordersheet_check_id = $(ordersheet_check[i]).find('option:selected').data('project')
+                    for(let j = 0 ; j < ordersheet_valid.length; j++){
+                        if(ordersheet_check_id == ordersheet_valid[j].project_id){
+                            ordersheet_valid[j].ordersheet.push(ordersheet_check_val)
+                        }
+                    }
+
+                }
+            }
+            function set_ordersheet_option(){
+                for(let i = 0 ; i < ordersheet_option.length; i++){
+                    for(let j = 0; j < ordersheet_valid.length;j++){
+                        for(let k = 0; k < ordersheet_valid[j].ordersheet.length;k++){
+                            if($(ordersheet_option[i]).is(':selected')){
+                                
+                            }
+                            else{
+                                if($(ordersheet_option[i]).val() == ordersheet_valid[j].ordersheet[k] && $(ordersheet_option[i]).data('project') == ordersheet_valid[j].project_id){
+                                    $(ordersheet_option[i]).attr('disabled',true)
+                                }
+                                
+                            }
+                        }
+                    }
+                    
+
+                }
+            }
+            
 
         }
 
@@ -612,31 +728,58 @@ export default {
         approve_form.addEventListener('submit', async function(e){
             e.preventDefault();
             const appove_select = $('input[name=approve_status]:checked', '#approve_form').val()
-             $('#approve-modal').modal('toggle');
-            if(appove_select == 'true'){
-                var timestamp = Math.round(new Date().getTime() / 1000);
-                projectFirestore.collection('Po').doc(id).update({
-                    update_time:timestamp,
-                    approve_status:true
-                }).then(()=>{
-                    router.push({ 
-                        name: 'PECpoList',
-                        params: { mserror: true} 
+            var timestamp = Math.round(new Date().getTime() / 1000);
+            $('#approve-modal').modal('toggle');
+            if(user_role == 'manager'){
+                if(appove_select == 'true'){
+                    projectFirestore.collection('Po').doc(id).update({
+                        update_time:timestamp,
+                        manager_approve_status:true
+                    }).then(()=>{
+                        router.push({ 
+                            name: 'PecPoConfirmList',
+                            params: { mserror: true} 
+                        })
                     })
-                })
+                }
+                else{
+                    projectFirestore.collection('Po').doc(id).update({
+                        update_time:timestamp,
+                        manager_approve_status:false
+                    }).then(()=>{
+                        router.push({ 
+                            name: 'PecPoConfirmList',
+                            params: { mserror: true} 
+                        })
+                    })
+                }
             }
             else{
-                var timestamp = Math.round(new Date().getTime() / 1000);
-                projectFirestore.collection('Po').doc(id).update({
-                    update_time:timestamp,
-                    approve_status:false
-                }).then(()=>{
-                    router.push({ 
-                        name: 'PECpoList',
-                        params: { mserror: true} 
+                if(appove_select == 'true'){
+                    projectFirestore.collection('Po').doc(id).update({
+                        update_time:timestamp,
+                        generalmanager_approve_status:true
+                    }).then(()=>{
+                        router.push({ 
+                            name: 'PecPoConfirmList',
+                            params: { mserror: true} 
+                        })
                     })
-                })
+                }
+                else{
+                    projectFirestore.collection('Po').doc(id).update({
+                        update_time:timestamp,
+                        generalmanager_approve_status:false
+                    }).then(()=>{
+                        router.push({ 
+                            name: 'PecPoConfirmList',
+                            params: { mserror: true} 
+                        })
+                    })
+                }
+                
             }
+            
 
 
         })

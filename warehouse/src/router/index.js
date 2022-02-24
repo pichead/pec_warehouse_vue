@@ -80,7 +80,7 @@ projectAuth.onAuthStateChanged((user) => {
   
     if (user) {
       projectFirestore.collection('Users').doc(user.uid).get().then( role =>{
-        const admin =  role.data().admin
+        const activation =  role.data().activation
         if(activation == true){
           next({ name: 'Home'})
         }

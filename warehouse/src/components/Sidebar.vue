@@ -4,7 +4,7 @@
     <section class="bg-dark p-4 " style="width: 250px;position:fixed;z-index: 1000;left: 0;top: 0;border-right: 1px solid #162636;height: 100%;color:white">
         <div class="h4 pb-4 pt-3 font-weight-bold" style="border-bottom: 4px solid white;">
             <a class="text-white" style="text-decoration:none" href="/home">
-                PEC Warehouse 0.2.71
+                PEC Warehouse 0.3.50
             </a>
         </div>
         <br>
@@ -40,6 +40,10 @@
             <li id="" class="nav-item   py-2 pl-3" >
                 <a class="nav-link text-light font-weight-bold" href="/Battery/pecpoList">PEC PO</a>
             </li>
+            <li id="" class="nav-item   py-2 pl-3" >
+                <a class="nav-link text-light font-weight-bold" href="/pecpo_confirm_list">PEC PO Confirm</a>
+            </li>
+            
             <!-- <li id="" class="nav-item   py-2 pl-3"  >
                 <a class="nav-link text-light font-weight-bold" href="/Battery/batterylist">Stock</a>
             </li> -->
