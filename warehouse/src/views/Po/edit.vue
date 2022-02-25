@@ -214,14 +214,23 @@
                     </div>
                 </form>
                 <div class="modal" id="approve-modal" aria-hidden="true" style="display: none;">
-                    <div class="modal-dialog">
+                    <div class="modal-dialog modal-lg">
                         <form id="approve_form" class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title">Approve</h5>
                                 <button class="close" data-dismiss="modal">×</button>
                             </div>
-                            <div id="approve-modal-body" class="modal-body col-10 mx-auto">
-                                
+                            <div class="modal-body col-10 mx-auto">
+                                <div class="font-weight-bol my-3 font-weight-bold">Approve</div>
+                                <div id="approve-modal-body"></div>                                
+                            </div>
+                            <br>
+                            <div class="col-10 mx-auto font-weight-bold">Massage</div>
+                            <div class="col-10 mx-auto border round my-3 p-3">
+                                <div id="msg-data" class="overflow-auto" style="height:200px">
+                                    <div class="col-10 text-center mx-auto mt-4 pt-5">No Massage</div>
+                                </div>
+                                <textarea id="new_msg" class="form-control my-2" placeholder="Massage..."></textarea>
                             </div>
                             <div class="modal-footer">
                                 <button class="btn red-btn" data-dismiss="modal">Close</button>
@@ -256,6 +265,8 @@ export default {
         var con_origin
         var con_warranty
         var con_delivery = ""
+        var msg = []
+        var username
         const origin_option = ['China','Mexico']
         var shipmentprice = 0
         const shipment_list = ['Combined to CIF','Other']
@@ -268,7 +279,17 @@ export default {
             const Companys = await projectFirestore.collection('ContactCompany').get()
             const ordersheet_list = Po.data().battorder
             const approve_status = Po.data().approve_status
-
+            const auth = projectAuth;
+            const user_email = auth.currentUser.email;
+            const get_user_list = await projectFirestore.collection("Users").where("email", '==', user_email).get()
+            username = await get_username(get_user_list)
+            function get_username(){
+                var name
+                get_user_list.forEach((user)=>{
+                    name = user.data().name
+                })
+                return name
+            }
             if(approve_status == true){
                 $('#approve-modal-body').html(
                     '<div class="form-check">'+
@@ -293,6 +314,22 @@ export default {
                     '</div>'
                 )
             }
+
+            if(Po.data().msg.length > 0){
+                msg = Po.data().msg
+                $('#msg-data').html('')
+                for(let i = 0; i < Po.data().msg.length; i++){
+                    var dt=eval(Po.data().msg[i].date*1000);
+                    var msg_date = (new Date(dt)).toLocaleString();
+                    $('#msg-data').append(
+                        '<div class="border border-round p-2 my-1">'+
+                            '<div class="">'+Po.data().msg[i].name+' : '+msg_date+'</div>'+
+                            '<div class="pl-3">'+Po.data().msg[i].msg+'</div>'+
+                        '</div> '
+                    )
+                }
+            }
+            
 
             
 
@@ -1214,12 +1251,19 @@ export default {
         approve_form.addEventListener('submit', async function(e){
             e.preventDefault();
             const appove_select = $('input[name=approve_status]:checked', '#approve_form').val()
-             $('#approve-modal').modal('toggle');
+            var timestamp = Math.round(new Date().getTime() / 1000);
+            if($('#new_msg').val() != ""){
+                msg.push({date:timestamp,name:username,msg:$('#new_msg').val()})
+            }
+            $('#approve-modal').modal('toggle');
             if(appove_select == 'true'){
-                var timestamp = Math.round(new Date().getTime() / 1000);
                 projectFirestore.collection('Po').doc(id).update({
                     update_time:timestamp,
-                    approve_status:true
+                    approve_status:true,
+                    manager_approve_status:false,
+                    generalmanager_approve_status:false,
+                    reject:false,
+                    msg:msg
                 }).then(()=>{
                     router.push({ 
                         name: 'PECpoList',
@@ -1228,10 +1272,13 @@ export default {
                 })
             }
             else{
-                var timestamp = Math.round(new Date().getTime() / 1000);
                 projectFirestore.collection('Po').doc(id).update({
                     update_time:timestamp,
-                    approve_status:false
+                    approve_status:false,
+                    manager_approve_status:false,
+                    generalmanager_approve_status:false,
+                    reject:false,
+                    msg:msg
                 }).then(()=>{
                     router.push({ 
                         name: 'PECpoList',
@@ -1239,6 +1286,7 @@ export default {
                     })
                 })
             }
+
 
 
         })

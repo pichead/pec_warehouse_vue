@@ -386,7 +386,9 @@ export default {
                 visible:true,
                 approve_status:false,
                 manager_approve_status:false,
-                generalmanager_approve_status:false
+                generalmanager_approve_status:false,
+                reject:false,
+                msg:[]
 
 
             }).then( function(docRef){

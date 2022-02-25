@@ -188,7 +188,7 @@
 
                     <div id="approve_valid" class="d-flex flex-row-reverse row-hl my-5">
                         <button class="btn btn-info col-2 " type="button" data-toggle="modal" data-target="#approve-modal">Approve</button>
-                        <a class="btn btn-secondary col-2 mr-2" type="button" href="/Battery/pecpoList">Back</a>
+                        <a class="btn btn-secondary col-2 mr-2" type="button" href="/pecpo_confirm_list">Back</a>
                         
                     </div>
                 </form>
@@ -199,8 +199,17 @@
                                 <h5 class="modal-title">Approve</h5>
                                 <button class="close" data-dismiss="modal">×</button>
                             </div>
-                            <div id="approve-modal-body" class="modal-body col-10 mx-auto">
-                                
+                            <div  class="modal-body col-10 mx-auto">
+                                <div class="font-weight-bol my-3 font-weight-bold">Approve</div>
+                                <div id="approve-modal-body"></div>
+                            </div>
+                            <br>
+                            <div class="col-10 mx-auto font-weight-bold">Massage</div>
+                            <div class="col-10 mx-auto border round my-3 p-3">
+                                <div id="msg-data" class="overflow-auto" style="height:200px">
+                                    <div class="col-10 text-center mx-auto mt-4 pt-5">No Massage</div>
+                                </div>
+                                <textarea id="new_msg" class="form-control my-2" placeholder="Massage..."></textarea>
                             </div>
                             <div class="modal-footer">
                                 <button class="btn red-btn" data-dismiss="modal">Close</button>
@@ -241,18 +250,41 @@ export default {
         function onlyUnique(value, index, self) {
             return self.indexOf(value) === index;
         }
+        var msg = []
         var user_role
-
+        var username
         pre_approve_btn()
         async function pre_approve_btn(){
+            const Po_confirm = await projectFirestore.collection('Po').doc(id).get()
             const auth = projectAuth;
             const user_email = auth.currentUser.email;
             const get_user_list = await projectFirestore.collection("Users").where("email", '==', user_email).get()
             const user_permission = get_permission(get_user_list)
             const role = await render_permission(user_permission)
-
+            username = await get_username(get_user_list)
+            function get_username(){
+                var name
+                get_user_list.forEach((user)=>{
+                    name = user.data().name
+                })
+                return name
+            }
             await render_permission_data()
 
+            if(Po_confirm.data().msg.length > 0){
+                msg = Po_confirm.data().msg
+                $('#msg-data').html('')
+                for(let i = 0; i < Po_confirm.data().msg.length; i++){
+                    var dt=eval(Po_confirm.data().msg[i].date*1000);
+                    var msg_date = (new Date(dt)).toLocaleString();
+                    $('#msg-data').append(
+                        '<div class="border border-round p-2 my-1">'+
+                            '<div class="">'+Po_confirm.data().msg[i].name+' : '+msg_date+'</div>'+
+                            '<div class="pl-3">'+Po_confirm.data().msg[i].msg+'</div>'+
+                        '</div> '
+                    )
+                }
+            }
             function get_permission(){
                 var user_permission_arr = []
                 get_user_list.forEach((user)=>{
@@ -273,7 +305,7 @@ export default {
                 }
             }
             async function render_permission_data(){
-                const Po_confirm = await projectFirestore.collection('Po').doc(id).get()
+                
                 const approve_status = await get_confirm_status()
                 function get_confirm_status(){
                     if(role == 'manager'){
@@ -283,6 +315,7 @@ export default {
                         return Po_confirm.data().generalmanager_approve_status
                     }
                 }
+                
                 if(approve_status == true){
                     $('#approve-modal-body').html(
                         '<div class="form-check">'+
@@ -292,6 +325,10 @@ export default {
                         '<div class="form-check">'+
                             '<input class="form-check-input" type="radio" name="approve_status" id="approve2" value="false">'+
                             '<label class="form-check-label" for="approve2">Not Approved</label>'+
+                        '</div>'+
+                        '<div class="form-check">'+
+                            '<input class="form-check-input" type="radio" name="approve_status" id="approve3" value="reject">'+
+                            '<label class="form-check-label" for="approve2">Reject</label>'+
                         '</div>'
                     )
                 }
@@ -304,9 +341,15 @@ export default {
                         '<div class="form-check">'+
                             '<input class="form-check-input" type="radio" name="approve_status" id="approve2" value="false" checked>'+
                             '<label class="form-check-label" for="approve2">Not Approved</label>'+
+                        '</div>'+
+                        '<div class="form-check">'+
+                            '<input class="form-check-input" type="radio" name="approve_status" id="approve3" value="reject">'+
+                            '<label class="form-check-label" for="approve2">Reject</label>'+
                         '</div>'
                     )
                 }
+                
+
             }
         }
 
@@ -548,8 +591,6 @@ export default {
                     
                 
                 }
-
-
                 
             }
 
@@ -729,12 +770,19 @@ export default {
             e.preventDefault();
             const appove_select = $('input[name=approve_status]:checked', '#approve_form').val()
             var timestamp = Math.round(new Date().getTime() / 1000);
+            if($('#new_msg').val() != ""){
+                msg.push({date:timestamp,name:username,msg:$('#new_msg').val()})
+            }
             $('#approve-modal').modal('toggle');
             if(user_role == 'manager'){
-                if(appove_select == 'true'){
+                if(appove_select == 'reject'){
                     projectFirestore.collection('Po').doc(id).update({
                         update_time:timestamp,
-                        manager_approve_status:true
+                        approve_status:false,
+                        manager_approve_status:false,
+                        generalmanager_approve_status:false,
+                        reject:true,
+                        msg:msg
                     }).then(()=>{
                         router.push({ 
                             name: 'PecPoConfirmList',
@@ -743,40 +791,63 @@ export default {
                     })
                 }
                 else{
-                    projectFirestore.collection('Po').doc(id).update({
-                        update_time:timestamp,
-                        manager_approve_status:false
-                    }).then(()=>{
-                        router.push({ 
-                            name: 'PecPoConfirmList',
-                            params: { mserror: true} 
+                    if(appove_select == 'true'){
+                        projectFirestore.collection('Po').doc(id).update({
+                            update_time:timestamp,
+                            manager_approve_status:true,
+                            msg:msg
+                        }).then(()=>{
+                            router.push({ 
+                                name: 'PecPoConfirmList',
+                                params: { mserror: true} 
+                            })
                         })
-                    })
+                    }
+                    else{
+                        projectFirestore.collection('Po').doc(id).update({
+                            update_time:timestamp,
+                            manager_approve_status:false,
+                            msg:msg
+                        }).then(()=>{
+                            router.push({ 
+                                name: 'PecPoConfirmList',
+                                params: { mserror: true} 
+                            })
+                        })
+                    }
                 }
             }
             else{
-                if(appove_select == 'true'){
-                    projectFirestore.collection('Po').doc(id).update({
-                        update_time:timestamp,
-                        generalmanager_approve_status:true
-                    }).then(()=>{
-                        router.push({ 
-                            name: 'PecPoConfirmList',
-                            params: { mserror: true} 
-                        })
-                    })
+                if(appove_select == 'reject'){
+
                 }
                 else{
-                    projectFirestore.collection('Po').doc(id).update({
-                        update_time:timestamp,
-                        generalmanager_approve_status:false
-                    }).then(()=>{
-                        router.push({ 
-                            name: 'PecPoConfirmList',
-                            params: { mserror: true} 
+                    if(appove_select == 'true'){
+                        projectFirestore.collection('Po').doc(id).update({
+                            update_time:timestamp,
+                            generalmanager_approve_status:true,
+                            msg:msg
+                        }).then(()=>{
+                            router.push({ 
+                                name: 'PecPoConfirmList',
+                                params: { mserror: true} 
+                            })
                         })
-                    })
+                    }
+                    else{
+                        projectFirestore.collection('Po').doc(id).update({
+                            update_time:timestamp,
+                            generalmanager_approve_status:false,
+                            msg:msg
+                        }).then(()=>{
+                            router.push({ 
+                                name: 'PecPoConfirmList',
+                                params: { mserror: true} 
+                            })
+                        })
+                    }
                 }
+
                 
             }
             
