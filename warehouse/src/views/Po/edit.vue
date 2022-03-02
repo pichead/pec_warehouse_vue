@@ -1232,7 +1232,7 @@ export default {
                     const ordersheet_series = $(batt[i]).data('series')
                     const batt_no = $(batt[i]).data('id')
                     const batt_unit_price = $(batt[i]).val()
-                    const battdata = {project_id:project_id,orderSheet:ordersheet_no,batt_no:batt_no,batt_unit_price:batt_unit_price,order_amount:ordersheet_orderamount,register_amount:0,series:ordersheet_series}
+                    const battdata = {project_id:project_id,orderSheet:ordersheet_no,batt_no:batt_no,batt_unit_price:batt_unit_price,order_amount:ordersheet_orderamount,register_amount:0,series:ordersheet_series,register_amount:0,register_barcode:[]}
                     for(let j = 0;j < battarray.length;j++){
                         for(let k = 0; k < battarray[j].ordersheet.length; k++){
                             if(project_id == battarray[j].job && ordersheet_no == battarray[j].ordersheet[k].ordersheet){
