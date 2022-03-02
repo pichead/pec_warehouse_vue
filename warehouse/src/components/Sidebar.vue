@@ -14,23 +14,13 @@
             </li>
             <li id="" class="nav-item   py-2  pl-3" >
                 <a id="order_booking" class="nav-link text-light font-weight-bold"  data-toggle="collapse" data-target=".Order-collapse" >Order<span id="alarm_order" class="d-none mx-2 p-2  badge badge-danger"></span><i id="sign-down" class="bi bi-caret-down "></i><i id="sign-right" class="bi bi-caret-right d-none"></i></a>
-
                 <ul class="collapse pl-3 Order-collapse">
                     <li class="nav-item" >
                         <a class="nav-link text-light pl-0 font-weight-bold" href="/Order_N_Booking"><i class="bi bi-caret-right-fill"></i>International Order<span id="alarm_ordersheet" class=" mx-2 p-2 d-none badge badge-danger"></span></a>
                     </li>
-                    <!-- <li class="nav-item" >
-                        <a class="nav-link text-light pl-0 font-weight-bold" href="/Order_N_Booking/Wh"><i class="bi bi-caret-right-fill"></i> Warehouse</a>
-                    </li> -->
                     <li class="nav-item" >
                         <a class="nav-link text-light pl-0 font-weight-bold" href="/Order_check/Wh"><i class="bi bi-caret-right-fill"></i>Warehouse Order<span id="alarm_order_wh" class=" mx-2 p-2 d-none badge badge-danger"></span></a>
                     </li>
-                    <!-- <li id="" class="nav-item" >
-                        <a class="nav-link text-light pl-0 font-weight-bold" href="/Order_N_Booking/Sale"><i class="bi bi-caret-right-fill"></i> Sale</a>
-                    </li>
-                    <li id="" class="nav-item" >
-                        <a class="nav-link text-light pl-0 font-weight-bold" href="/Order_N_Booking/Preview"><i class="bi bi-caret-right-fill"></i> Preview</a>
-                    </li> -->
                 </ul>
             </li>
             
@@ -42,6 +32,14 @@
             </li>
             <li id="" class="nav-item   py-2 pl-3" >
                 <a class="nav-link text-light font-weight-bold" href="/pecpo_confirm_list">PEC PO Confirm</a>
+            </li>
+            <li id="" class="nav-item   py-2  pl-3" >
+                <a id="warehouse" class="nav-link text-light font-weight-bold"  data-toggle="collapse" data-target=".warehouse-collapse" >Warehouse<span id="alarm_warehouse" class="d-none mx-2 p-2  badge badge-danger"></span><i id="sign-down-wh" class="bi bi-caret-down "></i><i id="sign-right-wh" class="bi bi-caret-right d-none"></i></a>
+                <ul class="collapse pl-3 warehouse-collapse">
+                    <li class="nav-item" >
+                        <a class="nav-link text-light pl-0 font-weight-bold" href="/Warehouse/registerBattery"><i class="bi bi-caret-right-fill"></i>Register Battery<span id="alarm_warehouse" class=" mx-2 p-2 d-none badge badge-danger"></span></a>
+                    </li>
+                </ul>
             </li>
             
             <!-- <li id="" class="nav-item   py-2 pl-3"  >

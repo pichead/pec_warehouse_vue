@@ -56,7 +56,7 @@
                         </div>
                         <div class="col-6">
                             <div class="form-group row">
-                                <label class="col-4 col-form-label font-weight-bold">Origin</label >
+                                <label class="col-4 col-form-label font-weight-bold">Order Origin</label >
                                 <div class="col-8">
                                     <select id="select_origin" class="col-12 form-control" required>
                                         <option selected disabled value="">Select Origin</option>
@@ -69,11 +69,19 @@
                         </div>
                         <div class="col-6">
                             <div class="form-group row">
-                                <label class="col-4 col-form-label font-weight-bold">Warranty</label >
+                                <label class="col-4 col-form-label font-weight-bold">Order Warranty</label >
                                 <div class="col-4">
                                     <input id="warranty" class="form-control" type="number" required/>
                                 </div>
                                 <div class="col-4 col-form-label">Months</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label class="col-4 pr-0 col-form-label font-weight-bold">Order Delivery Date</label >
+                                <div class="col-8">
+                                    <input id="delivery" class="form-control" type="date" required/>
+                                </div>
                             </div>
                         </div>
                         
@@ -114,127 +122,7 @@
 
                 <div class="col-12 border p-4">
                     <div id="data" class="col-12">
-                        <!-- <div id="row-1" class="row my-4">
-                            <div class="col-3">
-                                <div class="row">
-                                    <div class="col-5 col-form-label">
-                                        Job No.
-                                    </div>
-                                    <div class="col-7">
-                                        <select id="row-job-1" class="col-12 form-control job">
-                                            <option>65/001</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-4">
-                                <div class="row">
-                                    <div class="col-5 col-form-label">Project Name</div>
-                                    <div class="col-7">
-                                        <input id="projectname-1" class="form-control col-12" value="" readonly/>
-                                    </div>   
-                                </div>
-                            </div>
-                            <div class="col-5">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <button class="btn btn-danger col-12" data-row="1" type="button">Remove Job No</button>
-                                    </div>
-                                    <div class="col-6">
-                                        <button class="btn btn-primary col-12" data-ordersheet="1" type="button">Add Order Sheet</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 mt-3">
-                                <div class="col-12 pb-4 border-bottom">
-                                    <div class="row py-2 text-center tablehead-color">
-                                        <div class="col-2">Order Sheet</div>
-                                        <div class="col-3">Description</div>
-                                        <div class="col">Qty.</div>
-                                        <div class="col">Unit</div>
-                                        <div class="col-2">Unit Price (USD)</div>
-                                        <div class="col-2">Amount (USD)</div>
-                                    </div>
-                                    <div id="data-pa-1">
-                                        <div id="row-1-1" class="row py-2">
-                                            <div class="col-2">
-                                                <div class="row">
-                                                    <select id="ordersheet-1-1" class="form-control col-8" style="font-size:14px">
-                                                    </select>
-                                                    <div class="col-4 pt-1"><i class="bi bi-trash text-danger ordersheet-del" data-project="1" data-ordersheet="1" style="font-size:25px;" ></i></div>
-                                                </div>
-                                            </div>
-                                            <div id="description-1-1" class="col-3"></div>
-                                            <div id="qty-1-1" class="col"></div>
-                                            <div id="unit-1-1" class="col text-center"></div>
-                                            <div id="price-1-1" class="col-2"></div>
-                                            <div id="total-1-1" class="col-2"></div> 
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="row-1" class="row my-4">
-                            <div class="col-3">
-                                <div class="row">
-                                    <div class="col-5 col-form-label">
-                                        Job No.
-                                    </div>
-                                    <div class="col-7">
-                                        <select id="row-job-1" class="col-12 form-control job">
-                                            <option>65/001</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-4">
-                                <div class="row">
-                                    <div class="col-5 col-form-label">Project Name</div>
-                                    <div class="col-7">
-                                        <input id="projectname-1" class="form-control col-12" value="" readonly/>
-                                    </div>   
-                                </div>
-                            </div>
-                            <div class="col-5">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <button class="btn btn-danger col-12" data-row="1" type="button">Remove Job No</button>
-                                    </div>
-                                    <div class="col-6">
-                                        <button class="btn btn-primary col-12" data-ordersheet="1" type="button">Add Order Sheet</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 mt-3">
-                                <div class="col-12 pb-4 border-bottom">
-                                    <div class="row py-2 text-center tablehead-color">
-                                        <div class="col-2">Order Sheet</div>
-                                        <div class="col-3">Description</div>
-                                        <div class="col">Qty.</div>
-                                        <div class="col">Unit</div>
-                                        <div class="col-2">Unit Price (USD)</div>
-                                        <div class="col-2">Amount (USD)</div>
-                                    </div>
-                                    <div id="data-pa-1">
-                                        <div id="row-1-1" class="row py-2">
-                                            <div class="col-2">
-                                                <div class="row">
-                                                    <select id="ordersheet-1-1" class="form-control col-8" style="font-size:14px">
-                                                    </select>
-                                                    <div class="col-4 pt-1"><i class="bi bi-trash text-danger ordersheet-del" data-project="1" data-ordersheet="1" style="font-size:25px;" ></i></div>
-                                                </div>
-                                            </div>
-                                            <div id="description-1-1" class="col-3"></div>
-                                            <div id="qty-1-1" class="col"></div>
-                                            <div id="unit-1-1" class="col text-center"></div>
-                                            <div id="price-1-1" class="col-2"></div>
-                                            <div id="total-1-1" class="col-2"></div> 
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
-                        
+
                     </div>
                     <div class="col-12">
                         <button id="addjob" class="btn btn-warning col-12 text-white" type="button" data-row="1" disabled >Add Job No</button>
@@ -355,40 +243,39 @@ export default {
         const addform = document.querySelector('#addform');
         addform.addEventListener('submit', async function(e){
             e.preventDefault();
+            console.log('save')
             const pecpono = $('#pecpono').val()
             const pecpoyear = $('#pecpoyear').val()
             const company = $('#company').find('option:selected').val()
             const tpayment = $('#Tpayment').val()
-            const delivery_date = $('#delivery_date').val()
+            const delivery = $('#delivery_date').val()
             const comment = $('#comment').val()
             const createdate = Math.round(new Date().getTime() / 1000);
             const orgin = $('#select_origin').find('option:selected').val()
             const warranty = $('#warranty').val()
-            // console.log('pecpono : ',pecpono)
-            // console.log('pecpoyear : ',pecpoyear)
-            // console.log('company : ',company)
-            // console.log('tpayment : ',tpayment)
-            // console.log('delivery_date : ',delivery_date)
-            // console.log('comment : ',comment)
-            // console.log('createdate : ',createdate)
+            const delivery_date = $('#delivery').val()
+
 
             projectFirestore.collection('Po').add({
                 pecpo_no:pecpono,
                 pecpo_year:pecpoyear,
                 company:company,
                 tpayment:tpayment,
-                delivery:delivery_date,
+                delivery:delivery,
                 comment:comment,
                 createdate:createdate,
                 update_time:createdate,
                 origin:orgin,
                 warranty:warranty,
+                delivery_date:delivery_date,
                 visible:true,
                 approve_status:false,
                 manager_approve_status:false,
                 generalmanager_approve_status:false,
                 reject:false,
-                msg:[]
+                msg:[],
+                battorder:[],
+                register_batt:false
 
 
             }).then( function(docRef){

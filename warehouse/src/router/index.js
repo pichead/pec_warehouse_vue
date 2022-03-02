@@ -26,6 +26,12 @@ import UserIndex from '../views/user/index.vue'
 
 // end user
 
+// warehouse
+import RegisterBattery from '../views/Warehouse/registerBattery.vue'
+
+
+
+// end warehouse
 
 
 import BatteryIndex from '../views/Battery/index.vue'
@@ -44,7 +50,6 @@ import PrintPecpo from '../views/Po/preview.vue'
 
 // End PO
 
-import RegisterBattery from '../views/Battery/registerBattery.vue'
 import BatterySpec from '../views/Battery/spec.vue'
 import Pmindex from '../views/finder/pmIndex.vue'
 import Pmedit from '../views/finder/pmedit.vue'
@@ -249,7 +254,7 @@ const routes = [
     beforeEnter: requireAuth
   },
   {
-    path: '/Battery/registerBattery',
+    path: '/Warehouse/registerBattery',
     name: 'RegisterBattery',
     component: RegisterBattery,
     beforeEnter: requireAuth

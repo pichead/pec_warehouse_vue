@@ -105,6 +105,14 @@
                                 <div class="col-4 col-form-label">Months</div>
                             </div>
                         </div>
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label class="col-4 pr-0 col-form-label font-weight-bold">Order Delivery Date</label >
+                                <div class="col-8">
+                                    <input id="delivery" class="form-control top-data" type="date" disabled required/>
+                                </div>
+                            </div>
+                        </div>
                         
      
                         <div class="col-12">
@@ -264,7 +272,7 @@ export default {
         var project_ordersheet_use = []
         var con_origin
         var con_warranty
-        var con_delivery = ""
+        var con_delivery
         var msg = []
         var username
         const origin_option = ['China','Mexico']
@@ -393,75 +401,86 @@ export default {
                 }
                 $('#delivery_date').val(Po.data().delivery)
                 $('#warranty').val(Po.data().warranty)
+                $('#delivery').val(Po.data().delivery_date)
+
                 $('#comment').val(Po.data().comment)
                 $('#createdate').html('Create Date: '+cnew_date)
                 $('#lastupdate').html('Last Update: '+unew_date)
                 con_origin = Po.data().origin
                 con_warranty = Po.data().warranty
-                $('#add-shipment').data('row',(Po.data().shipment.length+1))
-                for(let i = 0 ;i < Po.data().shipment.length; i++){
-                    $('#data-shipment').append(
-                        '<div id="shipment-row-'+(i+1)+'" data-row="'+(i+1)+'" class="row py-2 shipment-row">'+
-                            '<div class="col-2">'+
-                                '<div class="row">'+
-                                    '<select id="shipment-option-'+(i+1)+'" class="form-control col-8 shipment-option low-data">'+
-                                        '<option disabled selected>select shipment</option>'+
-                                    '</select>'+
-                                    '<div class="col-4 pt-1"><i type="button" class="bi bi-trash text-danger shipment-del low-data" data-row="'+(i+1)+'" style="font-size:25px;" ></i></div>'+
+                con_delivery = Po.data().delivery_date
+                if(Po.data().shipment){
+                    $('#add-shipment').data('row',(Po.data().shipment.length+1))
+                    for(let i = 0 ;i < Po.data().shipment.length; i++){
+                        $('#data-shipment').append(
+                            '<div id="shipment-row-'+(i+1)+'" data-row="'+(i+1)+'" class="row py-2 shipment-row">'+
+                                '<div class="col-2">'+
+                                    '<div class="row">'+
+                                        '<select id="shipment-option-'+(i+1)+'" class="form-control col-8 shipment-option low-data">'+
+                                            '<option disabled selected>select shipment</option>'+
+                                        '</select>'+
+                                        '<div class="col-4 pt-1"><i type="button" class="bi bi-trash text-danger shipment-del low-data" data-row="'+(i+1)+'" style="font-size:25px;" ></i></div>'+
+                                    '</div>'+
                                 '</div>'+
-                            '</div>'+
-                            '<div class="col-3">'+
-                                '<input id="shipment-des-'+(i+1)+'" class="form-control shipment-description low-data" type="text" value="'+Po.data().shipment[i].description+'" />'+
-                            '</div>'+
-                            '<div class="col">'+
-                                '<input id="shipment-amount-'+(i+1)+'" class="form-control shipmentdata low-data shipment-amount" data-row="'+(i+1)+'" type="number" value="'+parseInt(Po.data().shipment[i].amount)+'" />'+
-                            '</div>'+
-                            '<div class="col">'+
-                                '<input id="shipment-unit-'+(i+1)+'" class="form-control shipment-unit low-data" type="text" value="'+Po.data().shipment[i].unit+'" />'+
-                            '</div>'+
-                            '<div class="col-2">'+
-                                '<input id="shipment-price-'+(i+1)+'" class="form-control shipmentdata shipment-price low-data" data-row="'+(i+1)+'" value="'+parseFloat(Po.data().shipment[i].price)+'" type="number" />'+
-                            '</div>'+
-                            '<div  id="shipment-totalprice-'+(i+1)+'" class="col-2 shipment-totoal-price text-right" >'+
-                                parseFloat(Po.data().shipment[i].price) * parseInt(Po.data().shipment[i].amount) +
-                            '</div>'+
-                        '</div>'
-                    )
-                    
+                                '<div class="col-3">'+
+                                    '<input id="shipment-des-'+(i+1)+'" class="form-control shipment-description low-data" type="text" value="'+Po.data().shipment[i].description+'" />'+
+                                '</div>'+
+                                '<div class="col">'+
+                                    '<input id="shipment-amount-'+(i+1)+'" class="form-control shipmentdata low-data shipment-amount" data-row="'+(i+1)+'" type="number" value="'+parseInt(Po.data().shipment[i].amount)+'" />'+
+                                '</div>'+
+                                '<div class="col">'+
+                                    '<input id="shipment-unit-'+(i+1)+'" class="form-control shipment-unit low-data" type="text" value="'+Po.data().shipment[i].unit+'" />'+
+                                '</div>'+
+                                '<div class="col-2">'+
+                                    '<input id="shipment-price-'+(i+1)+'" class="form-control shipmentdata shipment-price low-data" data-row="'+(i+1)+'" value="'+parseFloat(Po.data().shipment[i].price)+'" type="number" />'+
+                                '</div>'+
+                                '<div  id="shipment-totalprice-'+(i+1)+'" class="col-2 shipment-totoal-price text-right" >'+
+                                    parseFloat(Po.data().shipment[i].price) * parseInt(Po.data().shipment[i].amount) +
+                                '</div>'+
+                            '</div>'
+                        )
+                        
 
+                    }
                 }
+                else{
+                    $('#add-shipment').data('row',1)
+                }
+                
 
 
             }
             async function getdata(){
-                for(let i = 0 ;i < Po.data().shipment.length; i++){
-                    for(let j = 0; j  < shipment_list.length; j++){
+                if(Po.data().shipment){
+                    for(let i = 0 ;i < Po.data().shipment.length; i++){
+                        for(let j = 0; j  < shipment_list.length; j++){
 
-                        if(shipment_list[j] == Po.data().shipment[i].shipment){
-                            
-                            if(Po.data().shipment[i].shipment == 'Combined to CIF'){
-                                $('#shipment-option-'+(i+1)).append(
-                                    '<option value="Combined to CIF" selected>Combined to CIF</option>'
-                                )
-
-                            }
-                            else{
-                                $('#shipment-option-'+(i+1)).append(
-                                    '<option value="Other" selected>Other</option>'
-                                )
-                            }
-                        }
-                        else{
-                            if(Po.data().shipment[i].shipment == 'Combined to CIF'){
-                               $('#shipment-option-'+(i+1)).append(
-                                    '<option value="Other" >Other</option>'
-                                )
-                            }
-                            else{
+                            if(shipment_list[j] == Po.data().shipment[i].shipment){
                                 
-                                 $('#shipment-option-'+(i+1)).append(
-                                    '<option value="Combined to CIF" >Combimed to CIF</option>'
-                                )
+                                if(Po.data().shipment[i].shipment == 'Combined to CIF'){
+                                    $('#shipment-option-'+(i+1)).append(
+                                        '<option value="Combined to CIF" selected>Combined to CIF</option>'
+                                    )
+
+                                }
+                                else{
+                                    $('#shipment-option-'+(i+1)).append(
+                                        '<option value="Other" selected>Other</option>'
+                                    )
+                                }
+                            }
+                            else{
+                                if(Po.data().shipment[i].shipment == 'Combined to CIF'){
+                                $('#shipment-option-'+(i+1)).append(
+                                        '<option value="Other" >Other</option>'
+                                    )
+                                }
+                                else{
+                                    
+                                    $('#shipment-option-'+(i+1)).append(
+                                        '<option value="Combined to CIF" >Combimed to CIF</option>'
+                                    )
+                                }
                             }
                         }
                     }
@@ -472,7 +491,7 @@ export default {
                 const allproject = await  projectFirestore.collection('Projects').get()
                 allproject.forEach((project)=>{
                     for(let i = 0 ; i  < project.data().orderSheet.length; i++){
-                        if(project.data().orderSheet[i].origin == con_origin && project.data().orderSheet[i].warranty == con_warranty){
+                        if(project.data().orderSheet[i].origin == con_origin && project.data().orderSheet[i].warranty == con_warranty && project.data().orderSheet[i].deliverydate == con_delivery){
                             project_id.push(project.id)
                         }
                     }
@@ -495,7 +514,7 @@ export default {
                 for(let i = 0; i < project_ordersheet.length; i++){
                     const project_data_con =  await projectFirestore.collection('Projects').doc(project_id[i]).get()
                     for(let l = 0 ; l < project_data_con.data().orderSheet.length; l++){
-                        if(project_data_con.data().orderSheet[l].origin == con_origin && project_data_con.data().orderSheet[l].warranty == con_warranty){
+                        if(project_data_con.data().orderSheet[l].origin == con_origin && project_data_con.data().orderSheet[l].warranty == con_warranty && project_data_con.data().orderSheet[l].deliverydate == con_delivery){
                             project_ordersheet[i].ordersheet.push(project_data_con.data().orderSheet[l].no)
                         }
 
@@ -582,13 +601,13 @@ export default {
                         const pre_project_data_con =  await projectFirestore.collection('Projects').doc(project_id[i]).get()
                         if(ordersheet_list[j].job == pre_project_data_con.id){
                             $('#row-job-'+(j+1)).append(
-                                '<option value="'+pre_project_data_con.id+'" data-name="'+pre_project_data_con.data().ProjectName+'" data-row="'+(j+1)+'" selected >'+pre_project_data_con.data().JobNoFirst+'/'+pre_project_data_con.data().JobNoSecond+'</option>'
+                                '<option value="'+pre_project_data_con.id+'" data-first="'+pre_project_data_con.data().JobNoFirst+'" data-second="'+pre_project_data_con.data().JobNoSecond+'" data-name="'+pre_project_data_con.data().ProjectName+'" data-row="'+(j+1)+'" selected >'+pre_project_data_con.data().JobNoFirst+'/'+pre_project_data_con.data().JobNoSecond+'</option>'
                             )
                             $('#projectname-'+(j+1)).val(pre_project_data_con.data().ProjectName)
 
                             for(let k = 0; k < ordersheet_list[j].ordersheet.length; k++){
                                 for(let l = 0 ; l < pre_project_data_con.data().orderSheet.length; l++){
-                                    if(pre_project_data_con.data().orderSheet[l].origin == con_origin && pre_project_data_con.data().orderSheet[l].warranty == con_warranty){
+                                    if(pre_project_data_con.data().orderSheet[l].origin == con_origin && pre_project_data_con.data().orderSheet[l].warranty == con_warranty && pre_project_data_con.data().orderSheet[l].deliverydate == con_delivery){
 
                                         if( ordersheet_list[j].job == project_id[i] && ordersheet_list[j].ordersheet[k].ordersheet == pre_project_data_con.data().orderSheet[l].no){
                                             
@@ -710,8 +729,6 @@ export default {
                                 '</div>'+
                             '</div>')
             
-                
-
             }
 
             async function render_project_data(){
@@ -719,7 +736,7 @@ export default {
                 for(let i = 0; i < project_id.length ; i++){
                     const project_data_con =  await projectFirestore.collection('Projects').doc(project_id[i]).get()
                     $('#row-job-'+rowjob_count).append(
-                        '<option value="'+project_data_con.id+'" data-name="'+project_data_con.data().ProjectName+'" data-row="'+rowjob_count+'">'+project_data_con.data().JobNoFirst+'/'+project_data_con.data().JobNoSecond+'</option>'
+                        '<option value="'+project_data_con.id+'" data-first="'+project_data_con.data().JobNoFirst+'" data-second="'+project_data_con.data().JobNoSecond+'" data-name="'+project_data_con.data().ProjectName+'" data-row="'+rowjob_count+'">'+project_data_con.data().JobNoFirst+'/'+project_data_con.data().JobNoSecond+'</option>'
                     )
                     
                     
@@ -770,7 +787,7 @@ export default {
             function render_ordersheet_con(){
 
                 for(let i = 0; i < project_ordersheet_con.data().orderSheet.length; i++){
-                    if(project_ordersheet_con.data().orderSheet[i].origin == con_origin && project_ordersheet_con.data().orderSheet[i].warranty == con_warranty){
+                    if(project_ordersheet_con.data().orderSheet[i].origin == con_origin && project_ordersheet_con.data().orderSheet[i].warranty == con_warranty  && project_ordersheet_con.data().orderSheet[i].deliverydate == con_delivery){
                         $('#ordersheet-'+project_count+'-'+(ordersheet_count+1)).append(
                             '<option class="option-ordersheet" value="'+project_ordersheet_con.data().orderSheet[i].no+'" data-row="'+project_count+'" data-ordersheet="'+(ordersheet_count+1)+'" data-project="'+project_ordersheet_con.id+'">'+project_ordersheet_con.data().JobNoFirst+'/'+project_ordersheet_con.data().JobNoSecond+'/'+project_ordersheet_con.data().orderSheet[i].no+'</option>'
                         )
@@ -924,7 +941,7 @@ export default {
 
         $('#top-data-edit').on('click',function(){
 
-            if(con_origin != $('#select_origin').find('option:selected').val() || con_warranty != $('#warranty').val()){
+            if(con_origin != $('#select_origin').find('option:selected').val() || con_warranty != $('#warranty').val() || con_delivery != $('#delivery').val()){
 
             }
             else{
@@ -948,7 +965,7 @@ export default {
         })
 
         $('#low-data-edit').on('click',function(){
-            if(con_origin != $('#select_origin').find('option:selected').val() || con_warranty != $('#warranty').val()){
+            if(con_origin != $('#select_origin').find('option:selected').val() || con_warranty != $('#warranty').val() || con_delivery != $('#delivery').val()){
             }
             else{
                 if($('.low-data').prop('disabled') == true){
@@ -1005,8 +1022,10 @@ export default {
         function condition_change(){
             const select_origin_data = $('#select_origin').find('option:selected').val()
             const warranty_data = $('#warranty').val()
+            const delivery_data = $('#delivery').val()
 
-            if(con_origin != select_origin_data || con_warranty != warranty_data){
+
+            if(con_origin != select_origin_data || con_warranty != warranty_data || con_delivery != delivery_data){
                 $('#con-edit').removeClass('d-none')
                 $('#danger-text').removeClass('d-none')
                 // $('#sumprice-row').addClass('d-none')
@@ -1107,8 +1126,10 @@ export default {
             const update_time = Math.round(new Date().getTime() / 1000);
             const orgin = $('#select_origin').find('option:selected').val()
             const warranty = $('#warranty').val()
+            const delivery = $('#delivery').val()
 
-            if(con_origin != $('#select_origin').find('option:selected').val() || con_warranty != $('#warranty').val()){
+
+            if(con_origin != $('#select_origin').find('option:selected').val() || con_warranty != $('#warranty').val() || con_delivery != $('#delivery').val()){
                     projectFirestore.collection('Po').doc(id).update({
                     pecpo_no:pecpono,
                     pecpo_year:pecpoyear,
@@ -1118,6 +1139,7 @@ export default {
                     comment:comment,
                     update_time:update_time,
                     origin:orgin,
+                    delivery_date:delivery,
                     warranty:warranty,
                     battorder:[],
                     visible:true
@@ -1137,6 +1159,7 @@ export default {
                     update_time:update_time,
                     origin:orgin,
                     warranty:warranty,
+                    delivery_date:delivery,
                     visible:true,
                     approve_status:false
 
@@ -1173,7 +1196,8 @@ export default {
             function arrayorder_job(){
                 
                 for(let i = 0; i < job_count; i++){
-                    battarray.push({job:$($('.job')[i]).find('option:selected').val(),ordersheet:[],projectname:$($('.job')[i]).find('option:selected').data('name')})
+                    
+                    battarray.push({job:$($('.job')[i]).find('option:selected').val(),ordersheet:[],project_first:$($('.job')[i]).find('option:selected').data('first'),project_second:$($('.job')[i]).find('option:selected').data('second'),projectname:$($('.job')[i]).find('option:selected').data('name')})
                 }
 
                 for(let i = 0; i  <  $('.shipment-totoal-price').length; i++){
@@ -1208,7 +1232,7 @@ export default {
                     const ordersheet_series = $(batt[i]).data('series')
                     const batt_no = $(batt[i]).data('id')
                     const batt_unit_price = $(batt[i]).val()
-                    const battdata = {project_id:project_id,orderSheet:ordersheet_no,batt_no:batt_no,batt_unit_price:batt_unit_price,order_amount:ordersheet_orderamount,series:ordersheet_series}
+                    const battdata = {project_id:project_id,orderSheet:ordersheet_no,batt_no:batt_no,batt_unit_price:batt_unit_price,order_amount:ordersheet_orderamount,register_amount:0,series:ordersheet_series}
                     for(let j = 0;j < battarray.length;j++){
                         for(let k = 0; k < battarray[j].ordersheet.length; k++){
                             if(project_id == battarray[j].job && ordersheet_no == battarray[j].ordersheet[k].ordersheet){
