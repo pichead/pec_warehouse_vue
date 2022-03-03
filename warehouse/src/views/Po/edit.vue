@@ -1257,7 +1257,9 @@ export default {
                     update_time:timestamp,
                     battorder:battarray,
                     shipment:shipment_array,
-                    approve_status:false
+                    approve_status:false,
+                    manager_approve_status:false,
+                    generalmanager_approve_status:false,
                 }).then(()=>{
                     router.push({ 
                         name: 'PECpoList',

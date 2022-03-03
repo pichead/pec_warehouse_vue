@@ -22,9 +22,8 @@
                                     <div class="col-4 col-form-label font-weight-bold">ลักษณะสินค้า</div>
                                     <div class="col-7">
                                         <select class="col form-control">
-                                            <option value="">choose..</option>
                                             <option selected value="brandnew">สินค้าใหม่</option>
-                                            <option  value="old">สินค้าเก่า</option>
+                                            <option value="claim">สินค้าเครม</option>
                                         </select>
                                     </div>
                                 </div>
@@ -51,7 +50,7 @@
                                 <div class="row">
                                     <div class="col-4 col-form-label font-weight-bold">Order Sheet</div>
                                     <div class="col-7">
-                                        <select id="Order_Sheet" class="col form-control">
+                                        <select id="Order_Sheet" class="col form-control" disabled>
                                             <option selected disabled value="">choose..</option>
                                         </select>
                                     </div>
@@ -61,7 +60,7 @@
                                 <div class="row">
                                     <div class="col-4 col-form-label font-weight-bold">โรงงานรับประกัน</div>
                                     <div class="col-7">
-                                        <input id="warranty" class="form-control" type="number" readonly/>
+                                        <input id="warranty" class="form-control" required type="number" readonly/>
                                     </div>
                                 </div>
                             </div>
@@ -69,7 +68,7 @@
                                 <div class="row">
                                     <div class="col-4 col-form-label font-weight-bold">Model</div>
                                     <div class="col-7">
-                                        <select id="batt_model" class="col form-control">
+                                        <select id="batt_model" class="col form-control" disabled>
                                             <option selected disabled value="">choose..</option>
                                         </select>
                                     </div>
@@ -79,7 +78,7 @@
                                 <div class="row">
                                     <div class="col-4 col-form-label font-weight-bold">Brand</div>
                                     <div class="col-7">
-                                        <input id="brand" type="text" class="form-control" readonly/>
+                                        <input id="brand" type="text" class="form-control" required readonly/>
                                     </div>
                                 </div>
                             </div>
@@ -87,7 +86,7 @@
                                 <div class="row">
                                     <div class="col-4 col-form-label font-weight-bold">ปีนำเข้า</div>
                                     <div class="col-7">
-                                        <input id="register_year" type="number" placeholder="format 00" class="form-control" />
+                                        <input id="register_year" type="number" class="form-control" required/>
                                     </div>
                                 </div>
                             </div>
@@ -104,7 +103,7 @@
                                 <div class="row">
                                     <div class="col-4 col-form-label font-weight-bold">Total</div>
                                     <div class="col-7">
-                                        <input id="batt_total" type="number" class="form-control" />
+                                        <input id="batt_total" type="number" class="form-control" required/>
                                     </div>
                                 </div>
                             </div>
@@ -117,9 +116,9 @@
                                     <div class="col-5">
                                         <div class="col-12">
                                             <div class="row">
-                                                <input type="text" class="col-5 form-control" readonly>
+                                                <input id="start_runing_barcode" type="text" class="col-5 form-control" readonly>
                                                 <div class="col-form-label text-center col-2">To</div>
-                                                <input type="text" class="col-5 form-control" readonly>
+                                                <input id="end_runing_barcode" type="text" class="col-5 form-control" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -136,6 +135,12 @@
                     </div>
                 </div>
             </div>
+
+            <div class="border my-3 bg-white p-5">
+                <div class="font-weight-bold mb-2">Preview Barcode</div>
+                <div id="barcode_preview" class="row">
+                </div>
+            </div>
             
         </div>
     </div>
@@ -145,10 +150,11 @@
 import { projectFirestore, projectAuth } from "../../firebase/config";
 import Sidebar from "../../components/Sidebar.vue";
 import router from "@/router";
+import numeral from "numeral";
+
 export default {
     components: { Sidebar },
     mounted() {
-        const lastbarcode = get_lastbarcode()
         $('#register_year').val(new Date().getFullYear())
         async function render_pecpo(){
             const pec_po_list = await projectFirestore.collection('Po').orderBy('createdate','asc').get()
@@ -194,7 +200,7 @@ export default {
 
         $('#jobno_option').on('change',async function(){
             $('#Order_Sheet').html('<option disabled selected value="" >Choose Ordersheet</option>')
-            $('#jobno_option').prop( "disabled", false )
+            $('#Order_Sheet').prop( "disabled", false )
             let po_select = $('#pecpo_option').val()
             let job_no_select = $(this).val()
             let get_job_no = await projectFirestore.collection('Po').doc(po_select).get()
@@ -215,6 +221,7 @@ export default {
         })
 
         $('#Order_Sheet').on('change',async function(){
+            $('#batt_model').prop( "disabled", false )
             $('#batt_model').html('<option disabled selected value="" >Choose Model</option>')
             const ordersheet_select = $(this).val()
             let po_select = $('#pecpo_option').val()
@@ -240,14 +247,41 @@ export default {
             let batt_instock = $(this).find('option:selected').data('instock')
             let batt_amount = $(this).find('option:selected').data('amount')
             const render_amount_batt = parseInt(batt_amount) - parseInt(batt_instock)
-            console.log(batt_instock)
-            console.log(batt_amount)
-
             $('#batt_total').val(render_amount_batt)
+            render_preview_barcode()
         })
-        async function get_lastbarcode(){
-            return
+
+        $('#batt_total').on('change',function(){
+            render_preview_barcode()
+        })
+
+        function render_preview_barcode(){
+            $('#barcode_preview').html('')
+            const total_register = parseInt($('#batt_total').val())
+            const register_count = 0
+            const render_amount_batt_count = register_count + total_register
+            const year = new Date().getFullYear().toString().substr(2,2)
+            const warranty_text = get_warranty_text()
+
+            function get_warranty_text(){
+                if($('#warranty').val() == "3"){
+                    return "A"
+                }
+                else{
+                    return "B"
+                }
+            }
+            $('#start_runing_barcode').val('PEC-'+warranty_text+year+numeral(register_count+1).format('000000'))
+            $('#end_runing_barcode').val('PEC-'+warranty_text+year+numeral(render_amount_batt_count).format('000000'))
+            
+            for(let i = 0; i < render_amount_batt_count; i++){
+                $('#barcode_preview').append(
+                    '<div class="col-3 my-1 p-2 text-center" disabled><div class="border rounded">PEC-'+warranty_text+year+numeral(register_count+(i+1)).format('000000')+'</div></div>'
+                )
+            }
+        
         }
+
     }
 }
 </script>
