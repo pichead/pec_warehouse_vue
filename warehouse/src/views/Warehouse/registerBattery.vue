@@ -48,86 +48,23 @@
                                     <th>Warranty(Year)</th>
                                     <th>Amount</th>
                                     <!-- <th>pallet</th> -->
-                                    <th></th>
+                                    <th>
+                                        <input id="check_all" type="checkbox" class="align-bottom" style="height: 20px; width: 20px;"/>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody id="data">
                                 
                             </tbody>
                         </table>
-                        <!-- <div class="responsive-table">
-                            <table id="sortable">
-                                <tr class="ui-state-default">
-                                <th>Drag Row</th>
-                                <th>Id</th>
-                                <th>Fruit</th>
-                                <th>Quantity</th>
-                                <th>Image</th>
-                                </tr>
-                                <tr>
-                                <td><i class="fa fa-bars"></i></td>
-                                <td data-id="1">1</td>
-                                <td>Apple</td>
-                                <td>5</td>
-                                <td><img src="" alt="noImage" width="30px" height="25px"></td>
-                                </tr>
-                                <tr>
-                                <td><i class="fa fa-bars"></i></td>
-                                <td data-id="2">2</td>
-                                <td>Orange</td>
-                                <td>8</td>
-                                <td><img src="" alt="noImage" width="30px" height="25px"></td>
-                                </tr>
-                                <tr>
-                                <td><i class="fa fa-bars" ></i></td>
-                                <td data-role="test" data-id="3">3</td>
-                                <td>Banana</td>
-                                <td>3</td>
-                                <td><img src="" alt="noImage" width="30px" height="25px"></td>
-                                </tr>
-                            </table>
-                        </div> -->
+                     
                     </div>
                     <div class="col-12 clear-fix">
                         <div class="float-right">
                             <button id="export_btn" class="btn btn-info">Export</button>
-                            <button type="button" tableexport-id="ced092d-xlsx" class="button-default xlsx">Export to xlsx</button>
                         </div>
                     </div>
-                    <table id="tblData">
-                    <tbody style="background-color:red;"><tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Country</th>
-                    </tr>
-                    <tr>
-                        <td>John Doe</td>
-                        <td>john@gmail.com</td>
-                        <td>USA</td>
-                    </tr>
-                    <tr>
-                        <td>Michael&nbsp;Addison</td>
-                        <td>michael@gmail.com</td>
-                        <td>UK</td>
-                    </tr>
-                    <tr>
-                        <td>Sam&nbsp;Farmer</td>
-                        <td>sam@gmail.com</td>
-                        <td>France</td>
-                    </tr>
-                    <tr>
-                        <td>Christian Gray</td>
-                        <td>christian@gmail.com</td>
-                        <td>USA</td>
-                    </tr>
-                    <tr>
-                        <td>Oscar P Ward</td>
-                        <td>oscar.pward@gmail.com</td>
-                        <td>UK</td>
-                    </tr>
-                </tbody>
-                </table>
-                <button id="export">Export HTML Table To Excel File</button>
+                   
 
                 </div>
             </div>
@@ -193,6 +130,7 @@ export default {
                 for(let i = 0; i < po_select_data.data().battorder.length; i++){
                     for(let j = 0; j < po_select_data.data().battorder[i].ordersheet.length; j++){
                         for(let k = 0;k < po_select_data.data().battorder[i].ordersheet[j].battery.length; k++){
+                            $('#row_'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no).remove()
                             $('#data').append(
                                 '<tr id="row_'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'">'+
                                     '<td><div class="col-form-label running_num"></div></td>'+
@@ -204,9 +142,10 @@ export default {
                                     '<td>'+
                                         '<input class="col-12 form-control" type="number" step="1" value="'+po_select_data.data().battorder[i].ordersheet[j].battery[k].order_amount+'" />'+
                                     '</td>'+
-                                    '<td><div class="col-form-label">'+
-                                        '<button class="del_row_btn btn p-0 px-2 btn-danger" value="'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'" type="button">ลบ</button>'+
-                                    '</div></td>'+
+                                    '<td class="text-center align-bottom">'+
+                                        // '<button class="del_row_btn btn p-0 px-2 btn-danger" value="'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'" type="button">ลบ</button>'+
+                                        '<input value="'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'" type="checkbox" class="checkbox-model" style="height: 20px; width: 20px;"/>'+
+                                    '</td>'+
                                 '</tr>'
                             )
                         }
@@ -273,40 +212,54 @@ export default {
         })
         
 
-        $('#export').on('click',function(){
-
-            exportTableToExcel('tblData','exportexcel')
-        })
-        function exportTableToExcel(tableID, filename = ''){
-            var downloadLink;
-            var dataType = 'application/vnd.ms-excel';
-            var tableSelect = document.getElementById(tableID);
-            var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-            
-            // Specify file name
-            filename = filename?filename+'.xls':'excel_data.xls';
-            
-            // Create download link element
-            downloadLink = document.createElement("a");
-            
-            document.body.appendChild(downloadLink);
-            
-            if(navigator.msSaveOrOpenBlob){
-                var blob = new Blob(['\ufeff', tableHTML], {
-                    type: dataType
+        $('#check_all').on('change',()=>{
+            if($('#check_all').prop("checked")){
+                $(".checkbox-model").each(function() {
+                    $(this).prop("checked",true)
                 });
-                navigator.msSaveOrOpenBlob( blob, filename);
-            }else{
-                // Create a link to the file
-                downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
-            
-                // Setting the file name
-                downloadLink.download = filename;
-                
-                //triggering the function
-                downloadLink.click();
             }
-        }
+            else{
+                $(".checkbox-model").each(function() {
+                    $(this).prop("checked",false)
+                });
+            }
+        })
+
+
+        // $('#export').on('click',function(){
+
+        //     exportTableToExcel('tblData','exportexcel')
+        // })
+        // function exportTableToExcel(tableID, filename = ''){
+        //     var downloadLink;
+        //     var dataType = 'application/vnd.ms-excel';
+        //     var tableSelect = document.getElementById(tableID);
+        //     var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+            
+        //     // Specify file name
+        //     filename = filename?filename+'.xls':'excel_data.xls';
+            
+        //     // Create download link element
+        //     downloadLink = document.createElement("a");
+            
+        //     document.body.appendChild(downloadLink);
+            
+        //     if(navigator.msSaveOrOpenBlob){
+        //         var blob = new Blob(['\ufeff', tableHTML], {
+        //             type: dataType
+        //         });
+        //         navigator.msSaveOrOpenBlob( blob, filename);
+        //     }else{
+        //         // Create a link to the file
+        //         downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+            
+        //         // Setting the file name
+        //         downloadLink.download = filename;
+                
+        //         //triggering the function
+        //         downloadLink.click();
+        //     }
+        // }
 
 
     }
