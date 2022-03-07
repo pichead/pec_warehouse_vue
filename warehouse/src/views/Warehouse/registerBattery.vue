@@ -31,7 +31,7 @@
                         <table id="data_table" class="table">
                             <colgroup>
                                 <col span="1" style="width: 50px;">
-                                <col span="1" style="width: 100px;">
+                                <col span="1" style="width: 120px;">
                                 <col span="1" style="width: 150px;">
                                 <col span="1" style="width: 120px;">
                                 <col span="1" style="width: 200px;">
@@ -47,7 +47,7 @@
                                     <th>Model</th>
                                     <th>Warranty(Year)</th>
                                     <th>Amount</th>
-                                    <th>pallet</th>
+                                    <!-- <th>pallet</th> -->
                                     <th></th>
                                 </tr>
                             </thead>
@@ -88,6 +88,47 @@
                             </table>
                         </div> -->
                     </div>
+                    <div class="col-12 clear-fix">
+                        <div class="float-right">
+                            <button id="export_btn" class="btn btn-info">Export</button>
+                            <button type="button" tableexport-id="ced092d-xlsx" class="button-default xlsx">Export to xlsx</button>
+                        </div>
+                    </div>
+                    <table id="tblData">
+                    <tbody style="background-color:red;"><tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Country</th>
+                    </tr>
+                    <tr>
+                        <td>John Doe</td>
+                        <td>john@gmail.com</td>
+                        <td>USA</td>
+                    </tr>
+                    <tr>
+                        <td>Michael&nbsp;Addison</td>
+                        <td>michael@gmail.com</td>
+                        <td>UK</td>
+                    </tr>
+                    <tr>
+                        <td>Sam&nbsp;Farmer</td>
+                        <td>sam@gmail.com</td>
+                        <td>France</td>
+                    </tr>
+                    <tr>
+                        <td>Christian Gray</td>
+                        <td>christian@gmail.com</td>
+                        <td>USA</td>
+                    </tr>
+                    <tr>
+                        <td>Oscar P Ward</td>
+                        <td>oscar.pward@gmail.com</td>
+                        <td>UK</td>
+                    </tr>
+                </tbody>
+                </table>
+                <button id="export">Export HTML Table To Excel File</button>
+
                 </div>
             </div>
 
@@ -125,6 +166,7 @@ import { projectFirestore, projectAuth } from "../../firebase/config";
 import Sidebar from "../../components/Sidebar.vue";
 import router from "@/router";
 import numeral from "numeral";
+// import tableExport from "tableexport"
 
 export default {
     components: { Sidebar },
@@ -209,7 +251,63 @@ export default {
             }
         })
 
+        $('#export_btn').on('click',function(){
+            console.log('Export Click')
+            $("#data_table").tableExport(
+                {
+                headers: true,                      // (Boolean), display table headers (th or td elements) in the <thead>, (default: true)
+                footers: true,                      // (Boolean), display table footers (th or td elements) in the <tfoot>, (default: false)
+                formats: ["xls"],    // (String[]), filetype(s) for the export, (default: ['xlsx', 'csv', 'txt'])
+                filename: "id",                     // (id, String), filename for the downloaded file, (default: 'id')
+                bootstrap: false,                   // (Boolean), style buttons using bootstrap, (default: true)
+                exportButtons: true,                // (Boolean), automatically generate the built-in export buttons for each of the specified formats (default: true)
+                position: "bottom",                 // (top, bottom), position of the caption element relative to table, (default: 'bottom')
+                ignoreRows: null,                   // (Number, Number[]), row indices to exclude from the exported file(s) (default: null)
+                ignoreCols: null,                   // (Number, Number[]), column indices to exclude from the exported file(s) (default: null)
+                trimWhitespace: false,               // (Boolean), remove all leading/trailing newlines, spaces, and tabs from cell text in the exported file(s) (default: false)
+                RTL: false,                         // (Boolean), set direction of the worksheet to right-to-left (default: false)
+                sheetname: "id"                     // (id, String), sheet name for the exported spreadsheet, (default: 'id')
+                }
+            )
+           
+        })
         
+
+        $('#export').on('click',function(){
+
+            exportTableToExcel('tblData','exportexcel')
+        })
+        function exportTableToExcel(tableID, filename = ''){
+            var downloadLink;
+            var dataType = 'application/vnd.ms-excel';
+            var tableSelect = document.getElementById(tableID);
+            var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+            
+            // Specify file name
+            filename = filename?filename+'.xls':'excel_data.xls';
+            
+            // Create download link element
+            downloadLink = document.createElement("a");
+            
+            document.body.appendChild(downloadLink);
+            
+            if(navigator.msSaveOrOpenBlob){
+                var blob = new Blob(['\ufeff', tableHTML], {
+                    type: dataType
+                });
+                navigator.msSaveOrOpenBlob( blob, filename);
+            }else{
+                // Create a link to the file
+                downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+            
+                // Setting the file name
+                downloadLink.download = filename;
+                
+                //triggering the function
+                downloadLink.click();
+            }
+        }
+
 
     }
 }

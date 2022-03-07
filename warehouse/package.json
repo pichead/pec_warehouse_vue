@@ -11,8 +11,10 @@
     "bootstrap-icons": "^1.7.1",
     "core-js": "^3.6.5",
     "express": "^4.17.1",
+    "file-saverjs": "^1.3.6",
     "firebase": "^8.7.1",
     "numeral": "^2.0.6",
+    "tableexport": "^5.2.0",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0"
   },
