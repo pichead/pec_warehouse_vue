@@ -35,7 +35,7 @@
                                 <col span="1" style="width: 150px;">
                                 <col span="1" style="width: 120px;">
                                 <col span="1" style="width: 200px;">
-                                <col span="1" style="width: 150px;">
+                                <col span="1" style="width: 170px;">
                                 <col span="1" style="width: 120px;">
                             </colgroup>
                             <thead class="thead-dark">
@@ -62,6 +62,9 @@
                     <div class="col-12 clear-fix">
                         <div class="float-right">
                             <button id="export_btn" class="btn btn-info">Export</button>
+                            <button id="render" class="btn btn-info">Render</button>
+
+                            <!-- <input type="button" onclick="tableToExcel('data_table', 'W3C Example Table')" value="Export to Excel"> -->
                         </div>
                     </div>
                    
@@ -92,6 +95,22 @@
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div id="preview_excel" class="col-12">
+                <table id="excel_data" class="col-12">
+                    <tr>
+                        <td colspan="23" style="text-align: center;background-color:green">Inspection Form</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <picture>
+                                <img src="https://firebasestorage.googleapis.com/v0/b/warehouse-327518.appspot.com/o/imgs%2F33281.jpg?alt=media&token=0cd8d785-d00f-48b9-98e8-66617aef68de" alt="Flowers" style="width:80px;height:50px">
+                            </picture>
+                        </td>
+                        <td>วันที่ :</td>
+                    </tr>
+                </table>
             </div>
             
         </div>
@@ -190,26 +209,6 @@ export default {
             }
         })
 
-        $('#export_btn').on('click',function(){
-            console.log('Export Click')
-            $("#data_table").tableExport(
-                {
-                headers: true,                      // (Boolean), display table headers (th or td elements) in the <thead>, (default: true)
-                footers: true,                      // (Boolean), display table footers (th or td elements) in the <tfoot>, (default: false)
-                formats: ["xls"],    // (String[]), filetype(s) for the export, (default: ['xlsx', 'csv', 'txt'])
-                filename: "id",                     // (id, String), filename for the downloaded file, (default: 'id')
-                bootstrap: false,                   // (Boolean), style buttons using bootstrap, (default: true)
-                exportButtons: true,                // (Boolean), automatically generate the built-in export buttons for each of the specified formats (default: true)
-                position: "bottom",                 // (top, bottom), position of the caption element relative to table, (default: 'bottom')
-                ignoreRows: null,                   // (Number, Number[]), row indices to exclude from the exported file(s) (default: null)
-                ignoreCols: null,                   // (Number, Number[]), column indices to exclude from the exported file(s) (default: null)
-                trimWhitespace: false,               // (Boolean), remove all leading/trailing newlines, spaces, and tabs from cell text in the exported file(s) (default: false)
-                RTL: false,                         // (Boolean), set direction of the worksheet to right-to-left (default: false)
-                sheetname: "id"                     // (id, String), sheet name for the exported spreadsheet, (default: 'id')
-                }
-            )
-           
-        })
         
 
         $('#check_all').on('change',()=>{
@@ -224,44 +223,82 @@ export default {
                 });
             }
         })
+    
+        $('#export_btn').on('click',function(){
+            // const table_id = "data_table"
+            const table_id = "excel_data"
+
+            
+            const file_name = "Inspection Form_2022"
+            tableToExcel(table_id,file_name)
+            console.log('export')
+        })
 
 
-        // $('#export').on('click',function(){
+        var tableToExcel = (function() {
+            // var uri = 'data:application/vnd.ms-excel;base64,'
+            // , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+            // , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+            // , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+            // return function(table, name) {
+            // if (!table.nodeType) table = document.getElementById(table)
+            // var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+            // window.location.href = uri + base64(format(template, ctx))
+            // }
 
-        //     exportTableToExcel('tblData','exportexcel')
-        // })
-        // function exportTableToExcel(tableID, filename = ''){
-        //     var downloadLink;
-        //     var dataType = 'application/vnd.ms-excel';
-        //     var tableSelect = document.getElementById(tableID);
-        //     var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-            
-        //     // Specify file name
-        //     filename = filename?filename+'.xls':'excel_data.xls';
-            
-        //     // Create download link element
-        //     downloadLink = document.createElement("a");
-            
-        //     document.body.appendChild(downloadLink);
-            
-        //     if(navigator.msSaveOrOpenBlob){
-        //         var blob = new Blob(['\ufeff', tableHTML], {
-        //             type: dataType
-        //         });
-        //         navigator.msSaveOrOpenBlob( blob, filename);
-        //     }else{
-        //         // Create a link to the file
-        //         downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
-            
-        //         // Setting the file name
-        //         downloadLink.download = filename;
-                
-        //         //triggering the function
-        //         downloadLink.click();
-        //     }
-        // }
+            var uri = 'data:application/vnd.ms-excel;base64,'
+                , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+                , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
+                , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
+            return function (table, name) {
+                if (!table.nodeType) table = document.getElementById(table)
+                var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+                console.log(table.innerHTML)
+                window.location.href = uri + base64(format(template, ctx))
+            }
+        })()
 
+        $('#render').on('click',function(){
+            
+            getBase64Image(document.getElementById("imageid"));
+        })
 
+        function getBase64Image(img) {
+            var canvas = document.createElement("canvas");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0);
+            var dataURL = canvas.toDataURL("image/png");
+            console.log(dataURL)
+            // $('#imgedata').attr(
+            //     'src',
+            //     'data:image/png;base64,'+dataURL+''
+            // );
+            var base64 = "url("+dataURL+")"
+            var base642 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RDUxRjY0ODgyQTkxMTFFMjk0RkU5NjI5MEVDQTI2QzUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RDUxRjY0ODkyQTkxMTFFMjk0RkU5NjI5MEVDQTI2QzUiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpENTFGNjQ4NjJBOTExMUUyOTRGRTk2MjkwRUNBMjZDNSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpENTFGNjQ4NzJBOTExMUUyOTRGRTk2MjkwRUNBMjZDNSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PuT868wAAABESURBVHja7M4xEQAwDAOxuPw5uwi6ZeigB/CntJ2lkmytznwZFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYW1qsrwABYuwNkimqm3gAAAABJRU5ErkJggg=='
+            console.log(base64)
+            console.log(base642)
+            console.log(dataURL)
+            // document.getElementById('imagedata')
+            // .setAttribute(
+            //     'src',
+            //     dataURL
+            // );
+            $("#imglogo").css("background-image", 'url('+base642+')');
+            $("#imglogo2").css("background-image", 'url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RDUxRjY0ODgyQTkxMTFFMjk0RkU5NjI5MEVDQTI2QzUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RDUxRjY0ODkyQTkxMTFFMjk0RkU5NjI5MEVDQTI2QzUiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpENTFGNjQ4NjJBOTExMUUyOTRGRTk2MjkwRUNBMjZDNSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpENTFGNjQ4NzJBOTExMUUyOTRGRTk2MjkwRUNBMjZDNSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PuT868wAAABESURBVHja7M4xEQAwDAOxuPw5uwi6ZeigB/CntJ2lkmytznwZFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYW1qsrwABYuwNkimqm3gAAAABJRU5ErkJggg==")');
+            // url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RDUxRjY0ODgyQTkxMTFFMjk0RkU5NjI5MEVDQTI2QzUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RDUxRjY0ODkyQTkxMTFFMjk0RkU5NjI5MEVDQTI2QzUiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpENTFGNjQ4NjJBOTExMUUyOTRGRTk2MjkwRUNBMjZDNSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpENTFGNjQ4NzJBOTExMUUyOTRGRTk2MjkwRUNBMjZDNSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PuT868wAAABESURBVHja7M4xEQAwDAOxuPw5uwi6ZeigB/CntJ2lkmytznwZFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYW1qsrwABYuwNkimqm3gAAAABJRU5ErkJggg==")
+            // document.getElementById("imgedata").src = base64 
+
+            // return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+            
+        }
+
+        
+
+    
     }
+
+    
 }
 </script>
