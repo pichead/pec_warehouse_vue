@@ -27,7 +27,11 @@ import UserIndex from '../views/user/index.vue'
 // end user
 
 // warehouse
-import RegisterBattery from '../views/Warehouse/registerBattery.vue'
+import InspectionIndex from '../views/Warehouse/inspection_index.vue'
+import InspectionEdit from '../views/Warehouse/inspection_edit.vue'
+import InspectionCreate from '../views/Warehouse/inspection_create.vue'
+import RegisterBatteryIndex from '../views/Warehouse/registerbattery_index.vue'
+import RegisterBatteryEdit from '../views/Warehouse/registerbattery_edit.vue'
 
 
 
@@ -254,11 +258,36 @@ const routes = [
     beforeEnter: requireAuth
   },
   {
-    path: '/Warehouse/registerBattery',
-    name: 'RegisterBattery',
-    component: RegisterBattery,
+    path: '/Warehouse/InspectionIndex',
+    name: 'InspectionIndex',
+    component: InspectionIndex,
     beforeEnter: requireAuth
   },
+  {
+    path: '/Warehouse/InspectionCreate',
+    name: 'InspectionCreate',
+    component: InspectionCreate,
+    beforeEnter: requireAuth
+  },
+  {
+    path: '/Warehouse/InspectionEdit/:id',
+    name: 'InspectionEdit',
+    component: InspectionEdit,
+    beforeEnter: requireAuth
+  },
+  {
+    path: '/Warehouse/registerbatteryIndex',
+    name: 'RegisterBatteryIndex',
+    component: RegisterBatteryIndex,
+    beforeEnter: requireAuth
+  },
+  {
+    path: '/Warehouse/registerbatteryEdit/:id',
+    name: 'RegisterBatteryEdit',
+    component: RegisterBatteryEdit,
+    beforeEnter: requireAuth
+  },
+  
   {
     path: '/Battery/Specification',
     name: 'BatterySpec',

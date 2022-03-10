@@ -5,8 +5,8 @@
 <Sidebar />
     <div id="content" style="margin-left: 250px">
         <div class="container">
-            <div class="h3 mt-5 font-weight-bold">รับสินค้าเข้าคลัง</div>
-            <div class="border my-5 bg-white p-5">
+            <div class="h3 mt-5 font-weight-bold">InspectionForm</div>
+            <form id="addform" class="border my-5 bg-white p-5">
                 <div class="row">
                     <div class="col-6 my-1">
                         <div class="row">
@@ -62,7 +62,7 @@
                                     <th>OrderSheet</th>
                                     <th>Model</th>
                                     <th>Warranty(Year)</th>
-                                    <th>Amount</th>
+                                    <th>Qty</th>
                                     <!-- <th>pallet</th> -->
                                     <th>
                                         <input id="check_all" type="checkbox" class="align-bottom" style="height: 20px; width: 20px;"/>
@@ -77,9 +77,9 @@
                     </div>
                     <div class="col-12">
                         <div class="d-flex flex-row-reverse row-hl my-5">
-                            <button id="export_btn" class="btn btn-info col-2">Export</button>
+                            <button id="export_btn" class="btn btn-info col-2" type="button">Export</button>
 
-                            <button id="save_btn" class="btn btn-primary col-2 mx-1">Save</button>
+                            <button id="save_btn" class="btn btn-primary col-2 mx-1" type="submit">Save</button>
 
  
                         </div>
@@ -88,7 +88,7 @@
                     
 
                 </div>
-            </div>
+            </form>
 
             <div class="modal" id="AddPO">
                 <div class="modal-dialog">
@@ -118,44 +118,46 @@
             
             
         </div>
-        <div id="preview_excel" class="col-11 mx-auto px-0">
+        <div id="preview_excel" class="col-11 mx-auto px-0 d-none">
                 <table id="excel_data" class="col-12 table-bordered" style="padding: 0px;ห">
                     <colgroup>
-                        <col span="1" style="width: 45px;">
-                        <col span="1" style="width: 45px;">
-                        <col span="1" style="width: 45px;">
-                        <col span="1" style="width: 45px;">
-                        <col span="1" style="width: 45px;">
-                        <col span="1" style="width: 45px;">
-                        <col span="1" style="width: 45px;">
-                        <col span="1" style="width: 45px;">
-                        <col span="1" style="width: 45px;">
-                        <col span="1" style="width: 45px;">
+                        <col span="1" style="width: 58px;">
+                        <col span="1" style="width: 58px;">
+                        <col span="1" style="width: 58px;">
+                        <col span="1" style="width: 58px;">
+                        <col span="1" style="width: 58px;">
+                        <col span="1" style="width: 58px;">
+                        <col span="1" style="width: 58px;">
+                        <col span="1" style="width: 58px;">
+                        <col span="1" style="width: 58px;">
+                        <col span="1" style="width: 58px;">
 
-                        <col span="1" style="width: 45px;">
-                        <col span="1" style="width: 45px;">
-                        <col span="1" style="width: 45px;">
-                        <col span="1" style="width: 45px;">
-                        <col span="1" style="width: 45px;">
-                        <col span="1" style="width: 45px;">
-                        <col span="1" style="width: 45px;">
-                        <col span="1" style="width: 45px;">
-                        <col span="1" style="width: 45px;">
-                        <col span="1" style="width: 45px;">
+                        <col span="1" style="width: 58px;">
+                        <col span="1" style="width: 58px;">
+                        <col span="1" style="width: 58px;">
+                        <col span="1" style="width: 58px;">
+                        <col span="1" style="width: 58px;">
+                        <col span="1" style="width: 58px;">
+                        <col span="1" style="width: 58px;">
+                        <col span="1" style="width: 58px;">
+                        <col span="1" style="width: 58px;">
+                        <col span="1" style="width: 58px;">
 
-                        <col span="1" style="width: 45px;">
-                        <col span="1" style="width: 45px;">
-                        <col span="1" style="width: 45px;">
-                        <col span="1" style="width: 68px;">
+                        <col span="1" style="width: 58px;">
+                        <col span="1" style="width: 58px;">
+                        <col span="1" style="width: 58px;">
+                        <col span="1" style="width: 84px;">
                         
                     </colgroup>
                     <tr>
-                        <!-- <td colspan="2">
-                            <picture>
+                        <td colspan="1"></td>
+                        <td colspan="2">
+                            <!-- <picture>
                                 <img src="https://firebasestorage.googleapis.com/v0/b/warehouse-327518.appspot.com/o/imgs%2Flogo_pec.png?alt=media&token=299bbc3f-c90b-41f9-a546-3f9d333acae6" alt="Flowers" style="width:80px;height:50px">
-                            </picture>
-                        </td> -->
-                        <td colspan="24" style="text-align: center;font-weight: bold;font-size: 16px;">Inspection Form</td>
+                            </picture> -->
+                        </td>
+                        <td colspan="18" style="text-align: center;font-weight: bold;font-size: 16px;">Inspection Form</td>
+                        <td colspan="3"></td>
                     </tr>
 
                     <tr>
@@ -164,7 +166,7 @@
 
                     <tr>
                         <td colspan="2"></td>
-                        <td colspan="3" style="text-align: right;font-size: 14px;font-family:Angsana New;">
+                        <td colspan="3" style="text-align: right;font-family:Angsana New;font-size: 14px;">
                             Shipper/Exporter :
                         </td>
                         <td colspan="7" style="font-size: 10px;border-bottom: 1px solid;">
@@ -371,7 +373,8 @@ import numeral from "numeral";
 export default {
     components: { Sidebar },
     mounted() {
-        
+        var url = window.location.pathname;
+        var id = url.substring(url.lastIndexOf('/') + 1);
         async function predata(){
             const Predata_po = await projectFirestore.collection('Po').get()
             $('#Po_select').html('<option disabled value="" selected >Choose PEC PO</option>')
@@ -380,12 +383,60 @@ export default {
                     '<option value="'+pec_po.id+'">PEC'+pec_po.data().pecpo_no+'/'+pec_po.data().pecpo_year+'</option>'
                 )
             })
+
+            const inspection_data = await projectFirestore.collection('InspectionForm').doc(id).get()
+
+            for(let x = 0; x < inspection_data.data().battery.length; x++){
+                let po_select_data = await projectFirestore.collection('Po').doc(inspection_data.data().battery[x].po_id).get()
+                await add_po_to_table()
+
+                function add_po_to_table(){
+                    $('#shipper_exporter').val(inspection_data.data().shipper_exporter)
+                    $('#inspection_no').val(inspection_data.data().inspection_no)
+                    $('#packing_list').val(inspection_data.data().packing_list)
+                    $('#warehouse_location').val(inspection_data.data().warehouse_location)            
+                    for(let i = 0; i < po_select_data.data().battorder.length; i++){
+                        for(let j = 0; j < po_select_data.data().battorder[i].ordersheet.length; j++){
+                            for(let k = 0;k < po_select_data.data().battorder[i].ordersheet[j].battery.length; k++){
+                                if(po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no == inspection_data.data().battery[x].batt_no){
+
+                                
+                                $('#row_'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no).remove()
+                                $('#data').append(
+                                    '<tr id="row_'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'">'+
+                                        '<td><div class="col-form-label running_num"></div></td>'+
+                                        '<td><div class="col-form-label">PEC'+po_select_data.data().pecpo_no+'/'+po_select_data.data().pecpo_year+'</div></td>'+
+                                        '<td><div class="col-form-label">'+po_select_data.data().battorder[i].project_first+'/'+po_select_data.data().battorder[i].project_second+'</div></td>'+
+                                        '<td><div class="col-form-label">'+po_select_data.data().battorder[i].project_first+'/'+po_select_data.data().battorder[i].project_second+'/'+po_select_data.data().battorder[i].ordersheet[j].ordersheet+'</div></td>'+
+                                        '<td><div class="col-form-label">'+po_select_data.data().battorder[i].ordersheet[j].battery[k].series+'</div></td>'+
+                                        '<td class="text-center"><div class="col-form-label">'+(parseInt(po_select_data.data().warranty)/12)+'</div></td>'+
+                                        '<td>'+
+                                            '<input id="qty_'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'" class="col-12 form-control" type="number" step="1" value="'+inspection_data.data().battery[x].qty+'" />'+
+                                        '</td>'+
+                                        '<td class="text-center align-bottom">'+
+                                            // '<button class="del_row_btn btn p-0 px-2 btn-danger" value="'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'" type="button">ลบ</button>'+
+                                            '<input value="'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'" data-poid="'+po_select_data.id+'"  type="checkbox" class="checkbox-model" style="height: 20px; width: 20px;" checked/>'+
+                                        '</td>'+
+                                    '</tr>'
+                                )
+
+                                }
+                            }
+                        }
+                    }
+                    gen_running_num()
+
+                    
+                }
+            }
+
+
         }
         predata()
 
         $('#modal_add_po').on('click',async function(){
             const model_po_select_val = $('#Po_select').val()
-            const po_select_data = await projectFirestore.collection('Po').doc(model_po_select_val).get()
+            let po_select_data = await projectFirestore.collection('Po').doc(model_po_select_val).get()
             await add_po_to_table()
 
             function add_po_to_table(){
@@ -403,11 +454,11 @@ export default {
                                     '<td><div class="col-form-label">'+po_select_data.data().battorder[i].ordersheet[j].battery[k].series+'</div></td>'+
                                     '<td class="text-center"><div class="col-form-label">'+(parseInt(po_select_data.data().warranty)/12)+'</div></td>'+
                                     '<td>'+
-                                        '<input class="col-12 form-control" type="number" step="1" value="'+po_select_data.data().battorder[i].ordersheet[j].battery[k].order_amount+'" />'+
+                                        '<input id="qty_'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'" class="col-12 form-control" type="number" step="1" value="'+po_select_data.data().battorder[i].ordersheet[j].battery[k].order_amount+'" />'+
                                     '</td>'+
                                     '<td class="text-center align-bottom">'+
                                         // '<button class="del_row_btn btn p-0 px-2 btn-danger" value="'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'" type="button">ลบ</button>'+
-                                        '<input value="'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'" type="checkbox" class="checkbox-model" style="height: 20px; width: 20px;"/>'+
+                                        '<input value="'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'" data-poid="'+po_select_data.id+'"  type="checkbox" class="checkbox-model" style="height: 20px; width: 20px;"/>'+
                                     '</td>'+
                                 '</tr>'
                             )
@@ -488,47 +539,50 @@ export default {
             return function (table, name) {
                 if (!table.nodeType) table = document.getElementById(table)
                 var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
-                console.log(table.innerHTML)
                 window.location.href = uri + base64(format(template, ctx))
             }
         })()
 
-        // $('#render').on('click',function(){
+        const addform = document.querySelector('#addform');
+        addform.addEventListener('submit', async function(e){
+            e.preventDefault();
+            console.log('save')
+            const shipper_exporter = $('#shipper_exporter').val()
+            const inspection_no = $('#inspection_no').val()
+            const packing_list = $('#packing_list').val()
+            const warehouse_location = $('#warehouse_location').val()
+            var battery = [] 
+            await get_battery_data()
+            await save_data()
+            function get_battery_data(){
+                $(".checkbox-model").each(function() {
+                    if($(this).prop("checked")){
+                        battery.push({
+                            po_id:$(this).data('poid'),
+                            batt_no:$(this).val(),
+                            qty:$('#qty_'+$(this).val()).val()
+                        })
+                    }
+                })
+            }
+
+            function save_data(){
+                projectFirestore.collection('InspectionForm').doc(id).update({
+                    shipper_exporter:shipper_exporter,
+                    inspection_no:inspection_no,
+                    packing_list:packing_list,
+                    warehouse_location:warehouse_location,
+                    battery:battery
+                }).then(()=>{
+                    router.push({ 
+                        name: 'InspectionIndex',
+                        params: { mserror: true} 
+                    })
+                })
+            }
+
             
-        //     getBase64Image(document.getElementById("imageid"));
-        // })
-
-        // function getBase64Image(img) {
-        //     var canvas = document.createElement("canvas");
-        //     canvas.width = img.width;
-        //     canvas.height = img.height;
-        //     var ctx = canvas.getContext("2d");
-        //     ctx.drawImage(img, 0, 0);
-        //     var dataURL = canvas.toDataURL("image/png");
-        //     console.log(dataURL)
-        //     // $('#imgedata').attr(
-        //     //     'src',
-        //     //     'data:image/png;base64,'+dataURL+''
-        //     // );
-        //     var base64 = "url("+dataURL+")"
-        //     var base642 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RDUxRjY0ODgyQTkxMTFFMjk0RkU5NjI5MEVDQTI2QzUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RDUxRjY0ODkyQTkxMTFFMjk0RkU5NjI5MEVDQTI2QzUiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpENTFGNjQ4NjJBOTExMUUyOTRGRTk2MjkwRUNBMjZDNSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpENTFGNjQ4NzJBOTExMUUyOTRGRTk2MjkwRUNBMjZDNSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PuT868wAAABESURBVHja7M4xEQAwDAOxuPw5uwi6ZeigB/CntJ2lkmytznwZFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYW1qsrwABYuwNkimqm3gAAAABJRU5ErkJggg=='
-        //     console.log(base64)
-        //     console.log(base642)
-        //     console.log(dataURL)
-        //     // document.getElementById('imagedata')
-        //     // .setAttribute(
-        //     //     'src',
-        //     //     dataURL
-        //     // );
-        //     $("#imglogo").css("background-image", 'url('+base642+')');
-        //     $("#imglogo2").css("background-image", 'url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RDUxRjY0ODgyQTkxMTFFMjk0RkU5NjI5MEVDQTI2QzUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RDUxRjY0ODkyQTkxMTFFMjk0RkU5NjI5MEVDQTI2QzUiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpENTFGNjQ4NjJBOTExMUUyOTRGRTk2MjkwRUNBMjZDNSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpENTFGNjQ4NzJBOTExMUUyOTRGRTk2MjkwRUNBMjZDNSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PuT868wAAABESURBVHja7M4xEQAwDAOxuPw5uwi6ZeigB/CntJ2lkmytznwZFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYW1qsrwABYuwNkimqm3gAAAABJRU5ErkJggg==")');
-        //     // url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RDUxRjY0ODgyQTkxMTFFMjk0RkU5NjI5MEVDQTI2QzUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RDUxRjY0ODkyQTkxMTFFMjk0RkU5NjI5MEVDQTI2QzUiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpENTFGNjQ4NjJBOTExMUUyOTRGRTk2MjkwRUNBMjZDNSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpENTFGNjQ4NzJBOTExMUUyOTRGRTk2MjkwRUNBMjZDNSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PuT868wAAABESURBVHja7M4xEQAwDAOxuPw5uwi6ZeigB/CntJ2lkmytznwZFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYW1qsrwABYuwNkimqm3gAAAABJRU5ErkJggg==")
-        //     // document.getElementById("imgedata").src = base64 
-
-        //     // return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
-            
-        // }
-
+        })
         
 
     
