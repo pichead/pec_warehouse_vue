@@ -12,7 +12,7 @@
                         <div class="row">
                             <div class="col-6 col-form-label">Shipper/Exporter</div>
                             <div class="col-6">
-                                <input id="shipper_exporter" type="text" class="form-control" required>
+                                <input id="shipper_exporter" type="text" class="form-control head_data" required>
                             </div>
                         </div>
                     </div>
@@ -20,7 +20,7 @@
                         <div class="row">
                             <div class="col-6 col-form-label">Inspection No.</div>
                             <div class="col-6">
-                                <input id="inspection_no" type="text" class="form-control" required>
+                                <input id="inspection_no" type="text" class="form-control head_data" required>
                             </div>
                         </div>
                     </div>
@@ -28,7 +28,7 @@
                         <div class="row">
                             <div class="col-6 col-form-label">Packing List</div>
                             <div class="col-6">
-                                <input id="packing_list" type="text" class="form-control" required>
+                                <input id="packing_list" type="text" class="form-control head_data" required>
                             </div>
                         </div>
                     </div>
@@ -36,7 +36,7 @@
                         <div class="row">
                             <div class="col-6 col-form-label">สถานที่รับสินค้า/คลังจัดเก็บสินค้า</div>
                             <div class="col-6">
-                                <input id="warehouse_location" type="text" class="form-control" required>
+                                <input id="warehouse_location" type="text" class="form-control head_data" required>
                             </div>
                         </div>
                     </div>
@@ -80,12 +80,8 @@
                             <button id="export_btn" class="btn btn-info col-2" type="button">Export</button>
 
                             <button id="save_btn" class="btn btn-primary col-2 mx-1" type="submit">Save</button>
-
- 
                         </div>
                     </div>
-                    
-                    
 
                 </div>
             </form>
@@ -149,218 +145,225 @@
                         <col span="1" style="width: 87px;">
                         
                     </colgroup>
-                    <tr>
-                        <td colspan="1"></td>
-                        <td colspan="2">
-                            <!-- <picture>
-                                <img src="https://firebasestorage.googleapis.com/v0/b/warehouse-327518.appspot.com/o/imgs%2Flogo_pec.png?alt=media&token=299bbc3f-c90b-41f9-a546-3f9d333acae6" alt="Flowers" style="width:80px;height:50px">
-                            </picture> -->
-                        </td>
-                        <td colspan="18" style="text-align: center;font-weight: bold;font-size: 26px;font-family:Angsana New;">Inspection Form</td>
-                        <td colspan="3"></td>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <td colspan="1"></td>
+                            <td colspan="2">
+                                <!-- <picture>
+                                    <img src="https://firebasestorage.googleapis.com/v0/b/warehouse-327518.appspot.com/o/imgs%2Flogo_pec.png?alt=media&token=299bbc3f-c90b-41f9-a546-3f9d333acae6" alt="Flowers" style="width:80px;height:50px">
+                                </picture> -->
+                            </td>
+                            <td colspan="18" style="text-align: center;font-weight: bold;font-size: 26px;font-family:Angsana New;">Inspection Form</td>
+                            <td colspan="3"></td>
+                        </tr>
 
-                    <tr>
-                        <td colspan="24" style="text-align: center;font-weight: bold;font-size: 26px;font-family:Angsana New;">คำร้องขอตรวจสอบสินค้าต่างประเทศ</td>
-                    </tr>
+                        <tr>
+                            <td colspan="24" style="text-align: center;font-weight: bold;font-size: 26px;font-family:Angsana New;">คำร้องขอตรวจสอบสินค้าต่างประเทศ</td>
+                        </tr>
 
-                    <tr>
-                        <td colspan="2"></td>
-                        <td colspan="3" style="text-align: right;font-size: 24px;font-family:Angsana New;">
-                            Shipper/Exporter :
-                        </td>
-                        <td colspan="7" style="border-bottom: 1px dotted;font-size: 24px;font-family:Angsana New;">
-                        </td>
-                        <td colspan="1"></td>
-                        <td colspan="2" style="text-align: right;font-size: 24px;font-family:Angsana New;">
-                            Inspection No. :
-                        </td>
-                        <td colspan="5" style="border-bottom: 1px dotted;font-size: 24px;font-family:Angsana New;">
-                        </td>
-                        <td colspan="4"></td>
-                    </tr>
+                        <tr>
+                            <td colspan="2"></td>
+                            <td colspan="3" style="text-align: right;font-size: 24px;font-family:Angsana New;">
+                                Shipper/Exporter :
+                            </td>
+                            <td id="shipper_exporter_excel" colspan="7" style="text-align: center;border-bottom: 1px dotted;font-size: 24px;font-family:Angsana New;">
+                            </td>
+                            <td colspan="1"></td>
+                            <td colspan="2" style="text-align: right;font-size: 24px;font-family:Angsana New;">
+                                Inspection No. :
+                            </td>
+                            <td id="inspection_no_excel" colspan="5" style="text-align: center;border-bottom: 1px dotted;font-size: 24px;font-family:Angsana New;">
+                            </td>
+                            <td colspan="4"></td>
+                        </tr>
 
 
-                    <tr>
-                        <td colspan="5" style="text-align: right;font-size: 20px;font-family:Angsana New;">
-                            อ้างอิง Commercial Invoice / Packing List No. :
-                        </td>
-                        <td colspan="7" style="border-bottom: 1px dotted;font-size: 21px;font-family:Angsana New;">
-                        </td>
-                        <td colspan="2"></td>
-                        <td colspan="1" style="text-align: right;font-size: 24px;font-family:Angsana New;">
-                            วันที่ :
-                        </td>
-                        <td colspan="5" style="border-bottom: 1px dotted;font-size: 24px;font-family:Angsana New;">
-                        </td>
-                        <td colspan="4"></td>
-                    </tr>
+                        <tr>
+                            <td colspan="5" style="text-align: right;font-size: 20px;font-family:Angsana New;">
+                                อ้างอิง Commercial Invoice / Packing List No. :
+                            </td>
+                            <td id="packing_list_excel" colspan="7" style="text-align: center;border-bottom: 1px dotted;font-size: 20px;font-family:Angsana New;">
+                            </td>
+                            <td colspan="2"></td>
+                            <td colspan="1" style="text-align: right;font-size: 24px;font-family:Angsana New;">
+                                วันที่ :
+                            </td>
+                            <td id="date_excel" colspan="5" style="text-align: center;border-bottom: 1px dotted;font-size: 24px;font-family:Angsana New;">
+                            </td>
+                            <td colspan="4"></td>
+                        </tr>
 
-                    <tr>
-                        <td colspan="5" style="text-align: right;font-size: 24px;font-family:Angsana New;">
-                            สถานที่รับสินค้า / คลังจัดเก็บสินค้า  :
-                        </td>
-                        <td colspan="7" style="border-bottom: 1px dotted;font-size: 24px;font-family:Angsana New;">
-                        </td>
-                        <td colspan="12"></td>
-                    </tr>
+                        <tr>
+                            <td colspan="5" style="text-align: right;font-size: 24px;font-family:Angsana New;">
+                                สถานที่รับสินค้า / คลังจัดเก็บสินค้า  :
+                            </td>
+                            <td id="warehouse_location_excel" colspan="7" style="text-align: center;border-bottom: 1px dotted;font-size: 24px;font-family:Angsana New;">
+                            </td>
+                            <td colspan="12"></td>
+                        </tr>
 
-                    <tr>
-                        <td colspan="4" style="text-align: left;font-weight: bold;font-size: 24px;font-family:Angsana New;">
-                            รายละเอียดการขนส่งสินค้า
-                        </td>
-                        <td colspan="20"></td>
-                    </tr>
+                        <tr>
+                            <td colspan="4" style="text-align: left;font-weight: bold;font-size: 24px;font-family:Angsana New;">
+                                รายละเอียดการขนส่งสินค้า
+                            </td>
+                            <td colspan="20"></td>
+                        </tr>
 
-                    <tr>
-                        <td colspan="3" style="text-align: right;font-size: 24px;font-family:Angsana New;">
-                            จำนวนยานพาหนะ:
-                        </td>
-                        <td colspan="1"></td>
-                        <td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;">คัน</td>
-                        <td colspan="19"></td>
-                    </tr>
+                        <tr>
+                            <td colspan="3" style="text-align: right;font-size: 24px;font-family:Angsana New;">
+                                จำนวนยานพาหนะ:
+                            </td>
+                            <td colspan="1"></td>
+                            <td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;">คัน</td>
+                            <td colspan="19"></td>
+                        </tr>
 
-                    <tr>
-                        <td colspan="1" style="text-align: center;font-size: 26px;font-family:Angsana New;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">1)</td>
-                        <td colspan="2" style="font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ประเภท</td>
-                        <td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ล้อ</td>
-                        <td colspan="2" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">เลขทะเบียน</td>
-                        <td colspan="2" style="border-top: 1px solid;border-bottom: 1px solid;border-right: 1px solid"></td>
+                        <tr>
+                            <td colspan="1" style="text-align: center;font-size: 26px;font-family:Angsana New;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">1)</td>
+                            <td colspan="2" style="font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ประเภท</td>
+                            <td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ล้อ</td>
+                            <td colspan="2" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">เลขทะเบียน</td>
+                            <td colspan="2" style="border-top: 1px solid;border-bottom: 1px solid;border-right: 1px solid"></td>
 
-                        <td colspan="1" style="text-align: center;font-size: 26px;font-family:Angsana New;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">4)</td>
-                        <td colspan="2" style="font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ประเภท</td>
-                        <td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ล้อ</td>
-                        <td colspan="2" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">เลขทะเบียน</td>
-                        <td colspan="2" style="border-top: 1px solid;border-bottom: 1px solid;border-right: 1px solid"></td>
+                            <td colspan="1" style="text-align: center;font-size: 26px;font-family:Angsana New;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">4)</td>
+                            <td colspan="2" style="font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ประเภท</td>
+                            <td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ล้อ</td>
+                            <td colspan="2" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">เลขทะเบียน</td>
+                            <td colspan="2" style="border-top: 1px solid;border-bottom: 1px solid;border-right: 1px solid"></td>
 
-                        <td colspan="1" style="text-align: center;font-size: 26px;font-family:Angsana New;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">7)</td>
-                        <td colspan="2" style="font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ประเภท</td>
-                        <td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ล้อ</td>
-                        <td colspan="2" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">เลขทะเบียน</td>
-                        <td colspan="2" style="border-top: 1px solid;border-bottom: 1px solid;border-right: 1px solid"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="1" style="text-align: center;font-size: 26px;font-family:Angsana New;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">2)</td>
-                        <td colspan="2" style="font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ประเภท</td>
-                        <td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ล้อ</td>
-                        <td colspan="2" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">เลขทะเบียน</td>
-                        <td colspan="2" style="border-top: 1px solid;border-bottom: 1px solid;border-right: 1px solid"></td>
+                            <td colspan="1" style="text-align: center;font-size: 26px;font-family:Angsana New;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">7)</td>
+                            <td colspan="2" style="font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ประเภท</td>
+                            <td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ล้อ</td>
+                            <td colspan="2" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">เลขทะเบียน</td>
+                            <td colspan="2" style="border-top: 1px solid;border-bottom: 1px solid;border-right: 1px solid"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="1" style="text-align: center;font-size: 26px;font-family:Angsana New;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">2)</td>
+                            <td colspan="2" style="font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ประเภท</td>
+                            <td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ล้อ</td>
+                            <td colspan="2" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">เลขทะเบียน</td>
+                            <td colspan="2" style="border-top: 1px solid;border-bottom: 1px solid;border-right: 1px solid"></td>
 
-                        <td colspan="1" style="text-align: center;font-size: 26px;font-family:Angsana New;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">5)</td>
-                        <td colspan="2" style="font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ประเภท</td>
-                        <td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ล้อ</td>
-                        <td colspan="2" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">เลขทะเบียน</td>
-                        <td colspan="2" style="border-top: 1px solid;border-bottom: 1px solid;border-right: 1px solid"></td>
+                            <td colspan="1" style="text-align: center;font-size: 26px;font-family:Angsana New;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">5)</td>
+                            <td colspan="2" style="font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ประเภท</td>
+                            <td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ล้อ</td>
+                            <td colspan="2" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">เลขทะเบียน</td>
+                            <td colspan="2" style="border-top: 1px solid;border-bottom: 1px solid;border-right: 1px solid"></td>
 
-                        <td colspan="1" style="text-align: center;font-size: 26px;font-family:Angsana New;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">8)</td>
-                        <td colspan="2" style="font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ประเภท</td>
-                        <td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ล้อ</td>
-                        <td colspan="2" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">เลขทะเบียน</td>
-                        <td colspan="2" style="border-top: 1px solid;border-bottom: 1px solid;border-right: 1px solid"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="1" style="text-align: center;font-size: 26px;font-family:Angsana New;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">3)</td>
-                        <td colspan="2" style="font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ประเภท</td>
-                        <td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ล้อ</td>
-                        <td colspan="2" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">เลขทะเบียน</td>
-                        <td colspan="2" style="border-top: 1px solid;border-bottom: 1px solid;border-right: 1px solid"></td>
+                            <td colspan="1" style="text-align: center;font-size: 26px;font-family:Angsana New;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">8)</td>
+                            <td colspan="2" style="font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ประเภท</td>
+                            <td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ล้อ</td>
+                            <td colspan="2" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">เลขทะเบียน</td>
+                            <td colspan="2" style="border-top: 1px solid;border-bottom: 1px solid;border-right: 1px solid"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="1" style="text-align: center;font-size: 26px;font-family:Angsana New;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">3)</td>
+                            <td colspan="2" style="font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ประเภท</td>
+                            <td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ล้อ</td>
+                            <td colspan="2" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">เลขทะเบียน</td>
+                            <td colspan="2" style="border-top: 1px solid;border-bottom: 1px solid;border-right: 1px solid"></td>
 
-                        <td colspan="1" style="text-align: center;font-size: 26px;font-family:Angsana New;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">6)</td>
-                        <td colspan="2" style="font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ประเภท</td>
-                        <td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ล้อ</td>
-                        <td colspan="2" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">เลขทะเบียน</td>
-                        <td colspan="2" style="border-top: 1px solid;border-bottom: 1px solid;border-right: 1px solid"></td>
+                            <td colspan="1" style="text-align: center;font-size: 26px;font-family:Angsana New;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">6)</td>
+                            <td colspan="2" style="font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ประเภท</td>
+                            <td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ล้อ</td>
+                            <td colspan="2" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">เลขทะเบียน</td>
+                            <td colspan="2" style="border-top: 1px solid;border-bottom: 1px solid;border-right: 1px solid"></td>
 
-                        <td colspan="1" style="text-align: center;font-size: 26px;font-family:Angsana New;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">9)</td>
-                        <td colspan="2" style="font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ประเภท</td>
-                        <td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ล้อ</td>
-                        <td colspan="2" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">เลขทะเบียน</td>
-                        <td colspan="2" style="border-top: 1px solid;border-bottom: 1px solid;border-right: 1px solid"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="24"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="1" rowspan="2" style="vertical-align: middle;text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">
-                            ลำดับ
-                        </td>
-                        <td colspan="2" rowspan="2" style="vertical-align: middle;text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">
-                            PO NO.
-                        </td>
-                        <td colspan="2" rowspan="2" style="vertical-align: middle;text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">
-                            JOB NO.
-                        </td>
-                        <td colspan="2" rowspan="2" style="vertical-align: middle;text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">
-                            Warranty
-                        </td>
-                        <td colspan="5" rowspan="2" style="vertical-align: middle;text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">
-                            รายการ
-                        </td>
-                        <td colspan="2" rowspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">
-                            จำนวน
-                        </td>
-                        <td colspan="2" rowspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">
-                            การตรวจนับ
-                        </td>
-                        <td colspan="2" rowspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">
-                            สภาพสินค้า
-                        </td>
-                        <td colspan="3" rowspan="2" style="vertical-align: middle;text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">
-                            ปัญหาที่พบ
-                        </td>
-                        <td colspan="3" rowspan="2" style="vertical-align: middle;text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;border-right: 1px solid;">
-                            หมายเหตุ
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="1" rowspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">
-                            ลูก
-                        </td>
-                        <td colspan="1" rowspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">
-                            พาเลท
-                        </td>
-                        <td colspan="1" rowspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">
-                            ครบ
-                        </td>
-                        <td colspan="1" rowspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">
-                            ไม่ครบ
-                        </td>
-                        <td colspan="1" rowspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">
-                            สมบูรณ์
-                        </td>
-                        <td colspan="1" rowspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;border-right: 1px solid;">
-                            เสียหาย
-                        </td>
-                    </tr>
-                    <div id="excel_data_row">
+                            <td colspan="1" style="text-align: center;font-size: 26px;font-family:Angsana New;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">9)</td>
+                            <td colspan="2" style="font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ประเภท</td>
+                            <td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">ล้อ</td>
+                            <td colspan="2" style="text-align: center;font-size: 24px;font-family:Angsana New;border-top: 1px solid;border-bottom: 1px solid;">เลขทะเบียน</td>
+                            <td colspan="2" style="border-top: 1px solid;border-bottom: 1px solid;border-right: 1px solid"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="24"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="1" rowspan="2" style="vertical-align: middle;text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">
+                                ลำดับ
+                            </td>
+                            <td colspan="2" rowspan="2" style="vertical-align: middle;text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">
+                                PO NO.
+                            </td>
+                            <td colspan="2" rowspan="2" style="vertical-align: middle;text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">
+                                JOB NO.
+                            </td>
+                            <td colspan="2" rowspan="2" style="vertical-align: middle;text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">
+                                Warranty
+                            </td>
+                            <td colspan="5" rowspan="2" style="vertical-align: middle;text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">
+                                รายการ
+                            </td>
+                            <td colspan="2" rowspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">
+                                จำนวน
+                            </td>
+                            <td colspan="2" rowspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">
+                                การตรวจนับ
+                            </td>
+                            <td colspan="2" rowspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">
+                                สภาพสินค้า
+                            </td>
+                            <td colspan="3" rowspan="2" style="vertical-align: middle;text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">
+                                ปัญหาที่พบ
+                            </td>
+                            <td colspan="3" rowspan="2" style="vertical-align: middle;text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;border-right: 1px solid;">
+                                หมายเหตุ
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1" rowspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">
+                                ลูก
+                            </td>
+                            <td colspan="1" rowspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">
+                                พาเลท
+                            </td>
+                            <td colspan="1" rowspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">
+                                ครบ
+                            </td>
+                            <td colspan="1" rowspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">
+                                ไม่ครบ
+                            </td>
+                            <td colspan="1" rowspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;">
+                                สมบูรณ์
+                            </td>
+                            <td colspan="1" rowspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;font-weight: bold;border-left: 1px solid;border-top: 1px solid;border-bottom: 1px solid;border-right: 1px solid;">
+                                เสียหาย
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody id="excel_data_row">
 
-                    </div>
-                    <tr>
-                        <td colspan="2"></td>
-                        <td colspan="2" style="text-align: center;font-size: 24px;font-family:Angsana New;">ผู้ยื่นคำร้อง :</td>
-                        <td colspan="4" style="border-bottom: 1px dotted"></td>
-                        <td colspan="6"></td>
-                        <td colspan="2" style="text-align: center;font-size: 24px;font-family:Angsana New;">ผู้ตรวจสอบ :</td>
-                        <td colspan="4" style="border-bottom: 1px dotted"></td>
-                        <td colspan="4"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="4"></td>
-                        <td colspan="4" style="text-align: center;font-size: 14px;">ฝ่ายจัดซื้อต่างประเทศ</td>
-                        <td colspan="8"></td>
-                        <td colspan="4" style="text-align: center;font-size: 14px;">ฝ่ายคลังสินค้า</td>
-                        <td colspan="4"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="4"></td>
-                        <td colspan="4" style="text-align: center;font-size: 14px;">(…......./…......./….......)</td>
-                        <td colspan="8"></td>
-                        <td colspan="4" style="text-align: center;font-size: 14px;">(…......./…......./….......)</td>
-                        <td colspan="4"></td>
-                    </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="24"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"></td>
+                            <td colspan="2" style="text-align: center;font-size: 24px;font-family:Angsana New;">ผู้ยื่นคำร้อง :</td>
+                            <td colspan="4" style="border-bottom: 1px dotted"></td>
+                            <td colspan="6"></td>
+                            <td colspan="2" style="text-align: center;font-size: 24px;font-family:Angsana New;">ผู้ตรวจสอบ :</td>
+                            <td colspan="4" style="border-bottom: 1px dotted"></td>
+                            <td colspan="4"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"></td>
+                            <td colspan="4" style="text-align: center;font-size: 14px;">ฝ่ายจัดซื้อต่างประเทศ</td>
+                            <td colspan="8"></td>
+                            <td colspan="4" style="text-align: center;font-size: 14px;">ฝ่ายคลังสินค้า</td>
+                            <td colspan="4"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"></td>
+                            <td colspan="4" style="text-align: center;font-size: 14px;">(…......./…......./….......)</td>
+                            <td colspan="8"></td>
+                            <td colspan="4" style="text-align: center;font-size: 14px;">(…......./…......./….......)</td>
+                            <td colspan="4"></td>
+                        </tr>
+                    </tfoot>
                 </table>
-            </div>
+        </div>
     </div>
 </template>
 
@@ -374,7 +377,28 @@ import numeral from "numeral";
 export default {
     components: { Sidebar },
     mounted() {
+        var d = new Date();
+
+        var month = d.getMonth()+1;
+        var day = d.getDate();
+
+        var output = (day<10 ? '0' : '') + day  + ' / ' +
+                    (month<10 ? '0' : '') + month + ' / ' +
+                     d.getFullYear()
+        $('#date_excel').html(output)
         
+
+        $('#addform').on('change','.head_data',function(){
+            get_head_excel()
+        })
+
+        function get_head_excel(){
+            $('#shipper_exporter_excel').html($('#shipper_exporter').val())
+            $('#inspection_no_excel').html($('#inspection_no').val())
+            $('#packing_list_excel').html($('#packing_list').val())
+            $('#warehouse_location_excel').html($('#warehouse_location').val())
+        }
+
         async function predata(){
             const Predata_po = await projectFirestore.collection('Po').get()
             $('#Po_select').html('<option disabled value="" selected >Choose PEC PO</option>')
@@ -390,7 +414,7 @@ export default {
             const model_po_select_val = $('#Po_select').val()
             const po_select_data = await projectFirestore.collection('Po').doc(model_po_select_val).get()
             await add_po_to_table()
-
+            await get_head_excel()
             function add_po_to_table(){
                 console.log(po_select_data.data())
                 for(let i = 0; i < po_select_data.data().battorder.length; i++){
@@ -400,17 +424,17 @@ export default {
                             $('#data').append(
                                 '<tr id="row_'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'">'+
                                     '<td><div class="col-form-label running_num"></div></td>'+
-                                    '<td><div class="col-form-label">PEC'+po_select_data.data().pecpo_no+'/'+po_select_data.data().pecpo_year+'</div></td>'+
-                                    '<td><div class="col-form-label">'+po_select_data.data().battorder[i].project_first+'/'+po_select_data.data().battorder[i].project_second+'</div></td>'+
-                                    '<td><div class="col-form-label">'+po_select_data.data().battorder[i].project_first+'/'+po_select_data.data().battorder[i].project_second+'/'+po_select_data.data().battorder[i].ordersheet[j].ordersheet+'</div></td>'+
-                                    '<td><div class="col-form-label">'+po_select_data.data().battorder[i].ordersheet[j].battery[k].series+'</div></td>'+
-                                    '<td class="text-center"><div class="col-form-label">'+(parseInt(po_select_data.data().warranty)/12)+'</div></td>'+
+                                    '<td><div id="podata_'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'" class="col-form-label ">PEC'+po_select_data.data().pecpo_no+'/'+po_select_data.data().pecpo_year+'</div></td>'+
+                                    '<td><div id="jobdata_'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'" class="col-form-label ">'+po_select_data.data().battorder[i].project_first+'/'+po_select_data.data().battorder[i].project_second+'</div></td>'+
+                                    '<td><div id="ordersheetdata_'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'" class="col-form-label ">'+po_select_data.data().battorder[i].project_first+'/'+po_select_data.data().battorder[i].project_second+'/'+po_select_data.data().battorder[i].ordersheet[j].ordersheet+'</div></td>'+
+                                    '<td><div id="modeldata_'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'" class="col-form-label ">'+po_select_data.data().battorder[i].ordersheet[j].battery[k].series+'</div></td>'+
+                                    '<td class="text-center"><div id="warrantydata_'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'" class="col-form-label ">'+(parseInt(po_select_data.data().warranty)/12)+'</div></td>'+
                                     '<td>'+
-                                        '<input id="qty_'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'" class="col-12 form-control" type="number" step="1" value="'+po_select_data.data().battorder[i].ordersheet[j].battery[k].order_amount+'" />'+
+                                        '<input id="qtydata_'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'" class="col-12 form-control qtydata" type="number" step="1" value="'+po_select_data.data().battorder[i].ordersheet[j].battery[k].order_amount+'" />'+
                                     '</td>'+
                                     '<td class="text-center align-bottom">'+
                                         // '<button class="del_row_btn btn p-0 px-2 btn-danger" value="'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'" type="button">ลบ</button>'+
-                                        '<input value="'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'" data-poid="'+po_select_data.id+'"  type="checkbox" class="checkbox-model" style="height: 20px; width: 20px;"/>'+
+                                        '<input value="'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'"  data-poid="'+po_select_data.id+'" data-jobid="'+po_select_data.data().battorder[i].job+'"  type="checkbox" class="checkbox-model" style="height: 20px; width: 20px;"/>'+
                                     '</td>'+
                                 '</tr>'
                             )
@@ -453,6 +477,9 @@ export default {
             },
             stop: function( event, ui ) {
                 gen_running_num()
+                x = 0
+                get_battery_row(x)
+                render_row()
             }
         })
 
@@ -500,8 +527,9 @@ export default {
                     if($(this).prop("checked")){
                         battery.push({
                             po_id:$(this).data('poid'),
+                            job_id:$(this).data('jobid'),
                             batt_no:$(this).val(),
-                            qty:$('#qty_'+$(this).val()).val()
+                            qty:$('#qtydata_'+$(this).val()).val()
                         })
                     }
                 })
@@ -524,77 +552,138 @@ export default {
 
             
         })
-
+        var x = 0
         $('#data_table').on('change','.checkbox-model',async function() {
-            console.log('checkbox change')
+            x = 0
+            await get_battery_row(x)
+            await render_row()
+        })
 
-            await get_battery_row()
+        $('#check_all').on('change',async function(){
+            await check_box()
+            await get_battery_row(x)
+            await render_row()
+            function check_box(){
+                if($('#check_all').prop("checked")){
+                    $(".checkbox-model").each(function() {
+                        $(this).prop("checked",true)
+                    });
+                }
+                else{
+                    $(".checkbox-model").each(function() {
+                        $(this).prop("checked",false)
+                    });
+                }
+            }
+            
+        })
 
-            function get_battery_row(){
+        function get_battery_row(x){
                 $('#excel_data_row').html('')
+                
                 $(".checkbox-model").each(function() {
                     if($(this).prop("checked")){
-                        console.log('addrow')
+                        x = x+1
                         $('#excel_data_row').append(
-                            '<tr>'+
-                                '<td colspan="1">'+
-                                '<td>'+
+                            '<tr class="data_row">'+
+                                '<td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border:1px solid;">'+
+                                x+
+                                '</td>'+
 
-                                '<td colspan="2">'+
-                                '<td>'+
+                                '<td colspan="2" style="text-align: center;font-size: 24px;font-family:Angsana New;border:1px solid;">'+
+                                $('#podata_'+$(this).val()).html()+
+                                '</td>'+
 
-                                '<td colspan="2">'+
-                                '<td>'+
+                                '<td colspan="2" style="text-align: center;font-size: 24px;font-family:Angsana New;border:1px solid;">'+
+                                $('#jobdata_'+$(this).val()).html()+
+                                '</td>'+
 
-                                '<td  colspan="2">'+
-                                '<td>'+
+                                '<td colspan="2" style="text-align: center;font-size: 24px;font-family:Angsana New;border:1px solid;">'+
+                                $('#warrantydata_'+$(this).val()).html()+
+                                '</td>'+
 
-                                '<td colspan="5">'+
-                                '<td>'+
+                                '<td colspan="5" style="text-align: center;font-size: 24px;font-family:Angsana New;border:1px solid;">'+
+                                $('#modeldata_'+$(this).val()).html()+
+                                '</td>'+
 
-                                '<td> colspan="1"'+
-                                '<td>'+
+                                '<td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border:1px solid;">'+
+                                $('#qtydata_'+$(this).val()).val()+
+                                '</td>'+
 
-                                '<td colspan="1">'+
-                                '<td>'+
+                                '<td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border:1px solid;">'+
+                                '</td>'+
 
-                                '<td colspan="1">'+
-                                '<td>'+
+                                '<td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border:1px solid;">'+
+                                '</td>'+
 
-                                '<td colspan="1">'+
-                                '<td>'+
+                                '<td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border:1px solid;">'+
+                                '</td>'+
 
-                                '<td colspan="1">'+
-                                '<td>'+
+                                '<td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border:1px solid;">'+
+                                '</td>'+
 
-                                '<td colspan="1">'+
-                                '<td>'+
+                                '<td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border:1px solid;">'+
+                                '</td>'+
 
-                                '<td  colspan="3">'+
-                                '<td>'+
+                                '<td colspan="3" style="text-align: center;font-size: 24px;font-family:Angsana New;border:1px solid;">'+
+                                '</td>'+
 
-                                '<td colspan="3">'+
-                                '<td>'+
-                            '<tr>'
+                                '<td colspan="3" style="text-align: center;font-size: 24px;font-family:Angsana New;border:1px solid;">'+
+                                '</td>'+
+                            '</tr>'
                         )
+                    
                     }
                 })
-            }
+        }
 
-        })
+        function render_row(){
+            for(let i = 0; i < (12-$('.data_row').length); i++){
+                
+                $('#excel_data_row').append(
+                    '<tr>'+
+                        '<td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border:1px solid;">'+
+                        '</td>'+
 
-        $('#check_all').on('change',()=>{
-            if($('#check_all').prop("checked")){
-                $(".checkbox-model").each(function() {
-                    $(this).prop("checked",true)
-                });
+                        '<td colspan="2" style="text-align: center;font-size: 24px;font-family:Angsana New;border:1px solid;">'+
+                        '</td>'+
+
+                        '<td colspan="2" style="text-align: center;font-size: 24px;font-family:Angsana New;border:1px solid;">'+
+                        '</td>'+
+
+                        '<td colspan="2" style="text-align: center;font-size: 24px;font-family:Angsana New;border:1px solid;">'+
+                        '</td>'+
+
+                        '<td colspan="5" style="text-align: center;font-size: 24px;font-family:Angsana New;border:1px solid;">'+
+                        '</td>'+
+
+                        '<td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border:1px solid;">'+
+                        '</td>'+
+
+                        '<td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border:1px solid;">'+
+                        '</td>'+
+
+                        '<td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border:1px solid;">'+
+                        '</td>'+
+
+                        '<td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border:1px solid;">'+
+                        '</td>'+
+
+                        '<td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border:1px solid;">'+
+                        '</td>'+
+
+                        '<td colspan="1" style="text-align: center;font-size: 24px;font-family:Angsana New;border:1px solid;">'+
+                        '</td>'+
+
+                        '<td colspan="3" style="text-align: center;font-size: 24px;font-family:Angsana New;border:1px solid;">'+
+                        '</td>'+
+
+                        '<td colspan="3" style="text-align: center;font-size: 24px;font-family:Angsana New;border:1px solid;">'+
+                        '</td>'+
+                    '</tr>'
+                )
             }
-            else{
-                $(".checkbox-model").each(function() {
-                    $(this).prop("checked",false)
-                });
-            }
-        })
+        }
         
 
     
