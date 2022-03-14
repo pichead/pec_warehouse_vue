@@ -4,20 +4,29 @@
 <template>
 <Sidebar />
     <div id="content" style="margin-left: 250px">
-        <div class="container">
+        <div class="col-11 mx-auto">
             <div class="h3 mt-5 font-weight-bold">Register Battery</div>
             <form id="addform" class="border my-5 bg-white p-2">
                 <div class="row">
-
+                    <div class="col-12 my-3">
+                        <div class="row">
+                            <div class="col-2 col-form-label font-weight-bold">Inspection No.</div>
+                            <div id="inspec_no" class="col-10 col-form-label">
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-12">
                         <table id="data_table" class="table">
                             <colgroup>
                                 <col span="1" style="width: 100px;">
-                                <col span="1" style="width: 100px;">
+                                <col span="1" style="width: 80px;">
                                 <col span="1" style="width: 120px;">
                                 <col span="1" style="width: 180px;">
                                 <col span="1" style="width: 50px;">
                                 <col span="1" style="width: 60px;">
+                                <col span="1" style="width: 160px;">
+                                <col span="1" style="width: 190px;">
+
                             </colgroup>
                             <thead class="thead-dark">
                                 <tr class="text-center">
@@ -29,6 +38,8 @@
                                     <th>Qty</th>
                                     <th>การตรวจนับ</th>
                                     <th>สภาพสินค้า</th>
+                                    <th>ปัญหาที่พบ</th>
+                                    <th>หมายเหตุ</th>
                                 </tr>
                             </thead>
                             <tbody id="data">
@@ -74,6 +85,7 @@ export default {
         var id = url.substring(url.lastIndexOf('/') + 1);
         async function predata(){
             const Predata_po = await projectFirestore.collection('Po').get()
+            await year_check()
             $('#Po_select').html('<option disabled value="" selected >Choose PEC PO</option>')
             Predata_po.forEach((pec_po)=>{
                 $('#Po_select').append(
@@ -82,7 +94,7 @@ export default {
             })
 
             const inspection_data = await projectFirestore.collection('InspectionForm').doc(id).get()
-
+            $('#inspec_no').html(inspection_data.data().inspection_no)
             for(let x = 0; x < inspection_data.data().battery.length; x++){
                 let po_select_data = await projectFirestore.collection('Po').doc(inspection_data.data().battery[x].po_id).get()
                 await add_po_to_table()
@@ -100,7 +112,7 @@ export default {
                                 
                                 $('#row_'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no).remove()
                                 $('#data').append(
-                                    '<tr id="row_'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'">'+
+                                    '<tr id="row_'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'" class="load-data" data-row="'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'" data-poid="'+inspection_data.data().battery[x].po_id+'" data-jobid="'+inspection_data.data().battery[x].job_id+'" data-qty="'+inspection_data.data().battery[x].qty+'">'+
                                         // '<td><div class="col-form-label running_num"></div></td>'+
                                         '<td><div class="col-form-label">PEC'+po_select_data.data().pecpo_no+'/'+po_select_data.data().pecpo_year+'</div></td>'+
                                         '<td><div class="col-form-label">'+po_select_data.data().battorder[i].project_first+'/'+po_select_data.data().battorder[i].project_second+'</div></td>'+
@@ -130,6 +142,12 @@ export default {
                                                 '<label class="form-check-label">เสียหาย</label>'+
                                             '</div>'+
                                         '</div></td>'+
+                                        '<td>'+
+                                            '<textarea id="problem_'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'" class="form-control" rows="1"></textarea>'+
+                                        '</td>'+
+                                        '<td>'+
+                                            '<textarea id="comment_'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'" class="form-control" rows="1"></textarea>'+
+                                        '</td>'+
                                     '</tr>'
                                 )
 
@@ -137,161 +155,86 @@ export default {
                             }
                         }
                     }
-                    gen_running_num()
 
                     
                 }
             }
 
+            async function year_check(){
+                const year_now = new Date().getFullYear().toString().substr(-2)
+                const year = await projectFirestore.collection("BarcodeYears").doc(year_now).get()
+                await valid_uniq()
+
+                function valid_uniq(){
+                    if(year && year.exists){
+                        
+                    }
+                    else{
+                        projectFirestore.collection("BarcodeYears").doc(year_now).set({
+                            A: [],
+                            B: []
+                        })
+                    }
+                }
+            }
 
         }
         predata()
-
-        $('#modal_add_po').on('click',async function(){
-            const model_po_select_val = $('#Po_select').val()
-            let po_select_data = await projectFirestore.collection('Po').doc(model_po_select_val).get()
-            await add_po_to_table()
-
-            function add_po_to_table(){
-                console.log(po_select_data.data())
-                for(let i = 0; i < po_select_data.data().battorder.length; i++){
-                    for(let j = 0; j < po_select_data.data().battorder[i].ordersheet.length; j++){
-                        for(let k = 0;k < po_select_data.data().battorder[i].ordersheet[j].battery.length; k++){
-                            $('#row_'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no).remove()
-                            $('#data').append(
-                                '<tr id="row_'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'">'+
-                                    '<td><div class="col-form-label running_num"></div></td>'+
-                                    '<td><div class="col-form-label">PEC'+po_select_data.data().pecpo_no+'/'+po_select_data.data().pecpo_year+'</div></td>'+
-                                    '<td><div class="col-form-label">'+po_select_data.data().battorder[i].project_first+'/'+po_select_data.data().battorder[i].project_second+'</div></td>'+
-                                    '<td><div class="col-form-label">'+po_select_data.data().battorder[i].project_first+'/'+po_select_data.data().battorder[i].project_second+'/'+po_select_data.data().battorder[i].ordersheet[j].ordersheet+'</div></td>'+
-                                    '<td><div class="col-form-label">'+po_select_data.data().battorder[i].ordersheet[j].battery[k].series+'</div></td>'+
-                                    '<td class="text-center"><div class="col-form-label">'+(parseInt(po_select_data.data().warranty)/12)+'</div></td>'+
-                                    '<td>'+
-                                        '<input id="qty_'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'" class="col-12 form-control" type="number" step="1" value="'+po_select_data.data().battorder[i].ordersheet[j].battery[k].order_amount+'" />'+
-                                    '</td>'+
-                                    '<td class="text-center align-bottom">'+
-                                        // '<button class="del_row_btn btn p-0 px-2 btn-danger" value="'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'" type="button">ลบ</button>'+
-                                        '<input value="'+po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no+'" data-poid="'+po_select_data.id+'"  type="checkbox" class="checkbox-model" style="height: 20px; width: 20px;"/>'+
-                                    '</td>'+
-                                '</tr>'
-                            )
-                        }
-                    }
-                }
-                gen_running_num()
-
-                
-            }
-        })
-
-
-        $('#data').on('click','.del_row_btn',function(){
-            const del_row_val = $(this).val()
-            $('#row_'+del_row_val).remove()
-            gen_running_num()
-        })
-
-        function gen_running_num(){
-            const table_row_count = $('.running_num').length
-            for(let i = 0; i < table_row_count; i++){
-                $($('.running_num')[i]).html(i+1)
-            }
-        }
-
-        $("#data_table tbody").sortable({
-            cursor: "move",
-            placeholder: "sortable-placeholder",
-            helper: function(e, tr)
-            {
-                var $originals = tr.children();
-                var $helper = tr.clone();
-                $helper.children().each(function(index)
-                {
-                // Set helper cell sizes to match the original sizes
-                $(this).width($originals.eq(index).width());
-                });
-                return $helper;                
-            },
-            stop: function( event, ui ) {
-                gen_running_num()
-            }
-        })
-
-        
-
-        $('#check_all').on('change',()=>{
-            if($('#check_all').prop("checked")){
-                $(".checkbox-model").each(function() {
-                    $(this).prop("checked",true)
-                });
-            }
-            else{
-                $(".checkbox-model").each(function() {
-                    $(this).prop("checked",false)
-                });
-            }
-        })
-    
-        $('#export_btn').on('click',function(){
-            // const table_id = "data_table"
-            const table_id = "excel_data"
-
-            
-            const file_name = "Inspection Form_2022"
-            tableToExcel(table_id,file_name)
-            console.log('export')
-        })
-
-
-        var tableToExcel = (function() {
-
-            var uri = 'data:application/vnd.ms-excel;base64,'
-                , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
-                , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
-                , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
-            return function (table, name) {
-                if (!table.nodeType) table = document.getElementById(table)
-                var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
-                window.location.href = uri + base64(format(template, ctx))
-            }
-        })()
 
         const addform = document.querySelector('#addform');
         addform.addEventListener('submit', async function(e){
             e.preventDefault();
             console.log('save')
-            const shipper_exporter = $('#shipper_exporter').val()
-            const inspection_no = $('#inspection_no').val()
-            const packing_list = $('#packing_list').val()
-            const warehouse_location = $('#warehouse_location').val()
+
             var battery = [] 
             await get_battery_data()
             await save_data()
             function get_battery_data(){
-                $(".checkbox-model").each(function() {
-                    if($(this).prop("checked")){
-                        battery.push({
-                            po_id:$(this).data('poid'),
-                            batt_no:$(this).val(),
-                            qty:$('#qty_'+$(this).val()).val()
-                        })
+                $(".load-data").each(function() {
+                    const batt_id = $(this).data('row')
+                    const counting = counting_result(batt_id)
+                    const check_status = check_status_result(batt_id)
+                    function counting_result(){
+                        if($('input[name=check_1_'+batt_id+']:checked', '#addform').val() == 'true'){
+                            return true
+                        }
+                        else{
+                            return false
+                        }
                     }
+                    function check_status_result(){
+                        if($('input[name=check_2_'+batt_id+']:checked', '#addform').val() == 'true'){
+                            return true
+                        }
+                        else{
+                            return false
+                        }
+                    }
+
+                    battery.push({
+                        po_id:$(this).data('poid'),
+                        batt_no:$(this).data('row'),
+                        job_id:$(this).data('jobid'),
+                        qty:$(this).data('qty'),
+                        counting:counting,
+                        check_status:check_status,
+                        problem:$("#problem_"+batt_id).val(),
+                        comment:$("#comment_"+batt_id).val()
+                    })
                 })
             }
 
             function save_data(){
-                projectFirestore.collection('InspectionForm').doc(id).update({
-                    shipper_exporter:shipper_exporter,
-                    inspection_no:inspection_no,
-                    packing_list:packing_list,
-                    warehouse_location:warehouse_location,
-                    battery:battery
-                }).then(()=>{
-                    router.push({ 
-                        name: 'InspectionIndex',
-                        params: { mserror: true} 
-                    })
-                })
+                console.log(battery)
+                // projectFirestore.collection('InspectionForm').doc(id).update({
+                //     battery:battery,
+                //     gen_barcode:true
+                // }).then(()=>{
+                //     router.push({ 
+                //         name: 'InspectionIndex',
+                //         params: { mserror: true} 
+                //     })
+                // })
             }
 
             

@@ -2,7 +2,7 @@
     <Sidebar />
     <div id="content" style="margin-left: 250px">
         <div class="container">
-            <div class="h3 mt-5 font-weight-bold">รายการ Inspection Form</div>
+            <div class="h3 mt-5 font-weight-bold">Register Battery</div>
             <div class="row mt-5 mb-4">
                 <div class="col-12">
                     <input class="form-control" placeholder="Search" style="background: #f4f4f4;"/>

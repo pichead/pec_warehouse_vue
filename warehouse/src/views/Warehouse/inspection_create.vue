@@ -529,7 +529,7 @@ export default {
                             po_id:$(this).data('poid'),
                             job_id:$(this).data('jobid'),
                             batt_no:$(this).val(),
-                            qty:$('#qtydata_'+$(this).val()).val()
+                            qty:$('#qtydata_'+$(this).val()).val(),
                         })
                     }
                 })
@@ -541,7 +541,8 @@ export default {
                     inspection_no:inspection_no,
                     packing_list:packing_list,
                     warehouse_location:warehouse_location,
-                    battery:battery
+                    battery:battery,
+                    gen_barcode:false
                 }).then(()=>{
                     router.push({ 
                         name: 'InspectionIndex',
