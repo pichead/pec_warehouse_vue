@@ -245,10 +245,16 @@ export default {
                 console.log(gen_barcode_data)
                 console.log(year_batt_count)
                 console.log(barcode_year)
+                var data = gen_barcode_data
+                data.sort(function(a,b) 
+                {
+                    return a.warranty - b.warranty;
+                });
+                console.log(data)
                 var total_gen = 0
-                await gen_barcode()
-                await save_data()
-                await back_index_page()
+                // await gen_barcode()
+                // await save_data()
+                // await back_index_page()
                 function gen_barcode(){
                     
                     for(let i = 0; i < gen_barcode_data.length; i++){
