@@ -32,7 +32,7 @@ import router from "@/router";
 export default {
     components: { Sidebar },
     mounted() {
-        projectFirestore.collection("InspectionForm").get().then((inspection) => {
+        projectFirestore.collection("InspectionForm").where("gen_barcode", '==', false).get().then((inspection) => {
             
                 
             $('#inslist').html('')

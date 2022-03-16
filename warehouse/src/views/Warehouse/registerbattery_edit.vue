@@ -162,7 +162,9 @@ export default {
                                     qty:parseInt(inspection_data.data().battery[x].qty),
                                     ordersheetBatt:po_select_data.data().battorder[i].ordersheet[j].battery[k].batt_no,
                                     inspectionId:id,
-                                    warranty:parseInt(po_select_data.data().warranty)
+                                    warranty:parseInt(po_select_data.data().warranty),
+                                    barcodeStart:"",
+                                    barcodeEnd:""
                                 })
 
                                 }
@@ -235,7 +237,8 @@ export default {
                         counting:counting,
                         check_status:check_status,
                         problem:$("#problem_"+batt_id).val(),
-                        comment:$("#comment_"+batt_id).val()
+                        comment:$("#comment_"+batt_id).val(),
+
                     })
                 })
             }
@@ -245,15 +248,11 @@ export default {
                 console.log(gen_barcode_data)
                 console.log(year_batt_count)
                 console.log(barcode_year)
-                var data = gen_barcode_data
-                data.sort(function(a,b) 
-                {
-                    return a.warranty - b.warranty;
-                });
-                console.log(data)
+                var timestamp = Math.round(new Date().getTime() / 1000);
+
                 var total_gen = 0
-                // await gen_barcode()
-                // await save_data()
+                await gen_barcode()
+                await save_data()
                 // await back_index_page()
                 function gen_barcode(){
                     
@@ -272,8 +271,17 @@ export default {
                             var running_code = numeral(year_batt_count + total_gen).format('00000')
                             var code = 'PEC-'+warranty_barcode+barcode_year
                             var final_barcode = code+running_code
-                            console.log(final_barcode)
-                            console.log(total_gen)
+                            // console.log(final_barcode)
+                            // console.log(total_gen)
+                            if(j == 0){
+                                console.log(0)
+                                gen_barcode_data[i].barcodeStart = final_barcode
+                            }
+                            if(j == gen_barcode_data[i].qty - 1){
+                                console.log('final')
+                                gen_barcode_data[i].barcodeEnd = final_barcode
+                            }
+                            
                             projectFirestore.collection('Batteries_beta').add({
                                 barcode:final_barcode,
                                 series:gen_barcode_data[i].series,
@@ -283,28 +291,36 @@ export default {
                                 poId:gen_barcode_data[i].poId,
                                 ordersheetBatt:gen_barcode_data[i].ordersheetBatt,
                                 inspectionId:gen_barcode_data[i].inspectionId,
-                                warranty:gen_barcode_data[i].warranty
+                                warranty:gen_barcode_data[i].warranty,
+                                createDate:timestamp
                             })
                         }
                     }
                 }
 
                 function save_data(){
+
                     projectFirestore.collection('BarcodeYears').doc(barcode_year).update({
-                       total:total_gen
+                       total:total_gen + year_batt_count
+                    }).then(()=>{
+                        projectFirestore.collection('InspectionForm').doc(id).update({
+                            battery:battery,
+                            gen_barcode_data:gen_barcode_data,
+                            gen_barcode:true,
+                            gen_barcode_date:timestamp
+                        }).then(()=>{
+                            router.push({ 
+                                name: 'BatteryBarcodeIndex',
+                                params: { mserror: true} 
+                            })
+                        })
                     })
-                    projectFirestore.collection('InspectionForm').doc(id).update({
-                        battery:battery,
-                        gen_barcode:true
-                    })
+                    
                 }
 
-                function back_index_page(){
-                    router.push({ 
-                        name: 'RegisterBatteryIndex',
-                        params: { mserror: true} 
-                    })
-                }
+                // function back_index_page(){
+                    
+                // }
 
             }
 

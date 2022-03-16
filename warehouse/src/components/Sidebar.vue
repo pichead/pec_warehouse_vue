@@ -23,7 +23,9 @@
                     </li>
                 </ul>
             </li>
-            
+            <li id="" class="nav-item    py-2 pl-3" >
+                <a class="nav-link text-light font-weight-bold" href="/BatteryModel">Battery</a>
+            </li>
             <li id="" class="nav-item    py-2 pl-3" >
                 <a class="nav-link text-light font-weight-bold" href="/ContactCompany">Contact Company</a>
             </li>
@@ -39,8 +41,11 @@
                     <li class="nav-item" >
                         <a class="nav-link text-light pl-0 font-weight-bold" href="/Warehouse/InspectionIndex"><i class="bi bi-caret-right-fill"></i>Inspection Form<span id="" class=" mx-2 p-2 d-none badge badge-danger"></span></a>
                     </li>
-                     <li class="nav-item" >
+                    <li class="nav-item" >
                         <a class="nav-link text-light pl-0 font-weight-bold" href="/Warehouse/registerbatteryIndex"><i class="bi bi-caret-right-fill"></i>Register Battery<span id="" class=" mx-2 p-2 d-none badge badge-danger"></span></a>
+                    </li>
+                    <li class="nav-item" >
+                        <a class="nav-link text-light pl-0 font-weight-bold" href="/Warehouse/batterybarcodeIndex"><i class="bi bi-caret-right-fill"></i>Battery Barcode<span id="" class=" mx-2 p-2 d-none badge badge-danger"></span></a>
                     </li>
                 </ul>
             </li>

@@ -536,13 +536,17 @@ export default {
             }
 
             function save_data(){
+
+                var timestamp = Math.round(new Date().getTime() / 1000);
+
                 projectFirestore.collection('InspectionForm').add({
                     shipper_exporter:shipper_exporter,
                     inspection_no:inspection_no,
                     packing_list:packing_list,
                     warehouse_location:warehouse_location,
                     battery:battery,
-                    gen_barcode:false
+                    gen_barcode:false,
+                    createDate:timestamp
                 }).then(()=>{
                     router.push({ 
                         name: 'InspectionIndex',

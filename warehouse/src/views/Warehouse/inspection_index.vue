@@ -37,11 +37,12 @@ import router from "@/router";
 export default {
     components: { Sidebar },
     mounted() {
-        projectFirestore.collection("InspectionForm").get().then((inspection) => {
+        projectFirestore.collection("InspectionForm").where("gen_barcode", '==', false).get().then((inspection) => {
             
                 
             $('#inslist').html('')
-            inspection.forEach(async function(ins){   
+            inspection.forEach(async function(ins){
+                
                 $('#inslist').append('<div class="row py-2 font-weight-bold border mb-2 rounded text-center"  style="background: #f4f4f4;">'+
                         '<div class="col my-auto">'+ins.data().inspection_no+'</div>'+
                         '<div class="col-2 my-auto">'+ins.data().packing_list+'</div>'+

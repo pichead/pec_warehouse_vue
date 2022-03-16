@@ -32,11 +32,14 @@ import InspectionEdit from '../views/Warehouse/inspection_edit.vue'
 import InspectionCreate from '../views/Warehouse/inspection_create.vue'
 import RegisterBatteryIndex from '../views/Warehouse/registerbattery_index.vue'
 import RegisterBatteryEdit from '../views/Warehouse/registerbattery_edit.vue'
-
-
+import BatteryBarcodeIndex from '../views/Warehouse/batterybarcode_index.vue'
 
 // end warehouse
 
+// battery
+import BatteryModelIndex from '../views/BatteryModel/index.vue'
+
+// end battery
 
 import BatteryIndex from '../views/Battery/index.vue'
 import BatteryList from '../views/Battery/batteryList.vue'
@@ -287,7 +290,18 @@ const routes = [
     component: RegisterBatteryEdit,
     beforeEnter: requireAuth
   },
-  
+  {
+    path: '/Warehouse/batterybarcodeIndex',
+    name: 'BatteryBarcodeIndex',
+    component: BatteryBarcodeIndex,
+    beforeEnter: requireAuth
+  },
+  {
+    path: '/BatteryModel',
+    name: 'BatteryModelIndex',
+    component: BatteryModelIndex,
+    beforeEnter: requireAuth
+  },
   {
     path: '/Battery/Specification',
     name: 'BatterySpec',
