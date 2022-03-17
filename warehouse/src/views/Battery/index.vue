@@ -24,16 +24,7 @@
                 <div class="col-3"></div>
             </div>
             <div id="specList">
-            <!-- <div class="row py-2 font-weight-bold border mb-2 rounded"  style="background: #f4f4f4;">
-                <div class="col-1 my-auto">1.</div>
-                <div class="col-3 my-auto">UPS12-280R MRX</div>
-                <div class="col-3 my-auto">C&D Technologies</div>
-                <div class="col-2 my-auto">VRLA</div>
-                <div class="col-3 d-flex justify-content-center row-hl">
-                    <button class="btn btn-primary p-1 col-5 mr-1">Edit</button>
-                    <button class="btn btn-danger p-1 col-5 ml-1">Remove</button>
-                </div>
-            </div> -->
+
             </div>
         </div>
         <div class="modal" id="delModal" aria-hidden="true" style="display: none;">

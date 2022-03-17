@@ -38,6 +38,11 @@ import BatteryBarcodeIndex from '../views/Warehouse/batterybarcode_index.vue'
 
 // battery
 import BatteryModelIndex from '../views/BatteryModel/index.vue'
+import BatteryModelView from '../views/BatteryModel/view.vue'
+import BatteryModelBarcodeView from '../views/BatteryModel/barcode.vue'
+import BatteryModelExcelUpload from '../views/BatteryModel/excel.vue'
+
+
 
 // end battery
 
@@ -300,6 +305,24 @@ const routes = [
     path: '/BatteryModel',
     name: 'BatteryModelIndex',
     component: BatteryModelIndex,
+    beforeEnter: requireAuth
+  },
+  {
+    path: '/BatteryModel/modelview/:id',
+    name: 'BatteryModelView',
+    component: BatteryModelView,
+    beforeEnter: requireAuth
+  },
+  {
+    path: '/BatteryModel/barcodeview/:id',
+    name: 'BatteryModelBarcodeView',
+    component: BatteryModelBarcodeView,
+    beforeEnter: requireAuth
+  },
+  {
+    path: '/BatteryModel/excelUpload',
+    name: 'BatteryModelExcelUpload',
+    component: BatteryModelExcelUpload,
     beforeEnter: requireAuth
   },
   {

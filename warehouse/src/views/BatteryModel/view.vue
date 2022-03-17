@@ -2,14 +2,10 @@
 <Sidebar />
     <div id="content" style="margin-left: 250px">
         <div class="container">
-        <div class="h3 mt-5 font-weight-bold">Battery Model </div>
+        <div class="h3 mt-5 font-weight-bold">Battery Model : <span id="model_name"></span></div>
         <div class="row mt-5 mb-4">
-            <div class="col-10">
+            <div class="col-12">
                 <input class="form-control" placeholder="Search" style="background: #f4f4f4;"/>
-            </div>
-            <div class="col-2 pl-0">
-                <a class="btn btn-primary col" type="button" href="/BatteryModel/excelUpload">เพิ่มข้อมูล</a>
-                <!-- <button class="btn btn-primary col" type="button" data-toggle="modal" data-target="#add-data-modal" >เพิ่มข้อมูล</button> -->
             </div>
         </div>
         <div class="modal" id="add-data-modal">
@@ -35,11 +31,12 @@
         <div class="col" >
             <div id="head" class="row border-top pt-4 pb-3 font-weight-bold  text-center">
                 <div class="col-1">No.</div>
-                <div class="col-3">Battery Model</div>
-                <div class="col-2">Warehouse PEC</div>
-                <div class="col-2">Warehouse Rama2</div>
-                <div class="col-2">Site</div>
-                <div class="col-2"></div>
+                <div class="col-2">Barcode</div>
+                <div class="col-2">Location</div>
+                <div class="col-2">MFG Code</div>
+                <div class="col-1">Status</div>
+                <div class="col-2">Last Update</div>
+                <div class="col-2">Data</div>
             </div>
             <div id="specList">
 
@@ -57,27 +54,36 @@ import router from "@/router";
 export default {
     components: { Sidebar },
     mounted() {
-        
+        var url = window.location.pathname;
+        var id = url.substring(url.lastIndexOf('/') + 1);
+        var dataid = id
+
+        projectFirestore.collection('BatterySpecifications').doc(dataid).get().then( specdata =>{
+            $('#model_name').html(specdata.data().series)
+        })
         projectFirestore.collection("BatterySpecifications").orderBy("series","asc").get().then((BattSpecList) => {
             var i = 1
             $('#specList').html('')
             BattSpecList.forEach((BattSpec) => {
                 // console.log(BattSpec.data())
                 if(BattSpec.data().visible == true){
+                    if(i < 10){
+                        $('#specList').append(
+                            '<div class="row py-2 font-weight-bold border mb-2 rounded bg-white"  style="background: #f4f4f4;">'+
+                                '<div class="col-1 my-auto">'+i+'.</div>'+
+                                '<div class="col-2 my-auto">PEC-A220000'+i+'</div>'+
+                                '<div class="col-2 my-auto text-center">โกดัง PEC</div>'+
+                                '<div class="col-2 my-auto text-center">0122A</div>'+
+                                '<div class="col-1 my-auto text-center">Stock</div>'+
+                                '<div class="col-2 my-auto text-center">14-02-22</div>'+
+                                '<div class="col-2 d-flex justify-content-center row-hl">'+
+                                    '<button class="btn btn-info p-1 col-5 mr-1 view-btn" value="'+BattSpec.id+'">View</button>'+
+                                '</div>'+
+                            '</div>'
+                        )
+                        i++
+                    }
                     
-                    $('#specList').append(
-                        '<div class="row py-2 font-weight-bold border mb-2 rounded bg-white"  style="background: #f4f4f4;">'+
-                            '<div class="col-1 my-auto">'+i+'.</div>'+
-                            '<div class="col-3 my-auto">'+BattSpec.data().series+'</div>'+
-                            '<div class="col-2 my-auto text-center">'+5+'</div>'+
-                            '<div class="col-2 my-auto text-center">'+10+'</div>'+
-                            '<div class="col-2 my-auto text-center">'+20+'</div>'+
-                            '<div class="col-2 d-flex justify-content-center row-hl">'+
-                                '<button class="btn btn-info p-1 col-5 mr-1 view-btn" value="'+BattSpec.id+'">View</button>'+
-                            '</div>'+
-                        '</div>'
-                    )
-                    i++
                 }
                 
             })
@@ -88,7 +94,7 @@ export default {
         });
 
         function routeEdit(BattSpecId) {
-            router.push({ path: `/BatteryModel/modelview/${BattSpecId}` });
+            router.push({ path: `/BatteryModel/barcodeview/${BattSpecId}` });
         }
 
     }

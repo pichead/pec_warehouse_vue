@@ -554,8 +554,6 @@ export default {
                     })
                 })
             }
-
-            
         })
         var x = 0
         $('#data_table').on('change','.checkbox-model',async function() {
