@@ -34,11 +34,9 @@
         </div>
         <div class="col" >
             <div id="head" class="row border-top pt-4 pb-3 font-weight-bold  text-center">
-                <div class="col-1">No.</div>
-                <div class="col-3">Battery Model</div>
-                <div class="col-2">Warehouse PEC</div>
-                <div class="col-2">Warehouse Rama2</div>
-                <div class="col-2">Site</div>
+                <div class="col-2">No.</div>
+                <div class="col-4">Battery Model</div>
+                <div class="col-4">total</div>
                 <div class="col-2"></div>
             </div>
             <div id="specList">
@@ -57,31 +55,84 @@ import router from "@/router";
 export default {
     components: { Sidebar },
     mounted() {
-        
-        projectFirestore.collection("BatterySpecifications").orderBy("series","asc").get().then((BattSpecList) => {
-            var i = 1
-            $('#specList').html('')
-            BattSpecList.forEach((BattSpec) => {
-                // console.log(BattSpec.data())
-                if(BattSpec.data().visible == true){
-                    
+
+        preload()
+        async function preload(){
+            var batt_model_arr = []
+            var none_model = 0
+            const batt_specs = await projectFirestore.collection("BatterySpecifications").where('visible','==',true).orderBy("series","asc").get()
+            const batt_list = await projectFirestore.collection("Batteries").get()
+            await get_batt_model()
+            await get_amount_model()
+            await render_batt_model()
+
+
+            function get_batt_model(){
+                let i = 0
+                batt_specs.forEach((batt_spec)=>{
+                    i++
+                    batt_model_arr.push({
+                        row:i,
+                        id:batt_spec.id,
+                        model:batt_spec.data().series,
+                        total:0
+                    })
+                })
+            }
+            function get_amount_model(){
+                batt_list.forEach((batt_data)=>{
+                    none_model = none_model + 1 
+                    for(let i = 0; i < batt_model_arr.length; i++){
+                        if(batt_data.data().series == batt_model_arr[i].model){
+                            batt_model_arr[i].total = batt_model_arr[i].total+1
+                        }
+                    }
+                })
+            }
+            function render_batt_model(){
+                console.log('batt_model_arr : ',batt_model_arr)
+                console.log('none_model : ',none_model)
+
+                for(let i = 0; i < batt_model_arr.length; i++){
                     $('#specList').append(
                         '<div class="row py-2 font-weight-bold border mb-2 rounded bg-white"  style="background: #f4f4f4;">'+
-                            '<div class="col-1 my-auto">'+i+'.</div>'+
-                            '<div class="col-3 my-auto">'+BattSpec.data().series+'</div>'+
-                            '<div class="col-2 my-auto text-center">'+5+'</div>'+
-                            '<div class="col-2 my-auto text-center">'+10+'</div>'+
-                            '<div class="col-2 my-auto text-center">'+20+'</div>'+
+                            '<div class="col-1 my-auto">'+batt_model_arr[i].row+'.</div>'+
+                            '<div class="col-3 my-auto">'+batt_model_arr[i].model+'</div>'+
+                            '<div class="col-2 my-auto text-center">'+batt_model_arr[i].total+'</div>'+
                             '<div class="col-2 d-flex justify-content-center row-hl">'+
-                                '<button class="btn btn-info p-1 col-5 mr-1 view-btn" value="'+BattSpec.id+'">View</button>'+
+                                '<button class="btn btn-info p-1 col-5 mr-1 view-btn" value="'+batt_model_arr[i].id+'">View</button>'+
                             '</div>'+
                         '</div>'
                     )
-                    i++
                 }
+
+            }
+        }
+
+        // projectFirestore.collection("BatterySpecifications").orderBy("series","asc").get().then((BattSpecList) => {
+        //     var i = 1
+        //     $('#specList').html('')
+        //     BattSpecList.forEach((BattSpec) => {
+        //         // console.log(BattSpec.data())
+        //         if(BattSpec.data().visible == true){
+                    
+        //             $('#specList').append(
+        //                 '<div class="row py-2 font-weight-bold border mb-2 rounded bg-white"  style="background: #f4f4f4;">'+
+        //                     '<div class="col-1 my-auto">'+i+'.</div>'+
+        //                     '<div class="col-3 my-auto">'+BattSpec.data().series+'</div>'+
+        //                     '<div class="col-2 my-auto text-center">'+5+'</div>'+
+        //                     '<div class="col-2 my-auto text-center">'+10+'</div>'+
+        //                     '<div class="col-2 my-auto text-center">'+20+'</div>'+
+        //                     '<div class="col-2 d-flex justify-content-center row-hl">'+
+        //                         '<button class="btn btn-info p-1 col-5 mr-1 view-btn" value="'+BattSpec.id+'">View</button>'+
+        //                     '</div>'+
+        //                 '</div>'
+        //             )
+        //             i++
+        //         }
                 
-            })
-        })
+        //     })
+        // })
 
         $("#specList").on("click", ".view-btn", function (e) {
           routeEdit(e.target.value);
