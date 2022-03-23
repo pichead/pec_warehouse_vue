@@ -28,20 +28,21 @@
                 </div>
             </div>
         </div>
-        <div class="col" >
-            <div id="head" class="row border-top pt-4 pb-3 font-weight-bold  text-center">
-                <div class="col-1">No.</div>
-                <div class="col-2">Barcode</div>
-                <div class="col-2">Location</div>
-                <div class="col-2">MFG Code</div>
-                <div class="col-1">Status</div>
-                <div class="col-2">Last Update</div>
-                <div class="col-2">Data</div>
-            </div>
-            <div id="specList">
+        <table id="table_main" class="table">
+            <thead class="text-center">
+                <th>No.</th>
+                <th>Barcode</th>
+                <th>Location</th>
+                <th>MFG Code</th>
+                <th>Status</th>
+                <th>Last Update</th>
+                <th>Date</th>
 
-            </div>
-        </div>
+            </thead>
+            <tbody id="specList">
+
+            </tbody>
+        </table>
 
     </div>
         </div>
@@ -58,9 +59,59 @@ export default {
         var id = url.substring(url.lastIndexOf('/') + 1);
         var dataid = id
 
-        projectFirestore.collection('BatterySpecifications').doc(dataid).get().then( specdata =>{
-            $('#model_name').html(specdata.data().series)
-        })
+        pre_data()
+
+        async function pre_data(){
+            const model_batt = await projectFirestore.collection("BatterySpecifications").doc(dataid).get()
+            const model_name = model_batt.data().series
+            const batt_list = await projectFirestore.collection("Batteries").where('series','==',model_name).get()
+            $('#model_name').html(model_name)
+            
+            await render_data()
+            
+            let i = 1
+            function render_data(){
+                
+                batt_list.forEach(async function(batt_data){
+                    const batt_status_id = batt_data.data().statusItems[batt_data.data().statusItems.length-1].id
+                    const batt_status = await projectFirestore.collection("StatusItems").doc(batt_status_id).get() 
+                    $('#specList').append(
+                        '<tr class="font-weight-bold border rounded bg-white"  style="background: #f4f4f4;">'+
+                            '<td >'+i+'.</td>'+
+                            '<td>'+batt_data.data().barcode+'</td>'+
+                            '<td class="text-center">'+batt_data.data().siteLocations[batt_data.data().siteLocations.length-1].site+'</td>'+
+                            '<td class="text-center">'+batt_data.data().mfg_code+'</td>'+
+                            '<td class="text-center">'+batt_status.data().name+'</td>'+
+                            '<td class="text-center">14-02-22</td>'+
+                            '<td class="d-flex justify-content-center row-hl">'+
+                                '<button class="btn btn-info p-1 col-12 mr-1 view-btn" value="'+batt_data.id+'">View</button>'+
+                            '</td>'+
+                        '</tr>'
+                    )
+                    i++
+                    if(i == batt_list.size+1){
+                        data_table()
+
+                    }
+                })
+                
+
+
+            }
+
+            function data_table(){
+                $('#table_main').DataTable({
+                    "searching": false,
+                    "ordering": false,
+                    "pageLength": 10,
+                    "info":false,
+                    "lengthChange": false
+                })
+            }
+
+            
+
+        }
         projectFirestore.collection("BatterySpecifications").orderBy("series","asc").get().then((BattSpecList) => {
             var i = 1
             $('#specList').html('')
@@ -68,25 +119,13 @@ export default {
                 // console.log(BattSpec.data())
                 if(BattSpec.data().visible == true){
                     if(i < 10){
-                        $('#specList').append(
-                            '<div class="row py-2 font-weight-bold border mb-2 rounded bg-white"  style="background: #f4f4f4;">'+
-                                '<div class="col-1 my-auto">'+i+'.</div>'+
-                                '<div class="col-2 my-auto">PEC-A220000'+i+'</div>'+
-                                '<div class="col-2 my-auto text-center">โกดัง PEC</div>'+
-                                '<div class="col-2 my-auto text-center">0122A</div>'+
-                                '<div class="col-1 my-auto text-center">Stock</div>'+
-                                '<div class="col-2 my-auto text-center">14-02-22</div>'+
-                                '<div class="col-2 d-flex justify-content-center row-hl">'+
-                                    '<button class="btn btn-info p-1 col-5 mr-1 view-btn" value="'+BattSpec.id+'">View</button>'+
-                                '</div>'+
-                            '</div>'
-                        )
-                        i++
+                        
                     }
                     
                 }
                 
             })
+            
         })
 
         $("#specList").on("click", ".view-btn", function (e) {

@@ -96,9 +96,9 @@ export default {
                 for(let i = 0; i < batt_model_arr.length; i++){
                     $('#specList').append(
                         '<div class="row py-2 font-weight-bold border mb-2 rounded bg-white"  style="background: #f4f4f4;">'+
-                            '<div class="col-1 my-auto">'+batt_model_arr[i].row+'.</div>'+
-                            '<div class="col-3 my-auto">'+batt_model_arr[i].model+'</div>'+
-                            '<div class="col-2 my-auto text-center">'+batt_model_arr[i].total+'</div>'+
+                            '<div class="col-2 my-auto">'+batt_model_arr[i].row+'.</div>'+
+                            '<div class="col-4 my-auto">'+batt_model_arr[i].model+'</div>'+
+                            '<div class="col-4 my-auto text-center">'+batt_model_arr[i].total+'</div>'+
                             '<div class="col-2 d-flex justify-content-center row-hl">'+
                                 '<button class="btn btn-info p-1 col-5 mr-1 view-btn" value="'+batt_model_arr[i].id+'">View</button>'+
                             '</div>'+
@@ -108,31 +108,6 @@ export default {
 
             }
         }
-
-        // projectFirestore.collection("BatterySpecifications").orderBy("series","asc").get().then((BattSpecList) => {
-        //     var i = 1
-        //     $('#specList').html('')
-        //     BattSpecList.forEach((BattSpec) => {
-        //         // console.log(BattSpec.data())
-        //         if(BattSpec.data().visible == true){
-                    
-        //             $('#specList').append(
-        //                 '<div class="row py-2 font-weight-bold border mb-2 rounded bg-white"  style="background: #f4f4f4;">'+
-        //                     '<div class="col-1 my-auto">'+i+'.</div>'+
-        //                     '<div class="col-3 my-auto">'+BattSpec.data().series+'</div>'+
-        //                     '<div class="col-2 my-auto text-center">'+5+'</div>'+
-        //                     '<div class="col-2 my-auto text-center">'+10+'</div>'+
-        //                     '<div class="col-2 my-auto text-center">'+20+'</div>'+
-        //                     '<div class="col-2 d-flex justify-content-center row-hl">'+
-        //                         '<button class="btn btn-info p-1 col-5 mr-1 view-btn" value="'+BattSpec.id+'">View</button>'+
-        //                     '</div>'+
-        //                 '</div>'
-        //             )
-        //             i++
-        //         }
-                
-        //     })
-        // })
 
         $("#specList").on("click", ".view-btn", function (e) {
           routeEdit(e.target.value);
