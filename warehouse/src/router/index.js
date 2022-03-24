@@ -29,6 +29,7 @@ import UserIndex from '../views/user/index.vue'
 // warehouse
 import InspectionIndex from '../views/Warehouse/inspection_index.vue'
 import InspectionEdit from '../views/Warehouse/inspection_edit.vue'
+import InspectionView from '../views/Warehouse/inspection_view.vue'
 import InspectionCreate from '../views/Warehouse/inspection_create.vue'
 import RegisterBatteryIndex from '../views/Warehouse/registerbattery_index.vue'
 import RegisterBatteryEdit from '../views/Warehouse/registerbattery_edit.vue'
@@ -281,6 +282,12 @@ const routes = [
     path: '/Warehouse/InspectionEdit/:id',
     name: 'InspectionEdit',
     component: InspectionEdit,
+    beforeEnter: requireAuth
+  },
+  {
+    path: '/Warehouse/InspectionView/:id',
+    name: 'InspectionView',
+    component: InspectionView,
     beforeEnter: requireAuth
   },
   {

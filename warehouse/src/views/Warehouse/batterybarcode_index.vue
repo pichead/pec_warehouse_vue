@@ -27,6 +27,11 @@
                             <button class="close" data-dismiss="modal">×</button>
                         </div>
                         <div class="modal-body">
+                            <div class="row mb-3 font-weight-bold">
+                                <div class="pl-3 mr-2">Inspection No : </div>
+                                <div id="inspection_no_model" class=""></div>
+                            </div>
+                            
                             <table class="table">
                                 <thead class="thead-dark text-center" >
                                     <tr>
@@ -80,7 +85,7 @@ export default {
                     return total
                 }
 
-                $('#inslist').append('<div class="row py-2 font-weight-bold border mb-2 rounded text-center"  style="background: #f4f4f4;">'+
+                $('#inslist').append('<div class="row py-2 font-weight-bold border mb-2 rounded text-center" style="background: #f4f4f4;">'+
                         '<div class="col my-auto">'+ins.data().inspection_no+'</div>'+
                         '<div class="col-2 my-auto">'+ins.data().packing_list+'</div>'+
                         '<div class="col my-auto">'+ins.data().warehouse_location+'</div>'+
@@ -96,17 +101,17 @@ export default {
             $('#modal_body').html('')
             const btn_id = $(this).val()
             const modal_inspection = await projectFirestore.collection("InspectionForm").doc(btn_id).get()
-            console.log(modal_inspection.data())
+            $('#inspection_no_model').html(modal_inspection.data().inspection_no)
             for(let i = 0; i < modal_inspection.data().gen_barcode_data.length; i++){
                 $('#modal_body').append(
                     '<tr>'+
-                        '<td class="">'+(i+1)+'</td>'+
-                        '<td class="">'+modal_inspection.data().gen_barcode_data[i].poNo+'</td>'+
-                        '<td class="">'+modal_inspection.data().gen_barcode_data[i].jobNo+'</td>'+
+                        '<td class="text-center">'+(i+1)+'</td>'+
+                        '<td class="text-center">'+modal_inspection.data().gen_barcode_data[i].poNo+'</td>'+
+                        '<td class="text-center">'+modal_inspection.data().gen_barcode_data[i].jobNo+'</td>'+
                         '<td class="">'+modal_inspection.data().gen_barcode_data[i].series+'</td>'+
-                        '<td class="">'+modal_inspection.data().gen_barcode_data[i].qty+'</td>'+
-                        '<td class="">'+modal_inspection.data().gen_barcode_data[i].barcodeStart+'</td>'+
-                        '<td class="">'+modal_inspection.data().gen_barcode_data[i].barcodeEnd+'</td>'+
+                        '<td class="text-center">'+modal_inspection.data().gen_barcode_data[i].qty+'</td>'+
+                        '<td class="text-center">'+modal_inspection.data().gen_barcode_data[i].barcodeStart+'</td>'+
+                        '<td class="text-center">'+modal_inspection.data().gen_barcode_data[i].barcodeEnd+'</td>'+
                     '</tr>'
                 )
             }
