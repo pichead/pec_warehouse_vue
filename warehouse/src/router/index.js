@@ -42,6 +42,11 @@ import BatteryModelIndex from '../views/BatteryModel/index.vue'
 import BatteryModelView from '../views/BatteryModel/view.vue'
 import BatteryModelBarcodeView from '../views/BatteryModel/barcode.vue'
 import BatteryModelExcelUpload from '../views/BatteryModel/excel.vue'
+import BatteryMaintenanceNew from '../views/BatteryModel/maintenance_new.vue'
+import BatteryMaintenanceIn from '../views/BatteryModel/maintenance_instock.vue'
+import BatteryMaintenanceImport from '../views/BatteryModel/import_excel.vue'
+
+
 
 
 
