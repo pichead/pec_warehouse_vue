@@ -2,47 +2,94 @@
 <Sidebar />
     <div id="content" style="margin-left: 250px">
         <div class="container">
-        <div class="h3 mt-5 font-weight-bold">Battery Model </div>
-        <div class="row mt-5 mb-4">
-            <div class="col-10">
-                <input class="form-control" placeholder="Search" style="background: #f4f4f4;"/>
-            </div>
-            <div class="col-2 pl-0">
-                <a class="btn btn-primary col" type="button" href="/BatteryModel/excelUpload">เพิ่มข้อมูล</a>
-                <!-- <button class="btn btn-primary col" type="button" data-toggle="modal" data-target="#add-data-modal" >เพิ่มข้อมูล</button> -->
-            </div>
-        </div>
-        <div class="modal" id="add-data-modal">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">เพิ่มข้อมูลแบตเตอร์รี่</h5>
-                    <button class="close" data-dismiss="modal">×</button>
-                </div>
-                <div class="modal-body">
-                    <div id="modal-body" class="row">
-                        <div class="col-12 my-2">Upload file excel เพื่อเพิ่มข้อมูล</div>
-                        <input type="file" id="file" class="form-control-file col-12">
+        <div class="h3 mt-5 font-weight-bold">แบตเตอรี่เข้าใหม่</div>
+        
+        <div class="my-5 p-4 border">
+            <div class="row">
+                <div class="col-6 mb-4">
+                    <div class="row">
+                        <div class="col-4 col-form-label font-weight-bold">Inspection No.</div>
+                        <div class="col">
+                            <select class="form-control" id=""></select>
+                        </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                    <button class="btn btn-success" data-dismiss="modal">Save</button>
+                <div class="col-6 mb-4">
+                    <div class="row">
+                        <div class="col-4 pl-5 col-form-label font-weight-bold">Po No.</div>
+                        <div class="col">
+                            <select class="form-control" id=""></select>
+                        </div>
+                    </div>
                 </div>
+                <div class="col-6 mb-4">
+                    <div class="row">
+                        <div class="col-4 col-form-label font-weight-bold">Location</div>
+                        <div class="col">
+                            <select class="form-control" id=""></select>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="col" >
-            <div id="head" class="row border-top pt-4 pb-3 font-weight-bold  text-center">
-                <div class="col-2">No.</div>
-                <div class="col-4">Battery Model</div>
-                <div class="col-4">total</div>
-                <div class="col-2"></div>
-            </div>
-            <div id="specList">
+                <div class="col-6 mb-4">
+                    <div class="row">
+                        <div class="col-4 pl-5 col-form-label font-weight-bold">วันที่ชาร์จ</div>
+                        <div class="col">
+                            <div class="row">
+                                <div class="col-6">
+                                    <input class="form-control" type="date">
+                                </div>
+                                <div class="col-6">
+                                    <input class="form-control" type="date">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 mb-4">
+                    <div class="row">
+                        <div class="col-4 col-form-label font-weight-bold">วันที่ชาร์จถัดไป</div>
+                        <div class="col">
+                            <div class="row">
+                                <div class="col-6">
+                                    <input class="form-control" type="date">
+                                </div>
+                                <div class="col-6">
+                                    <input class="form-control" type="date">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 mb-4">
+                    <div class="row">
+                        <div class="col-6"></div>
+                        <div class="col-3">
+                            <button type="button" class="btn btn-danger col-12">Reset</button>
+                        </div>
+                        <div class="col-3">
+                            <button type="button" class="btn btn-primary col-12">Search</button>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>
+        <div class="p-4 border">
+            <table class="col">
+                <thead class="text-center py-2 border-bottom">
+                    <tr class="">
+                        <th>No.</th>
+                        <th>Model</th>
+                        <th>Location</th>
+                        <th>วันที่ชาร์จ</th>
+                        <th>วันที่ชาร์จถัดไป</th>
+                        <th>จำนวน</th>
+                        <th></th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+
 
     </div>
         </div>

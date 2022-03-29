@@ -43,12 +43,8 @@ import BatteryModelView from '../views/BatteryModel/view.vue'
 import BatteryModelBarcodeView from '../views/BatteryModel/barcode.vue'
 import BatteryModelExcelUpload from '../views/BatteryModel/excel.vue'
 import BatteryMaintenanceNew from '../views/BatteryModel/maintenance_new.vue'
-import BatteryMaintenanceIn from '../views/BatteryModel/maintenance_instock.vue'
+import BatteryMaintenanceInStock from '../views/BatteryModel/maintenance_instock.vue'
 import BatteryMaintenanceImport from '../views/BatteryModel/import_excel.vue'
-
-
-
-
 
 // end battery
 
@@ -337,6 +333,25 @@ const routes = [
     component: BatteryModelExcelUpload,
     beforeEnter: requireAuth
   },
+  {
+    path: '/BatteryMaintenanceNew',
+    name: 'BatteryMaintenanceNew',
+    component: BatteryMaintenanceNew,
+    beforeEnter: requireAuth
+  },
+  {
+    path: '/BatteryMaintenanceInstock',
+    name: 'BatteryMaintenanceInStock',
+    component: BatteryMaintenanceInStock,
+    beforeEnter: requireAuth
+  },
+  {
+    path: '/BatteryMaintenanceNew',
+    name: 'BatteryMaintenanceNew',
+    component: BatteryMaintenanceNew,
+    beforeEnter: requireAuth
+  },
+  
   {
     path: '/Battery/Specification',
     name: 'BatterySpec',
