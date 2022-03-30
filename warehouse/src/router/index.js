@@ -346,9 +346,9 @@ const routes = [
     beforeEnter: requireAuth
   },
   {
-    path: '/BatteryMaintenanceNew',
-    name: 'BatteryMaintenanceNew',
-    component: BatteryMaintenanceNew,
+    path: '/BatteryMaintenanceImport',
+    name: 'BatteryMaintenanceImport',
+    component: BatteryMaintenanceImport,
     beforeEnter: requireAuth
   },
   

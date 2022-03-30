@@ -20,7 +20,7 @@
 
                     </div>
                     <div class="col">
-                        <button class="btn btn-primary col-12" type="button">Next</button>
+                        <a class="btn btn-primary col-12" href="/BatteryMaintenanceImport" type="button">Next</a>
                     </div>
 
                 </div>
