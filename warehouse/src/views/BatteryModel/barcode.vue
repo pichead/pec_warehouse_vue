@@ -2,12 +2,8 @@
 <Sidebar />
     <div id="content" style="margin-left: 250px">
         <div class="container">
-        <div class="h3 mt-5 font-weight-bold">Battery Barcode : PEC-A2200001</div>
-        <div class="row mt-5 mb-4">
-            <div class="col-12">
-                <input class="form-control" placeholder="Search" style="background: #f4f4f4;"/>
-            </div>
-        </div>
+        <div class="h3 my-5 font-weight-bold">Battery Barcode : PEC-A2200001</div>
+
         <table id="table_main" class="table">
             <thead class="text-center">
                 <th>Location</th>

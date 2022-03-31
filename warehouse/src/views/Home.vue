@@ -22,7 +22,7 @@ import pagination from '../assets/pagination'
 import Sidebar from "../components/Sidebar.vue";
 import router from "@/router";
 import axios from "axios";
-// import { response } from 'express';
+
 export default {
     components: { Sidebar },
     mounted() {
@@ -34,10 +34,6 @@ export default {
             main()
         })
 
-
-        
-        
-        
     },
     data() {
         return {

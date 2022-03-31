@@ -2,21 +2,23 @@
 <Sidebar />
     <div id="content" style="margin-left: 250px">
         <div class="container">
-        <div class="h3 mt-5 font-weight-bold">แบตเตอรี่เข้าใหม่</div>
+        <div class="h3 mt-5 font-weight-bold">บำรุงรักษาแบตเตอรี่</div>
         
         <div class="my-5 p-4 border">
             <div class="row">
                 <div class="col-6 mb-4">
                     <div class="row">
-                        <div class="col-4 col-form-label font-weight-bold">Inspection No.</div>
+                        <div class="col-4 col-form-label font-weight-bold">รอบการตรวจ</div>
                         <div class="col">
-                            <select class="form-control" id=""></select>
+                            <select class="form-control" id="">
+                                <option value="">30 วัน</option>
+                            </select>
                         </div>
                     </div>
                 </div>
                 <div class="col-6 mb-4">
                     <div class="row">
-                        <div class="col-4 pl-5 col-form-label font-weight-bold">Po No.</div>
+                        <div class="col-4 pl-5 col-form-label font-weight-bold">Model</div>
                         <div class="col">
                             <select class="form-control" id=""></select>
                         </div>
@@ -45,7 +47,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6 mb-4">
+                <div class="col-6">
                     <div class="row">
                         <div class="col-4 col-form-label font-weight-bold">วันที่ชาร์จถัดไป</div>
                         <div class="col">
@@ -60,7 +62,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6 mb-4">
+                <div class="col-6">
                     <div class="row">
                         <div class="col-6"></div>
                         <div class="col-3">
@@ -75,8 +77,8 @@
             </div>
         </div>
         <div class="p-4 border">
-            <table class="col">
-                <thead class="text-center py-2 border-bottom">
+            <table class="col table table-striped">
+                <thead class="text-center">
                     <tr class="">
                         <th>No.</th>
                         <th>Model</th>
@@ -84,9 +86,79 @@
                         <th>วันที่ชาร์จ</th>
                         <th>วันที่ชาร์จถัดไป</th>
                         <th>จำนวน</th>
-                        <th></th>
+                        <th>
+                            <input type="checkbox">
+                        </th>
                     </tr>
                 </thead>
+                <tbody class="text-center">
+                    <tr>
+                        <td>1</td>
+                        <td>UPS12-150MRX</td>
+                        <td>โกดัง PEC</td>
+                        <td>20/01/2022</td>
+                        <td>19/02/2022</td>
+                        <td>30</td>
+                        <td>
+                            <input type="checkbox">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>UPS12-320MRX</td>
+                        <td>โกดัง PEC</td>
+                        <td>20/01/2022</td>
+                        <td>19/02/2022</td>
+                        <td>40</td>
+                        <td>
+                            <input type="checkbox">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>UPS12-320R MRX</td>
+                        <td>โกดัง PEC</td>
+                        <td>20/01/2022</td>
+                        <td>19/02/2022</td>
+                        <td>10</td>
+                        <td>
+                            <input type="checkbox">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>UPS12-37MRX</td>
+                        <td>โกดัง PEC</td>
+                        <td>20/01/2022</td>
+                        <td>19/02/2022</td>
+                        <td>10</td>
+                        <td>
+                            <input type="checkbox">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>UPS12-490MRX</td>
+                        <td>โกดัง PEC</td>
+                        <td>20/01/2022</td>
+                        <td>20/04/2022</td>
+                        <td>30</td>
+                        <td>
+                            <input type="checkbox">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>UPS12-510MRX</td>
+                        <td>โกดัง PEC</td>
+                        <td>20/01/2022</td>
+                        <td>20/04/2022</td>
+                        <td>150</td>
+                        <td>
+                            <input type="checkbox">
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </div>
 

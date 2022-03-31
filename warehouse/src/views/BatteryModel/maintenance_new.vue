@@ -40,8 +40,8 @@
             </div>
         </div>
         <div class="p-4 border">
-            <table class="col">
-                <thead class="text-center py-2 border-bottom">
+            <table class="col table table-striped">
+                <thead class="text-center ">
                     <tr class="">
                         <th>No.</th>
                         <th>Inspection</th>
@@ -50,9 +50,61 @@
                         <th>Model</th>
                         <th>Location</th>
                         <th>จำนวน</th>
-                        <th></th>
+                        <th>
+                            <input type="checkbox">
+                        </th>
                     </tr>
                 </thead>
+                <tbody  class="text-center">
+                    <tr>
+                        <td>1</td>
+                        <td>IF_30/2022</td>
+                        <td>PEC056/22</td>
+                        <td>65/035</td>
+                        <td>UPS12-370MRX</td>
+                        <td>โกดัง PEC</td>
+                        <td>60</td>
+                        <td>
+                            <input type="checkbox">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>IF_29/2022</td>
+                        <td>PEC055/22</td>
+                        <td>65/034</td>
+                        <td>UPS12-490MRX</td>
+                        <td>โกดัง PEC</td>
+                        <td>100</td>
+                        <td>
+                            <input type="checkbox">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>IF_28/2022</td>
+                        <td>PEC054/22</td>
+                        <td>65/000</td>
+                        <td>UPS12-490MRX</td>
+                        <td>โกดัง PEC</td>
+                        <td>100</td>
+                        <td>
+                            <input type="checkbox">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>IF_27/2022</td>
+                        <td>PEC053/22</td>
+                        <td>65/000</td>
+                        <td>UPS12-490MRX</td>
+                        <td>โกดัง PEC</td>
+                        <td>100</td>
+                        <td>
+                            <input type="checkbox">
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </div>
 
