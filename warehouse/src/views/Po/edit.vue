@@ -275,6 +275,7 @@ export default {
         var con_delivery
         var msg = []
         var username
+        var old_batt_data_arry = []
         const origin_option = ['China','Mexico']
         var shipmentprice = 0
         const shipment_list = ['Combined to CIF','Other']
@@ -1127,9 +1128,13 @@ export default {
             const orgin = $('#select_origin').find('option:selected').val()
             const warranty = $('#warranty').val()
             const delivery = $('#delivery').val()
+            await clear_old_data()
+            await save_new_data()
+            function clear_old_data(){
 
-
-            if(con_origin != $('#select_origin').find('option:selected').val() || con_warranty != $('#warranty').val() || con_delivery != $('#delivery').val()){
+            }
+            function save_new_data(){
+                if(con_origin != $('#select_origin').find('option:selected').val() || con_warranty != $('#warranty').val() || con_delivery != $('#delivery').val()){
                     projectFirestore.collection('Po').doc(id).update({
                     pecpo_no:pecpono,
                     pecpo_year:pecpoyear,
@@ -1144,30 +1149,33 @@ export default {
                     battorder:[],
                     visible:true
 
-                }).then(()=>{ 
-                    location.reload()
-                })
-            }
-            else{
-                projectFirestore.collection('Po').doc(id).update({
-                    pecpo_no:pecpono,
-                    pecpo_year:pecpoyear,
-                    company:company,
-                    tpayment:tpayment,
-                    delivery:delivery_date,
-                    comment:comment,
-                    update_time:update_time,
-                    origin:orgin,
-                    warranty:warranty,
-                    delivery_date:delivery,
-                    visible:true,
-                    approve_status:false
+                    }).then(()=>{ 
+                        location.reload()
+                    })
+                }
+                else{
+                    projectFirestore.collection('Po').doc(id).update({
+                        pecpo_no:pecpono,
+                        pecpo_year:pecpoyear,
+                        company:company,
+                        tpayment:tpayment,
+                        delivery:delivery_date,
+                        comment:comment,
+                        update_time:update_time,
+                        origin:orgin,
+                        warranty:warranty,
+                        delivery_date:delivery,
+                        visible:true,
+                        approve_status:false
 
-                }).then(()=>{ 
-                    location.reload()
-                })
-                
+                    }).then(()=>{ 
+                        location.reload()
+                    })
+                    
+                }
             }
+
+            
 
             
 
