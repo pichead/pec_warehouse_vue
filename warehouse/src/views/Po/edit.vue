@@ -1167,7 +1167,6 @@ export default {
                         delivery_date:delivery,
                         visible:true,
                         approve_status:false
-
                     }).then(()=>{ 
                         location.reload()
                     })
