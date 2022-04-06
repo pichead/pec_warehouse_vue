@@ -26,7 +26,7 @@
             <!-- <li id="" class="nav-item    py-2 pl-3" >
                 <a class="nav-link text-light font-weight-bold" href="/BatteryModel">Battery</a>
             </li> -->
-            <li id="" class="nav-item   py-2  pl-3" >
+            <!-- <li id="" class="nav-item   py-2  pl-3" >
                 <a id="BatteryModel" class="nav-link text-light font-weight-bold"  data-toggle="collapse" data-target=".BatteryModel-collapse" >Battery<span id="" class="d-none mx-2 p-2  badge badge-danger"></span><i id="sign-down-wh" class="bi bi-caret-down "></i><i id="sign-right-wh" class="bi bi-caret-right d-none"></i></a>
                 <ul class="collapse pl-3 BatteryModel-collapse">
                     <li id="" class="nav-item    py-2 pl-3" >
@@ -39,10 +39,10 @@
                         <a class="nav-link text-light font-weight-bold" href="/BatteryMaintenanceInstock">Maintenance(Stock)</a>
                     </li>
                 </ul>
-            </li>
-            <li id="" class="nav-item    py-2 pl-3" >
+            </li> -->
+            <!-- <li id="" class="nav-item    py-2 pl-3" >
                 <a class="nav-link text-light font-weight-bold" href="/ContactCompany">Contact Company</a>
-            </li>
+            </li> -->
             <li id="" class="nav-item   py-2 pl-3" >
                 <a class="nav-link text-light font-weight-bold" href="/Battery/pecpoList">PEC PO</a>
             </li>

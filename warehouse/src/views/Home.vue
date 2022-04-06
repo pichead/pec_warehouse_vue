@@ -9,8 +9,8 @@
     <div id="content" style="margin-left: 250px">
         <div class="col-10 mx-auto">
           <div class="h3">HOME</div>
-          <div id="test_btn" class="btn border">test</div>
-          <div id="results"></div>
+          <!-- <div id="test_btn" class="btn border">test</div>
+          <div id="results"></div> -->
         </div>
     </div>
 </template>

@@ -617,6 +617,11 @@ export default {
                                             )
 
                                             for(let m = 0; m < ordersheet_list[j].ordersheet[k].battery.length; m++){
+                                                old_batt_data_arry.push({
+                                                        job_id:ordersheet_list[j].job,
+                                                        ordersheet:ordersheet_list[j].ordersheet[k].ordersheet,
+                                                        batt_no:ordersheet_list[j].ordersheet[k].battery[m].batt_no
+                                                    })
                                                 $('#description-'+(j+1)+'-'+(k+1)).append(
                                                     '<div class="col-12 my-1" style="height:40px">'+ordersheet_list[j].ordersheet[k].battery[m].series+'</div>'
                                                 )
@@ -1128,11 +1133,8 @@ export default {
             const orgin = $('#select_origin').find('option:selected').val()
             const warranty = $('#warranty').val()
             const delivery = $('#delivery').val()
-            await clear_old_data()
             await save_new_data()
-            function clear_old_data(){
-
-            }
+            
             function save_new_data(){
                 if(con_origin != $('#select_origin').find('option:selected').val() || con_warranty != $('#warranty').val() || con_delivery != $('#delivery').val()){
                     projectFirestore.collection('Po').doc(id).update({
@@ -1195,11 +1197,76 @@ export default {
             var projectlist =  []
             var battorder =  []
             var battarray = []
+            
             await arrayorder_job()
             await arrayorder_odersheet()
             await arrayorder_batt()
+            // await clear_old_data_get()
+            // await clear_old_data()
             await savedata()
             
+            async function clear_old_data_get(){
+                console.log('old_batt_data_arry : ',old_batt_data_arry)
+                
+                for(let i = 0; i < old_batt_data_arry.length; i++){
+                    const get_batt_no = await projectFirestore.collection('Projects').doc(old_batt_data_arry[i].job_id).get()
+                    var new_batt_order = []
+                    var new_order_sheet = []
+                    for(let j = 0; j < get_batt_no.data().battery.length + 1; j++){
+                        if(j < get_batt_no.data().battery.length){
+                            if(old_batt_data_arry[i].batt_no.toString() == get_batt_no.data().battery[j].no){
+                                new_batt_order.push({
+                                    amount:get_batt_no.data().battery[j].amount,
+                                    company:get_batt_no.data().battery[j].company,
+                                    deliverydate:get_batt_no.data().battery[j].deliverydate,
+                                    inter_confirm:get_batt_no.data().battery[j].inter_confirm,
+                                    lock:true,
+                                    main:get_batt_no.data().battery[j].main,
+                                    no:get_batt_no.data().battery[j].no,
+                                    origin:get_batt_no.data().battery[j].origin,
+                                    series:get_batt_no.data().battery[j].series,
+                                    warranty:get_batt_no.data().battery[j].warranty,
+                                    wh_stock:get_batt_no.data().battery[j].wh_stock,
+                                })
+                                
+                            }
+                            else{
+                                new_batt_order.push(get_batt_no.data().battery[j])
+                            }
+                        }
+                        else{
+                            console.log('new_batt_order : ',new_batt_order)
+                            projectFirestore.collection('Projects').doc(old_batt_data_arry[i].job_id).update({
+                                battery:new_batt_order
+                            })
+                        }
+                        
+                        
+                    }
+                    
+                }
+            }
+            async function clear_old_data(){
+                console.log('new_batt_order : ',new_batt_order)
+                // for(let i = 0; i < old_batt_data_arry.length; i++){
+                //     const save_batt_no = await projectFirestore.collection('Projects').doc(old_batt_data_arry[i].job_id).get()
+                //     for(let j = 0; j < get_batt_no.data().battery.length; j++){
+                //         if(new_batt_order == save_batt_no.data().battery[j].no){
+
+
+                //             // projectFirestore.collection('Projects').doc(old_batt_data_arry[i].job_id).update({
+                //             //     battery:new_batt_order
+                //             // })
+                //         }
+
+                        
+                        
+                //     }
+                    
+                // }
+            }
+
+
             function arrayorder_job(){
                 
                 for(let i = 0; i < job_count; i++){
