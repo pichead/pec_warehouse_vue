@@ -49,7 +49,7 @@
             <li id="" class="nav-item   py-2 pl-3" >
                 <a class="nav-link text-light font-weight-bold" href="/pecpo_confirm_list">PEC PO Confirm</a>
             </li>
-            <li id="" class="nav-item   py-2  pl-3" >
+            <!-- <li id="" class="nav-item   py-2  pl-3" >
                 <a id="warehouse" class="nav-link text-light font-weight-bold"  data-toggle="collapse" data-target=".warehouse-collapse" >Warehouse<span id="alarm_warehouse" class="d-none mx-2 p-2  badge badge-danger"></span><i id="sign-down-wh" class="bi bi-caret-down "></i><i id="sign-right-wh" class="bi bi-caret-right d-none"></i></a>
                 <ul class="collapse pl-3 warehouse-collapse">
                     <li class="nav-item" >
@@ -62,7 +62,7 @@
                         <a class="nav-link text-light pl-0 font-weight-bold" href="/Warehouse/batterybarcodeIndex"><i class="bi bi-caret-right-fill"></i>Battery Barcode<span id="" class=" mx-2 p-2 d-none badge badge-danger"></span></a>
                     </li>
                 </ul>
-            </li>
+            </li> -->
             
             <!-- <li id="" class="nav-item   py-2 pl-3"  >
                 <a class="nav-link text-light font-weight-bold" href="/Battery/batterylist">Stock</a>

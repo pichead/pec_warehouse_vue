@@ -78,7 +78,7 @@ export default {
           if (!error.value) {
             // context.emit('signup')
               // this.$emit()
-
+            console.log('register....')
             projectFirestore.collection('Users').doc(projectAuth.currentUser.uid).set({
                 email: projectAuth.currentUser.email,
                 name:displayName.value,
@@ -92,6 +92,7 @@ export default {
               
           }
           else{
+            console.log('error')
             $('#alertdanger').removeClass('d-none')
           }
 
