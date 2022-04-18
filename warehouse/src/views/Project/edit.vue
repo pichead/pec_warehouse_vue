@@ -220,6 +220,21 @@ export default {
             
         });
         var no = 0
+
+        $('#JobNo1').on('change', function(){
+            if($(this).val() && $(this).val().length === 1) {
+                $(this).val('0' + $(this).val())
+            }
+        })
+        $('#JobNo2').on('change', function(){
+            if($(this).val() && $(this).val().length === 1) {
+                $(this).val('00' + $(this).val())
+            }
+            if($(this).val() && $(this).val().length === 2) {
+                $(this).val('0' + $(this).val())
+            }
+        })
+
         async function getdata(){
             
             const Project = await projectFirestore.collection('Projects').doc(id).get()

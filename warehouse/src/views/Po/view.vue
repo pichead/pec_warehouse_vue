@@ -295,7 +295,7 @@ export default {
 
             }
             function render_permission(){
-                if(user_permission.includes('confirm pecpo manager')){
+                if(user_permission.includes('confirm_pecpo_manager')){
                     user_role = 'manager'
                     return 'manager'
                 }

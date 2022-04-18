@@ -227,7 +227,19 @@ export default {
         //     let get_series = await projectFirestore.collection("BatterySpecifications").orderBy("series","asc").get()
         //     return get_series
         // }       
-
+        $('#JobNo1').on('change', function(){
+            if($(this).val() && $(this).val().length === 1) {
+                $(this).val('0' + $(this).val())
+            }
+        })
+        $('#JobNo2').on('change', function(){
+            if($(this).val() && $(this).val().length === 1) {
+                $(this).val('00' + $(this).val())
+            }
+            if($(this).val() && $(this).val().length === 2) {
+                $(this).val('0' + $(this).val())
+            }
+        })
         projectAuth.onAuthStateChanged((user) => {
             projectFirestore.collection("Users").get().then((Users) => {
                 Users.forEach((currentuser)=>{

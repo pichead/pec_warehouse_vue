@@ -273,14 +273,19 @@ export default {
 
         
         
-        // $('#JobNo1').on('change', function(){
-        //     renderJobNo()
-        //     // renderBookingNo()
-        // })
-        // $('#JobNo2').on('change', function(){
-        //     renderJobNo()
-        //     // renderBookingNo()
-        // })
+        $('#JobNo1').on('change', function(){
+            if($(this).val() && $(this).val().length === 1) {
+                $(this).val('0' + $(this).val())
+            }
+        })
+        $('#JobNo2').on('change', function(){
+            if($(this).val() && $(this).val().length === 1) {
+                $(this).val('00' + $(this).val())
+            }
+            if($(this).val() && $(this).val().length === 2) {
+                $(this).val('0' + $(this).val())
+            }
+        })
         $('.jobno').on('change',async function(){
             const jobnovalid_status = await validJobNo()
             // validJobNo()

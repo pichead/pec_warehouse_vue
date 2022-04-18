@@ -102,17 +102,17 @@
                                 <div class="col">
                                     <div id="lastupdate">Last Update: - </div>
                                 </div>
-                                <div class="col-5">
+                                <div class="col-4">
                                     <div class="row">
-                                        <div class="col-4">
+                                        <div class="col-6">
                                             <button id="cancel-btn" class="btn btn-danger col-12" type="button" >Cancel</button>
                                         </div>
-                                        <div class="col-4">
+                                        <div class="col-6">
                                             <button id="save-btn" class="btn btn-primary col-12" type="submit" >Save</button>
                                         </div>
-                                        <div class="col-4">
+                                        <!-- <div class="col-4">
                                             <button id="print-btn" class="btn btn-info col-12" type="button">Print</button>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>
@@ -120,7 +120,7 @@
                     </div>
                 </form>
 
-                <div class="col-12 border p-4">
+                <!-- <div class="col-12 border p-4">
                     <div id="data" class="col-12">
 
                     </div>
@@ -134,7 +134,7 @@
                     <a class="btn btn-secondary col-2 mr-2" type="button" href="/Battery/pecpoList">Cancel</a>
                     <button class="btn btn-danger  col-2 " type="submit">Save</button>
 
-                </div>
+                </div> -->
 
             </div>
         </div>
@@ -164,7 +164,33 @@ export default {
             })
 
         })
-
+        $('#pecpono').on('change', function(){
+            if($(this).val() && $(this).val().length === 1) {
+                $(this).val('00' + $(this).val())
+            }
+            if($(this).val() && $(this).val().length === 2) {
+                $(this).val('0' + $(this).val())
+            }
+        })
+        $('#pecpoyear').on('change', function(){
+            if($(this).val() == 1){
+                const year_now = new Date().getFullYear().toString()
+                
+                $(this).val(year_now)
+            }
+            else{
+                if($(this).val() && $(this).val().length === 1) {
+                    $(this).val('000' + $(this).val())
+                }
+                if($(this).val() && $(this).val().length === 2) {
+                    $(this).val('00' + $(this).val())
+                }
+                if($(this).val() && $(this).val().length === 3) {
+                    $(this).val('0' + $(this).val())
+                }
+            }
+            
+        })
         
         $('#addjob').on('click', async function (){
 

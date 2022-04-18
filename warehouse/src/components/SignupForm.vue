@@ -96,10 +96,6 @@ export default {
             $('#alertdanger').removeClass('d-none')
           }
 
-          
-          
-
-
         }
 
         return {   email, password,displayName, handleSubmit, error }

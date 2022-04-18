@@ -48,8 +48,14 @@
                         <br>
                         <div class="font-weight-bold mb-2">การเข้าถึง</div>
                         <div id="modal-edit-role" class="border p-3 col-10 mx-auto disable" >
-
-                                <div class="col-12 pl-5 font-weight-bold">Warehouse</div>
+                                <div class="col-12 pl-5 font-weight-bold">Job</div>
+                                <div class="row">
+                                    <input id="create_edite_job" type="checkbox" class="col-1 offset-3 my-1 permis" value="create_edite_job" style="width: 25px; height: 25px"/>
+                                    <div class="col-8 my-1">Create/Edit Job</div>
+                                    <input id="view_job" type="checkbox" class="col-1 offset-3 my-1 permis" value="view_job" style="width: 25px; height: 25px"/>
+                                    <div class="col-8 my-1">View Job</div>
+                                </div>
+                                <!-- <div class="col-12 pl-5 font-weight-bold">Warehouse</div>
                                 <div class="row">
                                     <input type="checkbox" class="col-1 offset-3 my-1" style="width: 25px; height: 25px"/>
                                     <div class="col-8 my-1">Stock</div>
@@ -58,28 +64,28 @@
                                     <input type="checkbox" class="col-1 offset-3 my-1" style="width: 25px; height: 25px"/>
                                     <div class="col-8 my-1">Project Order</div>
                                     
-                                </div>
+                                </div> -->
                                 <div class="col-12 mt-2 pl-5 font-weight-bold">PEC PO</div>
                                 <div class="row">
-                                    <input type="checkbox" class="col-1 offset-3 my-1 permis" value="create pecpo" style="width: 25px; height: 25px"/>
+                                    <input id="create_pecpo" type="checkbox" class="col-1 offset-3 my-1 permis" value="create_pecpo" style="width: 25px; height: 25px"/>
                                     <div class="col-8 my-1">Create PEC PO</div>
-                                    <input type="checkbox" class="col-1 offset-3 my-1 permis" value="confirm pecpo manager" style="width: 25px; height: 25px"/>
+                                    <input id="confirm_pecpo_manager" type="checkbox" class="col-1 offset-3 my-1 permis" value="confirm_pecpo_manager" style="width: 25px; height: 25px"/>
                                     <div class="col-8 my-1">Confirm PEC PO (Manager)</div>
-                                    <input type="checkbox" class="col-1 offset-3 my-1 permis" value="confirm pecpo general manager" style="width: 25px; height: 25px"/>
+                                    <input id="confirm_pecpo_general_manager" type="checkbox" class="col-1 offset-3 my-1 permis" value="confirm_pecpo_general_manager" style="width: 25px; height: 25px"/>
                                     <div class="col-8 my-1">Confirm PEC PO (Gengeral Manager)</div>
                                 </div>
 
-                                <div class="col-12 mt-2 pl-5 font-weight-bold">Site</div>
+                                <!-- <div class="col-12 mt-2 pl-5 font-weight-bold">Site</div>
                                 <div class="row">
                                     <input type="checkbox" class="col-1 offset-3 my-1" style="width: 25px; height: 25px"/>
                                     <div class="col-8 my-1">Site</div>
                                     <input type="checkbox" class="col-1 offset-3 my-1" style="width: 25px; height: 25px"/>
                                     <div class="col-8 my-1">Pm Data</div>
-                                </div>
+                                </div> -->
 
                                 <div class="col-12 pl-5 font-weight-bold">User</div>
                                 <div class="row">
-                                    <input type="checkbox" class="col-1 offset-3 my-1" style="width: 25px; height: 25px"/>
+                                    <input id="user_management" type="checkbox" class="col-1 offset-3 my-1 permis" value="user_management" style="width: 25px; height: 25px"/>
                                     <div class="col-8 my-1">User management</div>                                
                                 </div>
 
@@ -164,7 +170,9 @@ export default {
                         '<option value="false" selected>ปิด</option>'
                     )
                 }
-                
+                for(let i = 0; i < user_data.data().permission.length; i++){
+                    $('#'+user_data.data().permission[i]).prop('checked', true);
+                }
                 
                 
                 $("#modalfooter").html('<button class="btn btn-secondary col" data-dismiss="modal">ยกเลิก</button>'+
@@ -202,7 +210,7 @@ export default {
             }
             
             function saveUser(){
-                // console.log()
+                console.log(permission_arr)
                 projectFirestore.collection('Users').doc(UserId).update({
                     activation:activated,
                     permission:permission_arr

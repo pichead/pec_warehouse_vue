@@ -681,6 +681,34 @@ export default {
 
         predata()
 
+        $('#pecpono').on('change', function(){
+            if($(this).val() && $(this).val().length === 1) {
+                $(this).val('00' + $(this).val())
+            }
+            if($(this).val() && $(this).val().length === 2) {
+                $(this).val('0' + $(this).val())
+            }
+        })
+        $('#pecpoyear').on('change', function(){
+            if($(this).val() == 1){
+                const year_now = new Date().getFullYear().toString()
+                
+                $(this).val(year_now)
+            }
+            else{
+                if($(this).val() && $(this).val().length === 1) {
+                    $(this).val('000' + $(this).val())
+                }
+                if($(this).val() && $(this).val().length === 2) {
+                    $(this).val('00' + $(this).val())
+                }
+                if($(this).val() && $(this).val().length === 3) {
+                    $(this).val('0' + $(this).val())
+                }
+            }
+            
+        })
+        
 
         $('#addjob').on('click', async function (){
             

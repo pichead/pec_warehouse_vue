@@ -87,7 +87,7 @@ export default {
                 })
             }
             function get_render_page(){
-                if(user_permission && user_permission.includes('confirm pecpo manager') || user_permission.includes('confirm pecpo general manager')){
+                if(user_permission && user_permission.includes('confirm_pecpo_manager') || user_permission.includes('confirm_pecpo_general_manager')){
 
                 }
                 else{
