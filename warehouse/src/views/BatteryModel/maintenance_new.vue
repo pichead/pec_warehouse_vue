@@ -51,11 +51,10 @@
                         <th>Location</th>
                         <th>จำนวน</th>
                         <th>
-                            <input type="checkbox">
                         </th>
                     </tr>
                 </thead>
-                <tbody  class="text-center">
+                <tbody class="text-center">
                     <tr>
                         <td>1</td>
                         <td>IF_30/2022</td>
@@ -65,7 +64,7 @@
                         <td>โกดัง PEC</td>
                         <td>60</td>
                         <td>
-                            <input type="checkbox">
+                            <input type="number">
                         </td>
                     </tr>
                     <tr>
@@ -77,7 +76,7 @@
                         <td>โกดัง PEC</td>
                         <td>100</td>
                         <td>
-                            <input type="checkbox">
+                            <input type="number">
                         </td>
                     </tr>
                     <tr>
@@ -89,7 +88,7 @@
                         <td>โกดัง PEC</td>
                         <td>100</td>
                         <td>
-                            <input type="checkbox">
+                            <input type="number">
                         </td>
                     </tr>
                     <tr>
@@ -101,11 +100,17 @@
                         <td>โกดัง PEC</td>
                         <td>100</td>
                         <td>
-                            <input type="checkbox">
+                            <input type="number">
                         </td>
                     </tr>
                 </tbody>
             </table>
+        </div>
+        <div class="row my-4">
+            <div class="col-10"></div>
+            <div class="col-2">
+                <button type="button" class="col-12 btn btn-primary">Download(.xlsx)</button>
+            </div>
         </div>
 
 

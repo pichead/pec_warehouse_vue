@@ -87,7 +87,7 @@
                         <th>วันที่ชาร์จถัดไป</th>
                         <th>จำนวน</th>
                         <th>
-                            <input type="checkbox">
+                            
                         </th>
                     </tr>
                 </thead>
@@ -100,7 +100,7 @@
                         <td>19/02/2022</td>
                         <td>30</td>
                         <td>
-                            <input type="checkbox">
+                            <input type="number">
                         </td>
                     </tr>
                     <tr>
@@ -111,7 +111,7 @@
                         <td>19/02/2022</td>
                         <td>40</td>
                         <td>
-                            <input type="checkbox">
+                            <input type="number">
                         </td>
                     </tr>
                     <tr>
@@ -122,7 +122,7 @@
                         <td>19/02/2022</td>
                         <td>10</td>
                         <td>
-                            <input type="checkbox">
+                            <input type="number">
                         </td>
                     </tr>
                     <tr>
@@ -133,7 +133,7 @@
                         <td>19/02/2022</td>
                         <td>10</td>
                         <td>
-                            <input type="checkbox">
+                            <input type="number">
                         </td>
                     </tr>
                     <tr>
@@ -144,7 +144,7 @@
                         <td>20/04/2022</td>
                         <td>30</td>
                         <td>
-                            <input type="checkbox">
+                            <input type="number">
                         </td>
                     </tr>
                     <tr>
@@ -155,13 +155,18 @@
                         <td>20/04/2022</td>
                         <td>150</td>
                         <td>
-                            <input type="checkbox">
+                            <input type="number">
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-
+        <div class="row my-4">
+            <div class="col-10"></div>
+            <div class="col-2">
+                <button type="button" class="col-12 btn btn-primary">Download(.xlsx)</button>
+            </div>
+        </div>
 
     </div>
         </div>
