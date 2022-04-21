@@ -12,21 +12,48 @@
                 <input type="file" class="d-none" id="fileUpload" />
             </div>
         </div>
-        <div class="row">
-            <div class="col-8"></div>
-            <div class="col-4">
-                <div class="row">
-                    <div class="col">
-                        <button class="btn btn-danger col-12" type="button">Cancel</button>
+        <div class="row my-4">
+                    <div class="col-2 col-form-label">รอบการตรวจถัดไป:</div>
+                    <div class="col-10">
+                        <div class="row">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col-1 pt-2">
+                                        <input type="radio" name="radio_check_1" >
+                                    </div>
+                                    <div class="col-4 col-form-label">
+                                        รายเดือน
+                                    </div>
+                                    <select class="custom-select col-5" disabled>
+                                        <option>30วัน</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col-1 pt-2">
+                                        <input type="radio" name="radio_check_1" checked>
+                                    </div>
+                                    <div class="col-4 col-form-label">
+                                        กำหนดเอง
+                                    </div>
+                                    <input type="date" class="col-5 form-control">
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="row">
+                                    <div class="col-2 pt-2">
+                                        <input type="radio" name="radio_check_1" >
+                                    </div>
+                                    <div class="col-8 col-form-label">
+                                        ไม่มี (ส่งให้ลูกค้า)
+                                    </div>
 
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col">
-                        <a class="btn btn-primary col-12" href="/BatteryMaintenanceImport" type="button">Next</a>
-                    </div>
-
                 </div>
-            </div>
-        </div>
         <table class="table table-sm table-hover table-striped col-12">
             <thead>
                 <tr class="text-center">
@@ -42,13 +69,43 @@
                     <th>OCV</th>
                     <th>Mhos</th>
                     <th>Mhos%</th>
+                    <th>C/T</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="table-body">
                 
             </tbody>
         </table>
+        <div class="row">
+            <div class="col-8"></div>
+            <div class="col-4">
+                <div class="row">
+                    <div class="col">
+                        <button class="btn btn-danger col-12" type="button">Cancel</button>
 
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-primary col-12" type="button">Save</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="row d-none">
+            <div class="col-8"></div>
+            <div class="col-4">
+                <div class="row">
+                    <div class="col">
+                        <button class="btn btn-danger col-12" type="button">Cancel</button>
+
+                    </div>
+                    <div class="col">
+                        <a class="btn btn-primary col-12" href="/BatteryMaintenanceImport" type="button">Next</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
 
     </div>
         </div>
@@ -108,7 +165,7 @@ export default {
         }
     });
 
-    function ProcessExcel(data) {
+    async function ProcessExcel(data) {
       //Read the Excel File data.
       var workbook = XLSX.read(data, {
         type: "binary",
@@ -116,92 +173,64 @@ export default {
 
       //Fetch the name of First Sheet.
       var firstSheet = workbook.SheetNames[0];
-
+      console.log('firstSheet : ',firstSheet)
       //Read all rows from First Sheet into an JSON array.
       var excelRows = XLSX.utils.sheet_to_row_object_array(
-        workbook.Sheets[firstSheet]
+        workbook.Sheets[firstSheet],{range:1}
       );
 
       $("#table-body").html("");
-      console.log(excelRows);
+      console.log("excelRows : ",excelRows);
+      console.log('excelArray : ',excelArray)
+      var start_num_row = 1
       for (var i = 0; i < excelRows.length; i++) {
-        excelArray.push(excelRows[i]);
+        // excelArray.push(excelRows[i]);
+        
         $("#table-body").append(
           "<tr>" +
-            '<td class="text-lg-center sorting_disabled" scope="col">' +
-            excelArray[i].series +
+          '<td class="text-lg-center sorting_disabled" scope="col">' +
+            start_num_row +
             "</td>" +
             '<td class="text-lg-center sorting_disabled" scope="col">' +
-            excelArray[i].brand +
+            excelRows[i].Barcode +
             "</td>" +
             '<td class="text-lg-center sorting_disabled" scope="col">' +
-            excelArray[i].type +
+            excelRows[i].Model +
             "</td>" +
             '<td class="text-lg-center sorting_disabled" scope="col">' +
-            excelArray[i].cellsperblk +
+            excelRows[i].Brand +
             "</td>" +
             '<td class="text-lg-center sorting_disabled" scope="col">' +
-            excelArray[i].capacity +
+            excelRows[i].Ref +
             "</td>" +
             '<td class="text-lg-center sorting_disabled" scope="col">' +
-            excelArray[i].endVoltage +
+            excelRows[i]['MFG Code'] +
             "</td>" +
             '<td class="text-lg-center sorting_disabled" scope="col">' +
-            excelArray[i].ambientTempMax +
+            excelRows[i]['Job No.'] +
             "</td>" +
             '<td class="text-lg-center sorting_disabled" scope="col">' +
-            excelArray[i].ambientTempMin +
+            excelRows[i].Location +
             "</td>" +
             '<td class="text-lg-center sorting_disabled" scope="col">' +
-            excelArray[i].batteryTempMax +
+            excelRows[i].date +
             "</td>" +
             '<td class="text-lg-center sorting_disabled" scope="col">' +
-            excelArray[i].batteryTempMin +
+            excelRows[i].OCV +
             "</td>" +
             '<td class="text-lg-center sorting_disabled" scope="col">' +
-            excelArray[i].gDevice +
+            excelRows[i].Mhos +
             "</td>" +
             '<td class="text-lg-center sorting_disabled" scope="col">' +
-            excelArray[i].rDevice +
+            excelRows[i]['Mhos%'] +
             "</td>" +
             '<td class="text-lg-center sorting_disabled" scope="col">' +
-            excelArray[i].refFloatVoltage +
-            "</td>" +
-            '<td class="text-lg-center sorting_disabled" scope="col">' +
-            excelArray[i].floatHiUrgent +
-            "</td>" +
-            '<td class="text-lg-center sorting_disabled" scope="col">' +
-            excelArray[i].floatHiWarning +
-            "</td>" +
-            '<td class="text-lg-center sorting_disabled" scope="col">' +
-            excelArray[i].floatLoUrgent +
-            "</td>" +
-            '<td class="text-lg-center sorting_disabled" scope="col">' +
-            excelArray[i].floatLoWarning +
-            "</td>" +
-            '<td class="text-lg-center sorting_disabled" scope="col">' +
-            excelArray[i].refG +
-            "</td>" +
-            '<td class="text-lg-center sorting_disabled" scope="col">' +
-            excelArray[i].refGLow +
-            "</td>" +
-            '<td class="text-lg-center sorting_disabled" scope="col">' +
-            excelArray[i].refGWarning +
-            "</td>" +
-            '<td class="text-lg-center sorting_disabled" scope="col">' +
-            excelArray[i].refR +
-            "</td>" +
-            '<td class="text-lg-center sorting_disabled" scope="col">' +
-            excelArray[i].refRGood +
-            "</td>" +
-            '<td class="text-lg-center sorting_disabled" scope="col">' +
-            excelArray[i].refRAVG +
-            "</td>" +
-            '<td class="text-lg-center sorting_disabled" scope="col">' +
-            excelArray[i].refRFair +
+            excelRows[i]['C / T'] +
             "</td>" +
             "</tr>"
+            
         );
+        start_num_row++
       }
 
       $("#submitmodel").on("click", function () {
