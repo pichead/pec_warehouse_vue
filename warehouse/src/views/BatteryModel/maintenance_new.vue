@@ -142,6 +142,7 @@ export default {
             batt.forEach((data)=>{
                 batt.push(data.data())
             })
+            
         }
 
 
