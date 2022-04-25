@@ -292,7 +292,8 @@ export default {
                                 ordersheetBatt:gen_barcode_data[i].ordersheetBatt,
                                 inspectionId:gen_barcode_data[i].inspectionId,
                                 warranty:gen_barcode_data[i].warranty,
-                                createDate:timestamp
+                                createDate:timestamp,
+                                measurements:[]
                             })
                         }
                     }
