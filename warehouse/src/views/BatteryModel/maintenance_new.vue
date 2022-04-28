@@ -131,8 +131,6 @@ export default {
             await render_predata3()
 
             function setup(){
-                
-                
                 batt.forEach((data)=>{
                     batt_data.push(data.data())
                     inspection.push(data.data().inspectionId)
@@ -166,9 +164,15 @@ export default {
                         
                         row_model_count[key_batt] = 0;
                         
+                        if($('.po_option').length == 1){
+                            $('#po_option').append(
+                                '<option class="po_option" value="PEC'+inspection_data[i].gen_barcode_data[j].poNo+'">PEC'+inspection_data[i].gen_barcode_data[j].poNo+'</option>'
+                            )
+                        }
+
                         // row_model_count.push('{row:row_model_count,count:0}')
                         $('#data').append(
-                            '<tr class="table_data" data-ins="'+inspection_data[i].inspection_no+'" data-po="'+inspection_data[i].gen_barcode_data[j].poNo+'">'+
+                            '<tr class="table_data" data-ins="'+inspection_data[i].inspection_no+'" data-po="PEC'+inspection_data[i].gen_barcode_data[j].poNo+'">'+
                                 '<td class="row_number"></td>'+
                                 '<td>'+inspection_data[i].inspection_no+'</td>'+
                                 '<td>PEC'+inspection_data[i].gen_barcode_data[j].poNo+'</td>'+
@@ -212,15 +216,22 @@ export default {
             await preload()
             await load_newdata()
         })
+        $('#po_option').on('change', async function(){
+            await preload()
+            await load_newdata()
+        })
 
         function load_newdata(){
             const ins_select = $('#inspection_option').val()
             const po_select = $('#po_option').val()
 
             if(ins_select == 0){
+                $('#po_option').attr('selected','selected');
                 $('#po_option').attr('disabled',true)
+                
             }
             else{
+                console.log('ins change')
                 $('#po_option').attr('disabled',false)
 
                 $('.table_data').each(function(index){
@@ -229,6 +240,18 @@ export default {
                     }
                 })
             }
+            if(po_select == 0){
+
+            }
+            else{
+                $('.table_data').each(function(index){
+                    console.log('po change')
+                    if(po_select != $(this).data('po')){
+                        $(this).remove()
+                    }
+                })
+            }
+
             
         }
     }
