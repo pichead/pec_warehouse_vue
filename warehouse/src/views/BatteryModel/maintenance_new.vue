@@ -126,7 +126,6 @@ export default {
             await uniq_inspection()
             await get_PO()
             await render_predata()
-            await running_number()
             await render_predata2()
             await render_predata3()
 
@@ -153,7 +152,7 @@ export default {
                  $('#data').html('')
                 for(let i = 0; i < inspection_data.length; i++){
                     // console.log($('.ins_option').length)
-                    if($('.ins_option').length == 1){
+                    if($('.ins_option').length < inspection_data.length+1){
                         $('#inspection_option').append(
                             '<option class="ins_option" value="'+inspection_data[i].inspection_no+'">'+inspection_data[i].inspection_no+'</option>'
                         )
@@ -163,8 +162,8 @@ export default {
                         const key_batt = inspection_data[i].gen_barcode_data[j].ordersheetBatt
                         
                         row_model_count[key_batt] = 0;
-                        
-                        if($('.po_option').length == 1){
+                          if($('.po_option').length < inspection_data[i].gen_barcode_data.length+1){
+
                             $('#po_option').append(
                                 '<option class="po_option" value="PEC'+inspection_data[i].gen_barcode_data[j].poNo+'">PEC'+inspection_data[i].gen_barcode_data[j].poNo+'</option>'
                             )
@@ -215,10 +214,12 @@ export default {
         $('#inspection_option').on('change', async function(){
             await preload()
             await load_newdata()
+            await running_number()
         })
         $('#po_option').on('change', async function(){
             await preload()
             await load_newdata()
+            await running_number()
         })
 
         function load_newdata(){
@@ -226,7 +227,9 @@ export default {
             const po_select = $('#po_option').val()
 
             if(ins_select == 0){
-                $('#po_option').attr('selected','selected');
+                $('#po_option').html(
+                    '<option value="0" class="po_option" selected>ทั้งหมด</option>'
+                )
                 $('#po_option').attr('disabled',true)
                 
             }
