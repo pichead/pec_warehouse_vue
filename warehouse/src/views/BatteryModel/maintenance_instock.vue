@@ -20,7 +20,9 @@
                     <div class="row">
                         <div class="col-4 pl-5 col-form-label font-weight-bold">Model</div>
                         <div class="col">
-                            <select class="form-control" id=""></select>
+                            <select class="form-control" id="">
+                                <option value="ทั้งหมด">ทั้งหมด</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -28,48 +30,23 @@
                     <div class="row">
                         <div class="col-4 col-form-label font-weight-bold">Location</div>
                         <div class="col">
-                            <select class="form-control" id=""></select>
+                            <select class="form-control" id="">
+                                <option value="ทั้งหมด">ทั้งหมด</option>
+                                <option value="โกดัง PEC">โกดัง PEC</option>
+                                <option value="โกดัง พระราม2">โกดัง พระราม2</option>
+                            </select>
                         </div>
                     </div>
                 </div>
                 <div class="col-6 mb-4">
                     <div class="row">
-                        <div class="col-4 pl-5 col-form-label font-weight-bold">วันที่ชาร์จ</div>
+                        <div class="col-4 pl-5 col-form-label font-weight-bold">C / M</div>
                         <div class="col">
-                            <div class="row">
-                                <div class="col-6">
-                                    <input class="form-control" type="date">
-                                </div>
-                                <div class="col-6">
-                                    <input class="form-control" type="date">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="row">
-                        <div class="col-4 col-form-label font-weight-bold">วันที่ชาร์จถัดไป</div>
-                        <div class="col">
-                            <div class="row">
-                                <div class="col-6">
-                                    <input class="form-control" type="date">
-                                </div>
-                                <div class="col-6">
-                                    <input class="form-control" type="date">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="row">
-                        <div class="col-6"></div>
-                        <div class="col-3">
-                            <button type="button" class="btn btn-danger col-12">Reset</button>
-                        </div>
-                        <div class="col-3">
-                            <button type="button" class="btn btn-primary col-12">Search</button>
+                            <select class="form-control" id="">
+                                <option value="ทั้งหมด">ทั้งหมด</option>
+                                <option value="Charge">C "Charge"</option>
+                                <option value="Measurement">M "Measurement"</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -79,92 +56,92 @@
         <div class="p-4 border">
             <table class="col table table-striped">
                 <colgroup>
-                    <col span="1" style="width: 10%;">
-                    <col class="text-left" span="1" style="width: 20%;">
+                    <col span="1" style="width: 5%;">
+                    <col span="1" style="width: 15%;">
+                    <col span="1" style="width: 20%;">
                     <col span="1" style="width: 20%;">
                     <col span="1" style="width: 15%;">
                     <col span="1" style="width: 15%;">
-                    <col span="1" style="width: 10%;">
                     <col span="1" style="width: 10%;">
                 </colgroup>
                 <thead class="text-center">
                     <tr class="">
                         <th>No.</th>
+                        <th>Barcode</th>
                         <th>Model</th>
                         <th>Location</th>
                         <th>วันที่ชาร์จ</th>
-                        <th>วันที่ชาร์จถัดไป</th>
-                        <th>จำนวน</th>
+                        <th>C / M</th>
                         <th>
-                            จำนวนExport
+                            <input type="checkbox">
                         </th>
                     </tr>
                 </thead>
                 <tbody class="text-center">
                     <tr>
                         <td>1</td>
+                        <td>PEC-A2200109</td>
                         <td>UPS12-150MRX</td>
                         <td>โกดัง PEC</td>
                         <td>20/01/2022</td>
-                        <td>19/02/2022</td>
-                        <td>30</td>
+                        <td>C</td>
                         <td>
-                            <input type="number" class="col" value="0">
+                            <input type="checkbox">
                         </td>
                     </tr>
                     <tr>
                         <td>2</td>
+                        <td>PEC-A2200111</td>
                         <td>UPS12-320MRX</td>
                         <td>โกดัง PEC</td>
                         <td>20/01/2022</td>
-                        <td>19/02/2022</td>
-                        <td>40</td>
+                        <td>C</td>
                         <td>
-                            <input type="number" class="col" value="0">
+                            <input type="checkbox">
                         </td>
                     </tr>
                     <tr>
                         <td>3</td>
+                        <td>PEC-A2200139</td>
                         <td>UPS12-320R MRX</td>
                         <td>โกดัง PEC</td>
                         <td>20/01/2022</td>
-                        <td>19/02/2022</td>
-                        <td>10</td>
+                        <td>C</td>
                         <td>
-                            <input type="number" class="col" value="0">
+                            <input type="checkbox">
                         </td>
                     </tr>
                     <tr>
                         <td>4</td>
+                        <td>PEC-A2200135</td>
                         <td>UPS12-37MRX</td>
                         <td>โกดัง PEC</td>
                         <td>20/01/2022</td>
-                        <td>19/02/2022</td>
-                        <td>10</td>
+                        <td>M</td>
                         <td>
-                            <input type="number" class="col" value="0">
+                            <input type="checkbox">
                         </td>
                     </tr>
                     <tr>
                         <td>5</td>
+                        <td>PEC-A2200145</td>
                         <td>UPS12-490MRX</td>
                         <td>โกดัง PEC</td>
                         <td>20/01/2022</td>
-                        <td>20/04/2022</td>
-                        <td>30</td>
+                        <td>M</td>
                         <td>
-                            <input type="number" class="col" value="0">
+                            <input type="checkbox">
                         </td>
                     </tr>
                     <tr>
                         <td>6</td>
+                        <td>PEC-A2200147</td>
                         <td>UPS12-510MRX</td>
                         <td>โกดัง PEC</td>
                         <td>20/01/2022</td>
-                        <td>20/04/2022</td>
-                        <td>150</td>
+                        <td>C</td>
                         <td>
-                            <input type="number" class="col" value="0">
+                            <input type="checkbox">
                         </td>
                     </tr>
                 </tbody>

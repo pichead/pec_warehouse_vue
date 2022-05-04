@@ -22,21 +22,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12">
-                    <div class="row">
-                        <div class="col-8"></div>
-                        <div class="col-4">
-                            <div class="row">
-                                <div class="col">
-                                    <button class="btn btn-danger col" type="button">Reset</button>
-                                </div>
-                                <div class="col">
-                                    <button class="btn btn-primary col" type="button">Search</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
             </div>
         </div>
         <div class="p-4 border">
@@ -83,10 +69,55 @@
         <div class="row my-4">
             <div class="col-10"></div>
             <div class="col-2">
-                <button type="button" class="col-12 btn btn-primary">Download(.xlsx)</button>
+                <button id="export_btn" type="button" class="col-12 btn btn-primary">Download(.xlsx)</button>
             </div>
         </div>
 
+
+        <div id="preview_excel" class="col-11 mx-auto px-0 d-none">
+                <table id="excel_data" class="col-12 table-bordered" style="padding: 0px;">
+                    <colgroup>
+                        <!-- <col span="1" style="width: 58px;">
+                        <col span="1" style="width: 58px;">
+                        <col span="1" style="width: 58px;">
+                        <col span="1" style="width: 58px;">
+                        <col span="1" style="width: 58px;">
+                        <col span="1" style="width: 58px;">
+                        <col span="1" style="width: 58px;"> -->
+
+                    </colgroup>
+                    <thead>
+
+
+                        <tr>
+                            <td colspan="3">รายงานการตรวจแบตเตอรี่รายเดือน :</td>
+                            <td colspan="11"></td>
+                        </tr>
+                        <tr>
+                            <td>No.</td>
+                            <td>Brand</td>
+                            <td>Model</td>
+                            <td>Ref</td>
+                            <td>Barcode</td>
+                            <td>MFG Code</td>
+                            <td>Job No.</td>
+                            <td>Location</td>
+                            <td>Date</td>
+                            <td>OCV</td>
+                            <td>Mhos</td>
+                            <td>Mhos%</td>
+                            <td>C / M</td>
+                            <td>Batt Temp</td>
+                        </tr>
+                    </thead>
+                    <tbody id="excel_data_row">
+
+                    </tbody>
+                    <tfoot>
+
+                    </tfoot>
+                </table>
+        </div>
 
     </div>
         </div>
@@ -101,24 +132,23 @@ export default {
     mounted() {
         
         page_setup()
-
-        function page_setup(){
+        var batt_data = []
+        async function page_setup(){
             $('#inspection_option').html(
                 '<option value="0" class="ins_option" selected>ทั้งหมด</option>'
             )
             $('#po_option').html(
                 '<option value="0" class="po_option" selected>ทั้งหมด</option>'
             )
-            preload()
+            await preload()
+            await running_number()
         }
         
-        
         async function preload(){
-            var batt_data = []
+            batt_data = []
             var inspection = []
             var inspection_data = []
             var row_model_count = {}
-  
 
             const batt = await projectFirestore.collection("Batteries_beta").where('measurements','==',[]).get()
             
@@ -135,7 +165,6 @@ export default {
                     inspection.push(data.data().inspectionId)
                 })
             }
-
             
             function uniq_inspection(){
                 inspection = Array.from(new Set(inspection))
@@ -151,8 +180,9 @@ export default {
             function render_predata(){
                  $('#data').html('')
                 for(let i = 0; i < inspection_data.length; i++){
-                    // console.log($('.ins_option').length)
+                    
                     if($('.ins_option').length < inspection_data.length+1){
+                        
                         $('#inspection_option').append(
                             '<option class="ins_option" value="'+inspection_data[i].inspection_no+'">'+inspection_data[i].inspection_no+'</option>'
                         )
@@ -160,15 +190,23 @@ export default {
                     
                     for(let j = 0; j < inspection_data[i].gen_barcode_data.length; j++ ){
                         const key_batt = inspection_data[i].gen_barcode_data[j].ordersheetBatt
-                        
+                        var po_arr = []
                         row_model_count[key_batt] = 0;
-                          if($('.po_option').length < inspection_data[i].gen_barcode_data.length+1){
+                        if($('.po_option').length < inspection_data[i].gen_barcode_data.length+1){
 
-                            $('#po_option').append(
-                                '<option class="po_option" value="PEC'+inspection_data[i].gen_barcode_data[j].poNo+'">PEC'+inspection_data[i].gen_barcode_data[j].poNo+'</option>'
-                            )
+                            if(po_arr.includes('PEC'+inspection_data[i].gen_barcode_data[j].poNo)){
+                                
+                            }
+                            else{
+                                po_arr.push('PEC'+inspection_data[i].gen_barcode_data[j].poNo)
+                                po_arr = po_arr
+                                $('#po_option').append(
+                                    '<option class="po_option" value="PEC'+inspection_data[i].gen_barcode_data[j].poNo+'">PEC'+inspection_data[i].gen_barcode_data[j].poNo+'</option>'
+                                )
+                            }
+                            
                         }
-
+                        console.log(inspection_data[i])
                         // row_model_count.push('{row:row_model_count,count:0}')
                         $('#data').append(
                             '<tr class="table_data" data-ins="'+inspection_data[i].inspection_no+'" data-po="PEC'+inspection_data[i].gen_barcode_data[j].poNo+'">'+
@@ -180,12 +218,11 @@ export default {
                                 '<td>'+inspection_data[i].warehouse_location+'</td>'+
                                 '<td id="row_amount_'+inspection_data[i].gen_barcode_data[j].ordersheetBatt+'"></td>'+
                                 '<td>'+
-                                    '<input id="row_check_'+inspection_data[i].gen_barcode_data[j].ordersheetBatt+'" type="number" class="col" value="0">'+
+                                    '<input id="row_check_'+inspection_data[i].gen_barcode_data[j].ordersheetBatt+'" data-model="'+inspection_data[i].gen_barcode_data[j].series+'" data-ins="'+inspection_data[i].inspection_no+'" data-po="'+inspection_data[i].gen_barcode_data[j].poNo+'" type="number" class="col batt_input" value="0">'+
                                 '</td>'+
                             '<tr>'
 
                         )
-                        
 
                     }
                 }
@@ -206,20 +243,26 @@ export default {
 
         function running_number(){
             let row_number = $('.row_number').length
+
+            
             for(let i = 0; i < row_number; i++){
                 $($('.row_number')[i]).html(i+1)
             }
+
         }
 
         $('#inspection_option').on('change', async function(){
             await preload()
             await load_newdata()
             await running_number()
+            await get_batt_excel()
+
         })
         $('#po_option').on('change', async function(){
             await preload()
             await load_newdata()
             await running_number()
+            await get_batt_excel()
         })
 
         function load_newdata(){
@@ -257,6 +300,73 @@ export default {
 
             
         }
+
+
+
+        $('#export_btn').on('click',function(){
+            // const table_id = "data_table"
+            const table_id = "excel_data"
+            get_batt_excel()
+            
+            // const file_name = "Inspection Form_2022"
+            // tableToExcel(table_id,file_name)
+        })
+
+
+        var tableToExcel = (function() {
+
+            var uri = 'data:application/vnd.ms-excel;base64,'
+                , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+                , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
+                , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
+            return function (table, name) {
+                if (!table.nodeType) table = document.getElementById(table)
+                var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+                window.location.href = uri + base64(format(template, ctx))
+            }
+        })()
+
+        async function get_batt_excel(){
+            var amount_batt = []
+            var export_batt_data = []
+            const batt_input = $('.batt_input').length
+
+            
+            await get_amount_export()
+            await render_table_export_excel()
+
+
+            function get_amount_export(){
+                for(let i = 0; i < batt_input; i++){
+                    if($($('.batt_input')[i]).val() > 0){
+                        amount_batt.push({
+                            model:$($('.batt_input')[i]).data('model'),
+                            inspection:$($('.batt_input')[i]).data('ins'),
+                            po:$($('.batt_input')[i]).data('po'),
+                            amount: parseInt($($('.batt_input')[i]).val()) 
+                        })
+
+                    }
+                }
+            }
+
+            function render_table_export_excel(){
+                console.log('batt_data : ',batt_data)
+                for(let i = 0; i < amount_batt.length; i++){
+                    for(let j = 0; j < batt_data.length; j++){
+                        // if(amount_batt[i].model == batt_data.)
+                    }
+                }
+                
+            }   
+
+        }   
+
+
+        function render_excel_table(){
+
+        }
+
     }
 }
 </script>
