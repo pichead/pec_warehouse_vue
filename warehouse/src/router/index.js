@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+
 import { projectFirestore,projectAuth } from '../firebase/config'
 import Home from '../views/Home.vue'
 import Excel from '../views/excel.vue'
@@ -44,6 +45,7 @@ import BatteryModelBarcodeView from '../views/BatteryModel/barcode.vue'
 import BatteryModelExcelUpload from '../views/BatteryModel/excel.vue'
 import BatteryMaintenanceNew from '../views/BatteryModel/maintenance_new.vue'
 import BatteryMaintenanceInStock from '../views/BatteryModel/maintenance_instock.vue'
+import BatteryMaintenanceSetup from '../views/BatteryModel/maintenance_setup.vue'
 import BatteryMaintenanceImport from '../views/BatteryModel/import_excel.vue'
 
 // end battery
@@ -56,11 +58,13 @@ import BatteryEdit from '../views/Battery/editbattery.vue'
 import PECpoList from '../views/Po/pecpoList.vue'
 import PecPoConfirmList from '../views/Po/pecpo_confirm_list.vue'
 import CreatePecpo from '../views/Po/createPecpo.vue'
+
 import EditPecpo from '../views/Po/edit.vue'
 import ViewPecpo from '../views/Po/view.vue'
 import ConfirmPecpo from '../views/Po/confirm.vue'
 // import EditPecpo from '../views/Po/editPecpo.vue'
 import PrintPecpo from '../views/Po/preview.vue'
+import PoNew from '../views/Po/PoNew.vue'
 
 // End PO
 
@@ -244,6 +248,12 @@ const routes = [
     beforeEnter: requireAuth
   },
   {
+    path: '/createPecpoNew',
+    name: 'PoNew',
+    component: PoNew,
+    beforeEnter: requireAuth
+  },
+  {
     path: '/editPecpo/:id',
     name: 'EditPecpo',
     component: EditPecpo,
@@ -349,6 +359,12 @@ const routes = [
     path: '/BatteryMaintenanceImport',
     name: 'BatteryMaintenanceImport',
     component: BatteryMaintenanceImport,
+    beforeEnter: requireAuth
+  },
+  {
+    path: '/BatteryMaintenanceSetup',
+    name: 'BatteryMaintenanceSetup',
+    component: BatteryMaintenanceSetup,
     beforeEnter: requireAuth
   },
   

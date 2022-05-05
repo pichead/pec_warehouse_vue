@@ -77,37 +77,44 @@
         <div id="preview_excel" class="col-11 mx-auto px-0 d-none">
                 <table id="excel_data" class="col-12 table-bordered" style="padding: 0px;">
                     <colgroup>
-                        <!-- <col span="1" style="width: 58px;">
-                        <col span="1" style="width: 58px;">
-                        <col span="1" style="width: 58px;">
-                        <col span="1" style="width: 58px;">
-                        <col span="1" style="width: 58px;">
-                        <col span="1" style="width: 58px;">
-                        <col span="1" style="width: 58px;"> -->
+                        <col span="1" style="width: 75px;">
+                        <col span="1" style="width: 119px;">
+                        <col span="1" style="width: 181px;">
+                        <col span="1" style="width: 119px;">
+                        <col span="1" style="width: 204px;">
+                        <col span="1" style="width: 145px;">
+                        <col span="1" style="width: 145px;">
+                        <col span="1" style="width: 145px;">
+                        <col span="1" style="width: 145px;">
+                        <col span="1" style="width: 145px;">
+                        <col span="1" style="width: 145px;">
+                        <col span="1" style="width: 145px;">
+                        <col span="1" style="width: 145px;">
+                        <col span="1" style="width: 145px;">
 
                     </colgroup>
                     <thead>
 
 
                         <tr>
-                            <td colspan="3">รายงานการตรวจแบตเตอรี่รายเดือน :</td>
-                            <td colspan="11"></td>
+                            <td colspan="3" style="height:41px;vertical-align: middle;background-color:#F7EBB8;border:solid 1px;">รายงานการตรวจแบตเตอรี่รายเดือน :</td>
+                            <td colspan="11" style="height:41px;vertical-align: middle;background-color:#F7EBB8;border:solid 1px;"></td>
                         </tr>
-                        <tr>
-                            <td>No.</td>
-                            <td>Brand</td>
-                            <td>Model</td>
-                            <td>Ref</td>
-                            <td>Barcode</td>
-                            <td>MFG Code</td>
-                            <td>Job No.</td>
-                            <td>Location</td>
-                            <td>Date</td>
-                            <td>OCV</td>
-                            <td>Mhos</td>
-                            <td>Mhos%</td>
-                            <td>C / M</td>
-                            <td>Batt Temp</td>
+                        <tr style="text-align: center;height:41px;vertical-align: middle;">
+                            <td style="background-color:#B8E1F7;border:solid 1px;">No.</td>
+                            <td style="background-color:#B8E1F7;border:solid 1px;">Brand</td>
+                            <td style="background-color:#B8E1F7;border:solid 1px;">Model</td>
+                            <td style="background-color:#B8E1F7;border:solid 1px;">Ref</td>
+                            <td style="background-color:#B8E1F7;border:solid 1px;">Barcode</td>
+                            <td style="background-color:#B8E1F7;border:solid 1px;">MFG Code</td>
+                            <td style="background-color:#B8E1F7;border:solid 1px;">Job No.</td>
+                            <td style="background-color:#B8E1F7;border:solid 1px;">Location</td>
+                            <td style="background-color:#B8E1F7;border:solid 1px;">Date</td>
+                            <td style="background-color:#B8E1F7;border:solid 1px;">OCV</td>
+                            <td style="background-color:#B8E1F7;border:solid 1px;">Mhos</td>
+                            <td style="background-color:#B8E1F7;border:solid 1px;">Mhos%</td>
+                            <td style="background-color:#B8E1F7;border:solid 1px;">C / M</td>
+                            <td style="background-color:#B8E1F7;border:solid 1px;">Batt Temp</td>
                         </tr>
                     </thead>
                     <tbody id="excel_data_row">
@@ -150,7 +157,7 @@ export default {
             var inspection_data = []
             var row_model_count = {}
 
-            const batt = await projectFirestore.collection("Batteries_beta").where('measurements','==',[]).get()
+            const batt = await projectFirestore.collection("Batteries_beta").where('measurements','==',[]).orderBy("barcode", "asc").get()
             
             await setup()
             await uniq_inspection()
@@ -190,19 +197,40 @@ export default {
                     
                     for(let j = 0; j < inspection_data[i].gen_barcode_data.length; j++ ){
                         const key_batt = inspection_data[i].gen_barcode_data[j].ordersheetBatt
-                        var po_arr = []
+                        
                         row_model_count[key_batt] = 0;
                         if($('.po_option').length < inspection_data[i].gen_barcode_data.length+1){
-
-                            if(po_arr.includes('PEC'+inspection_data[i].gen_barcode_data[j].poNo)){
+                            // for(let k = 0; k < $('.po_option').length; k++){
+                            //     if($($('.po_option')[i]).)
+                            // }
+                            // if(po_arr.includes('PEC'+inspection_data[i].gen_barcode_data[j].poNo)){
                                 
-                            }
-                            else{
-                                po_arr.push('PEC'+inspection_data[i].gen_barcode_data[j].poNo)
-                                po_arr = po_arr
-                                $('#po_option').append(
-                                    '<option class="po_option" value="PEC'+inspection_data[i].gen_barcode_data[j].poNo+'">PEC'+inspection_data[i].gen_barcode_data[j].poNo+'</option>'
-                                )
+                            // }
+                            // else{
+                            //     po_arr.push('PEC'+inspection_data[i].gen_barcode_data[j].poNo)
+                            //     po_arr = po_arr
+                            //     $('#po_option').append(
+                            //         '<option class="po_option" value="PEC'+inspection_data[i].gen_barcode_data[j].poNo+'">PEC'+inspection_data[i].gen_barcode_data[j].poNo+'</option>'
+                            //     )
+                            // }
+                            po_rendering()
+                            async function po_rendering(){
+                                var po_arr = []
+                                await conunt_po()
+                                await render_po_data()
+
+                                function conunt_po(){
+                                    if(po_arr.includes('PEC'+inspection_data[i].gen_barcode_data[j].poNo)){
+                                        
+                                    }
+                                    else{
+                                        po_arr.push('PEC'+inspection_data[i].gen_barcode_data[j].poNo)
+                                    }
+                                }
+
+                                function render_po_data(){
+                                    console.log(po_arr)
+                                }
                             }
                             
                         }
@@ -218,7 +246,7 @@ export default {
                                 '<td>'+inspection_data[i].warehouse_location+'</td>'+
                                 '<td id="row_amount_'+inspection_data[i].gen_barcode_data[j].ordersheetBatt+'"></td>'+
                                 '<td>'+
-                                    '<input id="row_check_'+inspection_data[i].gen_barcode_data[j].ordersheetBatt+'" data-model="'+inspection_data[i].gen_barcode_data[j].series+'" data-ins="'+inspection_data[i].inspection_no+'" data-po="'+inspection_data[i].gen_barcode_data[j].poNo+'" type="number" class="col batt_input" value="0">'+
+                                    '<input id="row_check_'+inspection_data[i].gen_barcode_data[j].ordersheetBatt+'" data-location="'+inspection_data[i].warehouse_location+'" data-model="'+inspection_data[i].gen_barcode_data[j].series+'" data-ins="'+inspection_data[i].inspection_no+'" data-po="'+inspection_data[i].gen_barcode_data[j].poNo+'" type="number" class="col batt_input" value="0">'+
                                 '</td>'+
                             '<tr>'
 
@@ -263,6 +291,10 @@ export default {
             await load_newdata()
             await running_number()
             await get_batt_excel()
+            
+        })
+        $('#data').on('change','.batt_input',async function(){
+            await get_batt_excel()
         })
 
         function load_newdata(){
@@ -306,10 +338,10 @@ export default {
         $('#export_btn').on('click',function(){
             // const table_id = "data_table"
             const table_id = "excel_data"
-            get_batt_excel()
             
-            // const file_name = "Inspection Form_2022"
-            // tableToExcel(table_id,file_name)
+            
+            const file_name = "Inspection Form_2022"
+            tableToExcel(table_id,file_name)
         })
 
 
@@ -343,7 +375,8 @@ export default {
                             model:$($('.batt_input')[i]).data('model'),
                             inspection:$($('.batt_input')[i]).data('ins'),
                             po:$($('.batt_input')[i]).data('po'),
-                            amount: parseInt($($('.batt_input')[i]).val()) 
+                            amount: parseInt($($('.batt_input')[i]).val()),
+                            location:$($('.batt_input')[i]).data('location')
                         })
 
                     }
@@ -352,9 +385,65 @@ export default {
 
             function render_table_export_excel(){
                 console.log('batt_data : ',batt_data)
+                $('#excel_data_row').html('')
+                var running_number_export = 0
                 for(let i = 0; i < amount_batt.length; i++){
+                    const total_batt_in_model = amount_batt[i].amount
+                    var total_bat_get = 0
                     for(let j = 0; j < batt_data.length; j++){
-                        // if(amount_batt[i].model == batt_data.)
+
+                        if(amount_batt[i].model == batt_data[j].series && amount_batt[i].po == batt_data[j].poNo && total_batt_in_model > total_bat_get){
+                            console.log('total_batt_in_model : ',total_batt_in_model,' total_bat_get : ',total_bat_get)
+                            console.log(amount_batt[i].model)
+                            running_number_export++
+                            total_bat_get++
+                            $('#excel_data_row').append(
+                                '<tr  style="text-align: center; height:41px;vertical-align: middle;">'+
+                                    '<td>'+
+                                        running_number_export+
+                                    '</td>'+
+                                    '<td>'+
+                                        // brand
+                                    '</td>'+
+                                    '<td>'+
+                                        batt_data[j].series+
+                                    '</td>'+
+                                    '<td>'+
+                                        //Ref
+                                    '</td>'+
+                                    '<td>'+
+                                        batt_data[j].barcode+
+                                    '</td>'+
+                                    '<td>'+
+                                        //MFG Code
+                                    '</td>'+
+                                    '<td>'+
+                                        batt_data[j].jobNo+
+                                    '</td>'+
+                                    '<td>'+
+                                        amount_batt[i].location+
+                                    '</td>'+
+                                    '<td>'+
+                                        //date
+                                    '</td>'+
+                                    '<td>'+
+                                        //OCV
+                                    '</td>'+
+                                    '<td>'+
+                                        //Mhos
+                                    '</td>'+
+                                    '<td>'+
+                                        //Mhos%
+                                    '</td>'+
+                                    '<td>'+
+                                        // C/M
+                                    '</td>'+
+                                    '<td>'+
+                                        // batt temp
+                                    '</td>'+
+                                '</tr>'
+                            )
+                        }
                     }
                 }
                 

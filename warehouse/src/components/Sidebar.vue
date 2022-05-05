@@ -38,6 +38,9 @@
                     <li id="" class="nav-item    py-2 pl-3" >
                         <a class="nav-link text-light font-weight-bold" href="/BatteryMaintenanceInstock">Maintenance(Stock)</a>
                     </li>
+                    <li id="" class="nav-item    py-2 pl-3" >
+                        <a class="nav-link text-light font-weight-bold" href="/BatteryMaintenanceSetup">Maintenance Setup</a>
+                    </li>
                 </ul>
             </li>
             <!-- <li id="" class="nav-item    py-2 pl-3" >
@@ -45,6 +48,9 @@
             </li> -->
             <li id="" class="nav-item   py-2 pl-3" >
                 <a class="nav-link text-light font-weight-bold" href="/Battery/pecpoList">PEC PO</a>
+            </li>
+            <li id="" class="nav-item   py-2 pl-3" >
+                <a class="nav-link text-light font-weight-bold" href="/createPecpoNew">PEC PO(NEW)</a>
             </li>
             <li id="" class="nav-item   py-2 pl-3" >
                 <a class="nav-link text-light font-weight-bold" href="/pecpo_confirm_list">PEC PO Confirm</a>
