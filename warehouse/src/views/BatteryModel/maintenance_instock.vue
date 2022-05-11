@@ -13,11 +13,7 @@
                         <div class="col">
                             <select class="form-control" id="model_option">
                                 <option value="ทั้งหมด">ทั้งหมด</option>
-                                <option value="UPS12-150MRX">UPS12-150MRX</option>
-                                <option value="UPS12-320MRX">UPS12-320MRX</option>
-                                <option value="UPS12-320R MRX">UPS12-320R MRX</option>
-                                <option value="UPS12-37MRX">UPS12-37MRX</option>
-
+                                
                             </select>
                         </div>
                     </div>
@@ -40,8 +36,8 @@
                         <div class="col">
                             <select class="form-control" id="cm_option">
                                 <option value="ทั้งหมด">ทั้งหมด</option>
-                                <option value="Charge">C "Charge"</option>
-                                <option value="Measurement">M "Measurement"</option>
+                                <option value="Charge">"Charge"</option>
+                                <option value="Measurement">"Measurement"</option>
                             </select>
                         </div>
                     </div>
@@ -66,8 +62,8 @@
                         <th>Barcode</th>
                         <th>Model</th>
                         <th>Location</th>
-                        <th>วันที่ชาร์จ</th>
-                        <th>C / M</th>
+                        <th>Last Action</th>
+                        <th>Wait for Action</th>
                         <th>
                             <input id="chekbox_all" type="checkbox">
                         </th>
@@ -148,44 +144,141 @@ import router from "@/router";
 export default {
     components: { Sidebar },
     mounted() {
+        
+        headload()
 
         preload()
         var batt = []
-        async function preload(){
+        var batt_model = []
+        var batt_scheduler = []
+        
+        async function headload(){
+            const get_all_model = await projectFirestore.collection("BatterySpecifications").where('visible','==',true).orderBy('series','asc').get()
             
-            const get_batt = await projectFirestore.collection("Batteries_beta").where('measurements','!=',[]).get()
-            batt = []
-            var start_num_row = 1 
-            get_batt.forEach((batt_data)=>{
-                batt.push(batt_data.data())
-                console.log(batt_data.data())
-                const last_cm = batt_data.data().measurements.length - 1
-                var date = new Date(batt_data.data().measurements[last_cm].Date*1000);
-                var day = date.getDate();
-                var month = date.getMonth();
-                var year = date.getFullYear();
-                if (day < 10) {
-                    day = "0" + day;
-                }
-                if (month < 10) {
-                    month = "0" + month;
-                }
-                var new_date = day + "-" + month + "-" + year;
-                $('#data').html('')
-                $('#data').append(
-                    '<tr id="row_'+start_num_row+'" class="table_row" data-model="'+batt_data.data().series+'" data-location="'+batt_data.data().measurements[last_cm].Location+'" data-cm="'+batt_data.data().measurements[last_cm].type+'">'+
-                        '<td class="num_row">'+start_num_row+'</td>'+
-                        '<td>'+batt_data.data().barcode+'</td>'+
-                        '<td class="model_row">'+batt_data.data().series+'</td>'+
-                        '<td class="location_row">'+batt_data.data().measurements[last_cm].Location+'</td>'+
-                        '<td>'+new_date+'</td>'+
-                        '<td class="cm_row">'+batt_data.data().measurements[last_cm].type+'</td>'+
-                        '<td>'+
-                            '<input data-id="'+batt_data.data().barcode+'" class="checkbox_child" type="checkbox">'+
-                        '</td>'+
-                    '</tr>'
+            get_all_model.forEach((model_batt)=>{
+                $('#model_option').append(
+                    '<option value="'+model_batt.data().series+'">'+model_batt.data().series+'</option>'
                 )
             })
+
+            
+        }
+
+
+        async function preload(){
+            const get_batt_model = await projectFirestore.collection("BatterySpecifications").where('visible','==',true).get()
+            const get_batt = await projectFirestore.collection("Batteries_beta").where('measurements','!=',[]).get()
+            const get_scheduler = await projectFirestore.collection("BatteryMaintenanceScheduler").get()
+            batt = []
+            batt_model = []
+            batt_scheduler = []
+            var start_num_row = 1
+            await getmodel()
+            await getscheduler()
+            await renderbatt()
+            
+            function getmodel(){
+                get_batt_model.forEach((model_data)=>{
+                    batt_model.push(model_data.data())
+                })
+            }
+            function getscheduler(){
+                get_scheduler.forEach((scheduler_batt)=>{
+                    batt_scheduler.push(scheduler_batt.data())
+                })
+            }
+            function renderbatt(){
+                get_batt.forEach((batt_data)=>{
+                    batt.push(batt_data.data())
+                    const last_c = get_last_c()
+                    const last_m = get_last_m()
+
+                    function get_last_c(){
+                        for(let i = batt_data.data().measurements.length-1; i > -1; i--){
+                            if(batt_data.data().measurements[i].type == 'Charge'){
+                                return i
+                            }
+                            else{
+                                if(i == 0){
+                                    return 'No data'
+                                }
+                            }
+                        }
+                    }
+                    function get_last_m(){
+                        for(let i = batt_data.data().measurements.length-1; i > -1; i--){
+                            if(batt_data.data().measurements[i].type == 'Measurement'){
+                                return i
+                            }
+                            else{
+                                if(i == 0){
+                                    return 'No data'
+                                }
+                            }
+                        }
+                    }
+
+                    const last_cm = batt_data.data().measurements.length - 1
+                    var date = new Date(batt_data.data().measurements[last_cm].Date*1000);
+                    var day = date.getDate();
+                    var month = date.getMonth();
+                    var year = date.getFullYear();
+                    if (day < 10) {
+                        day = "0" + day;
+                    }
+                    if (month < 10) {
+                        month = "0" + month;
+                    }
+                    var new_date = day + "-" + month + "-" + year;
+                    $('#data').html('')
+                    const brand_from_model = batt_model.find(x => x.series === batt_data.data().series).brand
+                    const batt_charge_cycle = batt_scheduler.find(x => x.model === batt_data.data().series).charge_cycle
+                    const batt_measurement_cycle = batt_scheduler.find(x => x.model === batt_data.data().series).measurement_cycle
+
+                    const cm_status = get_wait_cm()                    
+                    function get_wait_cm(){
+            
+                        if(last_c != 'No data'){
+                            var count_c_date = Date.now() - batt_data.data().measurements[last_c].Date
+                            if(count_c_date > batt_measurement_cycle){
+                                return 'Charge'
+                            }
+                            else{
+                                if(count_c_date > batt_measurement_cycle){
+                                    return 'Measurement'
+                                }
+                                else{
+                                    return 'No Data'
+                                }
+                            }
+                        }
+                        else{
+                            return 'Charge'
+                        }
+
+
+                    }
+                    if(cm_status != 'No Data'){
+                        $('#data').append(
+                            '<tr id="row_'+start_num_row+'" class="table_row" data-model="'+batt_data.data().series+'" data-location="'+batt_data.data().measurements[last_cm].Location+'" data-cm="'+batt_data.data().measurements[last_cm].type+'">'+
+                                '<td class="num_row">'+start_num_row+'</td>'+
+                                '<td>'+batt_data.data().barcode+'</td>'+
+                                '<td class="model_row">'+batt_data.data().series+'</td>'+
+                                '<td class="location_row">'+batt_data.data().measurements[last_cm].Location+'</td>'+
+                                '<td>'+new_date+'</td>'+
+                                '<td class="cm_row">'+cm_status+'</td>'+
+                                '<td>'+
+                                    '<input data-cm="'+cm_status+'" data-barcode="'+batt_data.data().barcode+'" data-brand="'+brand_from_model+'" data-model="'+batt_data.data().series+'" data-ref="" data-mfg="" data-jobno="'+batt_data.data().jobNo+'" data-location="'+batt_data.data().measurements[last_cm].Location+'" class="checkbox_child" type="checkbox">'+
+                                '</td>'+
+                            '</tr>'
+                        )
+                    }
+
+
+                    
+
+                })
+            }
             
         }
 
@@ -194,7 +287,7 @@ export default {
             const table_id = "excel_data"
             
             
-            const file_name = "Inspection Form_2022"
+            const file_name = "maintenance"
             tableToExcel(table_id,file_name)
         })
 
@@ -305,6 +398,31 @@ export default {
 
         }   
 
+        
+
+        $('#data').on('change','.checkbox_child',async function(){
+            var checkbox_data = []
+            const checkbox_input = $('.checkbox_child')
+            await get_checkbox_data()
+            await render_table_excel()
+
+            function get_checkbox_data(){
+                for(let i = 0; i < checkbox_input.length; i++ ){
+                    if($(checkbox_input[i]).is(':checked')){
+                        console.log($(this).data('barcode'))
+                        checkbox_data.push({
+                            brand:$(this).data('brand'),
+                            model:$(this).data('model'),
+                            barcode:$(this).data('barcode'),
+                            jobno:$(this).data('jobno'),
+                            location:$(this).data('location'),
+                            cm:$(this).data('cm')
+                        })
+                    }
+    
+                }
+            }
+        })
 
 
 

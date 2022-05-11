@@ -20,8 +20,8 @@
                         <tr class="">
                             <th>No.</th>
                             <th>Model</th>
-                            <th>Brand</th>
-                            <th>รอบการตรวจ(วัน)</th>
+                            <th>Charge Cycle(Days)</th>
+                            <th>Measurement Cycle(Days)</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -61,10 +61,8 @@
                         
                     </div>
                 </div>
-                
             </div>
         </div>
-
         </div>
     </div>
 </template>
@@ -77,10 +75,10 @@ export default {
     components: { Sidebar },
     mounted() {
 
+        
         preload()
-
         async function preload(){
-            const get_all_model = await projectFirestore.collection("BatterySpecifications").where('visible','==',true).orderBy("series", "asc").get()
+            const get_all_model = await projectFirestore.collection("BatteryMaintenanceScheduler").orderBy("model", "asc").get()
             var run_number = 0
             get_all_model.forEach((model)=>{
                 run_number++
@@ -90,33 +88,36 @@ export default {
                             run_number+
                         '</td>'+
                         '<td>'+
-                            model.data().series+
+                            model.data().model+
                         '</td>'+
                         '<td>'+
-                            model.data().brand+
+                            (model.data().charge_cycle/2629743)*30+
                         '</td>'+
                         '<td>'+
-                            '30'+
+                            (model.data().measurement_cycle/2629743)*30+
                         '</td>'+
                         '<td>'+
                             '<button class="btn btn-warning font-weight-bold col-8 ml-4 edit-btn text-white" value="'+model.id+'" data-toggle="modal" data-target="#editModal" >Edit</button>'+
                         '</td>'+
                     '</tr>'
                 )
+
             })
         }
 
+
+
         $("#table_data").on("click", ".edit-btn", async function (e) {
-            const model_modal = await projectFirestore.collection("BatterySpecifications").doc(e.target.value).get()
+            const model_modal = await projectFirestore.collection("BatteryMaintenanceScheduler").doc(e.target.value).get()
             $('#modal-edit-option').html('')
 
             await render_modal_data()
 
             function render_modal_data(){
 
-                $('#model_head').text('รอบการMaintenance : '+ model_modal.data().series)
+                $('#model_head').text('รอบการMaintenance : '+ model_modal.data().model)
                 
-                $('#model_modal').html(model_modal.data().series)
+                $('#model_modal').html(model_modal.data().model)
                 $("#modalfooter").html('<button class="btn btn-secondary col" data-dismiss="modal">ยกเลิก</button>'+
                                         '<button class="btn btn-success edit-btn-cf col" value="'+e.target.value+'">บันทึก</button>'
                 )
