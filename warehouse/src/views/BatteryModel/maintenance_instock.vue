@@ -239,8 +239,8 @@ export default {
                     function get_wait_cm(){
             
                         if(last_c != 'No data'){
-                            var count_c_date = Date.now() - batt_data.data().measurements[last_c].Date
-                            if(count_c_date > batt_measurement_cycle){
+                            var count_c_date = (Date.now()/1000) - batt_data.data().measurements[last_c].Date
+                            if(count_c_date > batt_charge_cycle){
                                 return 'Charge'
                             }
                             else{
@@ -305,148 +305,130 @@ export default {
             }
         })()
 
-        async function get_batt_excel(){
-            var amount_batt = []
-            var export_batt_data = []
-            const batt_input = $('.batt_input').length
-
+        $('#chekbox_all').on('change',async function(){
             
-            await get_amount_export()
-            await render_table_export_excel()
-
-
-            function get_amount_export(){
-                for(let i = 0; i < batt_input; i++){
-                    if($($('.batt_input')[i]).val() > 0){
-                        amount_batt.push({
-                            model:$($('.batt_input')[i]).data('model'),
-                            inspection:$($('.batt_input')[i]).data('ins'),
-                            po:$($('.batt_input')[i]).data('po'),
-                            amount: parseInt($($('.batt_input')[i]).val()),
-                            location:$($('.batt_input')[i]).data('location')
-                        })
-
-                    }
+            
+            await check_all()
+            await getdata_for_excel()
+            function check_all(){
+                if($(this).is(':checked')){
+                    $('.checkbox_child').prop('checked', true);
+                }
+                else{
+                    $('.checkbox_child').prop('checked', false);
                 }
             }
+        })
 
-            function render_table_export_excel(){
-                console.log('batt_data : ',batt_data)
-                $('#excel_data_row').html('')
-                var running_number_export = 0
-                for(let i = 0; i < amount_batt.length; i++){
-                    const total_batt_in_model = amount_batt[i].amount
-                    var total_bat_get = 0
-                    for(let j = 0; j < batt_data.length; j++){
+ 
 
-                        if(amount_batt[i].model == batt_data[j].series && amount_batt[i].po == batt_data[j].poNo && total_batt_in_model > total_bat_get){
-                            console.log('total_batt_in_model : ',total_batt_in_model,' total_bat_get : ',total_bat_get)
-                            console.log(amount_batt[i].model)
-                            running_number_export++
-                            total_bat_get++
-                            $('#excel_data_row').append(
-                                '<tr  style="text-align: center; height:41px;vertical-align: middle;">'+
-                                    '<td>'+
-                                        running_number_export+
-                                    '</td>'+
-                                    '<td>'+
-                                        // brand
-                                    '</td>'+
-                                    '<td>'+
-                                        batt_data[j].series+
-                                    '</td>'+
-                                    '<td>'+
-                                        //Ref
-                                    '</td>'+
-                                    '<td>'+
-                                        batt_data[j].barcode+
-                                    '</td>'+
-                                    '<td>'+
-                                        //MFG Code
-                                    '</td>'+
-                                    '<td>'+
-                                        batt_data[j].jobNo+
-                                    '</td>'+
-                                    '<td>'+
-                                        amount_batt[i].location+
-                                    '</td>'+
-                                    '<td>'+
-                                        //date
-                                    '</td>'+
-                                    '<td>'+
-                                        //OCV
-                                    '</td>'+
-                                    '<td>'+
-                                        //Mhos
-                                    '</td>'+
-                                    '<td>'+
-                                        //Mhos%
-                                    '</td>'+
-                                    '<td>'+
-                                        // C/M
-                                    '</td>'+
-                                    '<td>'+
-                                        // batt temp
-                                    '</td>'+
-                                '</tr>'
-                            )
-                        }
-                    }
-                }
-                
-            }   
+        $('#data').on('change','.checkbox_child',function(){
+            getdata_for_excel()
+            
+        })
 
-        }   
-
-        
-
-        $('#data').on('change','.checkbox_child',async function(){
+        async function getdata_for_excel(){
             var checkbox_data = []
             const checkbox_input = $('.checkbox_child')
             await get_checkbox_data()
-            await render_table_excel()
+            await render_table_export_excel(checkbox_data)
 
             function get_checkbox_data(){
                 for(let i = 0; i < checkbox_input.length; i++ ){
                     if($(checkbox_input[i]).is(':checked')){
-                        console.log($(this).data('barcode'))
                         checkbox_data.push({
-                            brand:$(this).data('brand'),
-                            model:$(this).data('model'),
-                            barcode:$(this).data('barcode'),
-                            jobno:$(this).data('jobno'),
-                            location:$(this).data('location'),
-                            cm:$(this).data('cm')
+                            brand:$(checkbox_input[i]).data('brand'),
+                            model:$(checkbox_input[i]).data('model'),
+                            barcode:$(checkbox_input[i]).data('barcode'),
+                            jobno:$(checkbox_input[i]).data('jobno'),
+                            location:$(checkbox_input[i]).data('location'),
+                            cm:$(checkbox_input[i]).data('cm')
                         })
                     }
-    
+
                 }
-            }
-        })
-
-
-
-        $('#chekbox_all').on('change',function(){
             
-            if($(this).is(':checked')){
-                $('.checkbox_child').prop('checked', true);
             }
-            else{
-                $('.checkbox_child').prop('checked', false);
+        }
+
+
+
+        function render_table_export_excel(checkbox_data){
+            $('#excel_data_row').html('')
+            var running_number_export = 0
+            console.log('render : ',checkbox_data)
+            for(let i = 0; i < checkbox_data.length; i++){
+                
+                running_number_export++
+                $('#excel_data_row').append(
+                    '<tr  style="text-align: center; height:41px;vertical-align: middle;">'+
+                        '<td>'+
+                            running_number_export+
+                        '</td>'+
+                        '<td>'+
+                            checkbox_data[i].brand+
+                        '</td>'+
+                        '<td>'+
+                            checkbox_data[i].model+
+                        '</td>'+
+                        '<td>'+
+                            //Ref
+                        '</td>'+
+                        '<td>'+
+                            checkbox_data[i].barcode+
+                        '</td>'+
+                        '<td>'+
+                            //MFG Code
+                        '</td>'+
+                        '<td>'+
+                            checkbox_data[i].jobno+
+                        '</td>'+
+                        '<td>'+
+                            checkbox_data[i].location+
+                        '</td>'+
+                        '<td>'+
+                            //date
+                        '</td>'+
+                        '<td>'+
+                            //OCV
+                        '</td>'+
+                        '<td>'+
+                            //Mhos
+                        '</td>'+
+                        '<td>'+
+                            //Mhos%
+                        '</td>'+
+                        '<td>'+
+                            checkbox_data[i].cm+
+                        '</td>'+
+                        '<td>'+
+                            // batt temp
+                        '</td>'+
+                    '</tr>'
+                )
+
+                
             }
-        })
+            
+        }   
+
+
+       
 
 
         $('#model_option').on('change',async function(){
             filter()
+            get_batt_excel()
         })
          $('#location_option').on('change',async function(){
             
             filter()
+            get_batt_excel()
         })
         $('#cm_option').on('change',async function(){
             
             filter()
+            get_batt_excel()
         })
 
         async function filter(){
@@ -458,16 +440,13 @@ export default {
             $('.table_row').each(function(index){
                 if(model_select != 'ทั้งหมด' && model_select != $(this).data('model')){
                     $(this).remove()
-                    console.log('del model ',$(this).data('model'))
                 }
                 if(location_select != 'ทั้งหมด' && location_select != $(this).data('location')){
                     $(this).remove()
-                    console.log('del locatio  ',$(this).data('location'))
 
                 }
                 if(cm_select != 'ทั้งหมด' && cm_select != $(this).data('cm')){
                     $(this).remove()
-                    console.log('del cm ',$(this).data('cm'))
 
                 }
                 
