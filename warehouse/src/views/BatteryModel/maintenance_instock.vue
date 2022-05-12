@@ -2,7 +2,7 @@
 <Sidebar />
     <div id="content" style="margin-left: 250px">
         <div class="container">
-        <div class="h3 mt-5 font-weight-bold">บำรุงรักษาแบตเตอรี่</div>
+        <div class="h3 mt-5 font-weight-bold">บำรุงรักษาแบตเตอรี่(คลัง)</div>
         
         <div class="my-5 p-4 border">
             <div class="row">
@@ -36,8 +36,8 @@
                         <div class="col">
                             <select class="form-control" id="cm_option">
                                 <option value="ทั้งหมด">ทั้งหมด</option>
-                                <option value="Charge">"Charge"</option>
-                                <option value="Measurement">"Measurement"</option>
+                                <option value="Charge">Charge</option>
+                                <option value="Measurement">Measurement</option>
                             </select>
                         </div>
                     </div>
@@ -62,7 +62,7 @@
                         <th>Barcode</th>
                         <th>Model</th>
                         <th>Location</th>
-                        <th>Last Action</th>
+                        <th>LastDate</th>
                         <th>Wait for Action</th>
                         <th>
                             <input id="chekbox_all" type="checkbox">
@@ -117,11 +117,11 @@
                             <td style="background-color:#B8E1F7;border:solid 1px;">Job No.</td>
                             <td style="background-color:#B8E1F7;border:solid 1px;">Location</td>
                             <td style="background-color:#B8E1F7;border:solid 1px;">Date</td>
-                            <td style="background-color:#B8E1F7;border:solid 1px;">OCV</td>
-                            <td style="background-color:#B8E1F7;border:solid 1px;">Mhos</td>
+                            <td style="background-color:#B8E1F7;border:solid 1px;">OCV(V)</td>
+                            <td style="background-color:#B8E1F7;border:solid 1px;">Mhos(Siemen)</td>
                             <td style="background-color:#B8E1F7;border:solid 1px;">Mhos%</td>
                             <td style="background-color:#B8E1F7;border:solid 1px;">C / M</td>
-                            <td style="background-color:#B8E1F7;border:solid 1px;">Batt Temp</td>
+                            <td style="background-color:#B8E1F7;border:solid 1px;">Batt Temp(°C)</td>
                         </tr>
                     </thead>
                     <tbody id="excel_data_row">
@@ -188,6 +188,7 @@ export default {
                 })
             }
             function renderbatt(){
+                $('#data').html('')
                 get_batt.forEach((batt_data)=>{
                     batt.push(batt_data.data())
                     const last_c = get_last_c()
@@ -230,7 +231,7 @@ export default {
                         month = "0" + month;
                     }
                     var new_date = day + "-" + month + "-" + year;
-                    $('#data').html('')
+                    
                     const brand_from_model = batt_model.find(x => x.series === batt_data.data().series).brand
                     const batt_charge_cycle = batt_scheduler.find(x => x.model === batt_data.data().series).charge_cycle
                     const batt_measurement_cycle = batt_scheduler.find(x => x.model === batt_data.data().series).measurement_cycle
@@ -258,9 +259,10 @@ export default {
 
 
                     }
+                    console.log(cm_status)
                     if(cm_status != 'No Data'){
                         $('#data').append(
-                            '<tr id="row_'+start_num_row+'" class="table_row" data-model="'+batt_data.data().series+'" data-location="'+batt_data.data().measurements[last_cm].Location+'" data-cm="'+batt_data.data().measurements[last_cm].type+'">'+
+                            '<tr id="row_'+start_num_row+'" class="table_row" data-model="'+batt_data.data().series+'" data-location="'+batt_data.data().measurements[last_cm].Location+'" data-cm="'+cm_status+'">'+
                                 '<td class="num_row">'+start_num_row+'</td>'+
                                 '<td>'+batt_data.data().barcode+'</td>'+
                                 '<td class="model_row">'+batt_data.data().series+'</td>'+
@@ -272,6 +274,7 @@ export default {
                                 '</td>'+
                             '</tr>'
                         )
+                        start_num_row++
                     }
 
 
@@ -418,17 +421,14 @@ export default {
 
         $('#model_option').on('change',async function(){
             filter()
-            get_batt_excel()
         })
          $('#location_option').on('change',async function(){
             
             filter()
-            get_batt_excel()
         })
         $('#cm_option').on('change',async function(){
             
             filter()
-            get_batt_excel()
         })
 
         async function filter(){
@@ -439,13 +439,18 @@ export default {
 
             $('.table_row').each(function(index){
                 if(model_select != 'ทั้งหมด' && model_select != $(this).data('model')){
+                    console.log($(this).html())
                     $(this).remove()
                 }
                 if(location_select != 'ทั้งหมด' && location_select != $(this).data('location')){
+                    console.log($(this).html())
+
                     $(this).remove()
 
                 }
                 if(cm_select != 'ทั้งหมด' && cm_select != $(this).data('cm')){
+                    console.log($(this).data('cm'))
+                    console.log($(this).html())
                     $(this).remove()
 
                 }

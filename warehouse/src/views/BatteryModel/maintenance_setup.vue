@@ -40,22 +40,18 @@
                     </div>
                     <div id="modal-edit-content" class="modal-body">
                         <div class="row">
-                            <div class="col-4 font-weight-bold pt-2">
+                            <div class="col-6 font-weight-bold pt-2">
                                 Model
                             </div>
-                            <div id="model_modal" class="col-8 col-form-label">
+                            <div id="model_modal" class="col-6 col-form-label">
                                 
                             </div>
                         </div>
                         <br>
-                        <div class="row">
-                            <div class="col-4 font-weight-bold pt-2">
-                                รอบการตรวจ (วัน)
-                            </div>
-                            <div class="col-8">
-                                <input id="loop_setup_modal" type="number" class="form-control" value="30">
-                            </div>
+                        <div id="model_data">
+
                         </div>
+                        
                     </div>
                     <div id="modalfooter" class="modal-footer">
                         
@@ -116,7 +112,23 @@ export default {
             function render_modal_data(){
 
                 $('#model_head').text('รอบการMaintenance : '+ model_modal.data().model)
-                
+
+                $('#model_data').html(
+                    '<div class="row">'+
+                        '<div class="col-6 font-weight-bold pt-2">Charge Cycle</div>'+
+                        '<div class="col-6">'+
+                            '<input id="loop_setup_modal" type="number" class="form-control" value="'+(model_modal.data().charge_cycle/2629743)*30+'">'+
+                        '</div>'+
+                    '</div>'+
+                    '<br>'+
+                    '<div class="row">'+
+                        '<div class="col-6 font-weight-bold pt-2">Maintenance Cycle</div>'+
+                        '<div class="col-6">'+
+                            '<input id="loop_setup_modal" type="number" class="form-control" value="'+(model_modal.data().measurement_cycle/2629743)*30+'">'+
+                        '</div>'+
+                    '</div>'
+                )
+
                 $('#model_modal').html(model_modal.data().model)
                 $("#modalfooter").html('<button class="btn btn-secondary col" data-dismiss="modal">ยกเลิก</button>'+
                                         '<button class="btn btn-success edit-btn-cf col" value="'+e.target.value+'">บันทึก</button>'
