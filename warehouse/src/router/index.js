@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import { projectFirestore,projectAuth } from '../firebase/config'
 import Home from '../views/Home.vue'
+import Test from '../views/test.vue'
 import Excel from '../views/excel.vue'
 import Welcome from '../views/Welcome.vue'
 // import resetpassword from '../views/resetpassword.vue'
@@ -121,6 +122,11 @@ projectAuth.onAuthStateChanged((user) => {
 
 
 const routes = [
+  {
+    path: '/test',
+    name: 'Test',
+    component: Test
+  },
   {
     path: '/home',
     name: 'Home',
