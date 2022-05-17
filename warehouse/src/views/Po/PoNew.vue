@@ -10,7 +10,7 @@
         <div>
             <div class="container">
                 <div class="h3 mt-5 font-weight-bold">ลงทะเบียน PEC PO</div>
-                <form id="addform" class="border mt-5 mb-2 p-5 bg-white">
+                <form id="addform" class="border mt-5 mb-2 p-3 bg-white">
                     <div class="row">
                         <div class="col-6">
                             <div class="form-group row">
@@ -72,112 +72,12 @@
 
                 <br>
                 <div id="data">
-                    <div class="col-12 border rounded p-4 my-2">
-                        <div class="row">
-                            <div class="col-4 border-right">
-                                <input type="checkbox"><span> Job 65/001 : AIS</span>
-                            </div>
-                            <div class="col-8">
-                                <div class="row my-2">
-                                    <div class="col-4">
-                                        <input type="checkbox"><span> OrderSheet 65/001/1</span>
-                                    </div>
-                                    <div class="col-8">
-                                        <div class="col-12">UPS12-220MRX 120 ลูก</div>
-                                        <div class="col-12">UPS12-320MRX 50  ลูก</div>
-                                    </div>
-                                </div>
+                    
 
-                                <div class="row my-2">
-                                    <div class="col-4">
-                                        <input type="checkbox"><span> OrderSheet 65/001/(R)</span>
-                                    </div>
-                                    <div class="col-8">
-                                        <div class="col-12">UPS12-220MRX 120 ลูก</div>
-                                        <div class="col-12">UPS12-320MRX 50  ลูก</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="col-12 border rounded p-4 my-2">
-                        <div class="row">
-                            <div class="col-4 border-right">
-                                <input type="checkbox"><span> Job 65/002 : Dtac</span>
-                            </div>
-                            <div class="col-8">
-                                <div class="row my-2">
-                                    <div class="col-4">
-                                        <input type="checkbox"><span> OrderSheet 65/002/1</span>
-                                    </div>
-                                    <div class="col-8">
-                                        <div class="col-12">UPS12-220MRX 120 ลูก</div>
-                                        <div class="col-12">UPS12-320MRX 50  ลูก</div>
-                                    </div>
-                                </div>
-
-                                <div class="row my-2">
-                                    <div class="col-4">
-                                        <input type="checkbox"><span> OrderSheet 65/002/(R)</span>
-                                    </div>
-                                    <div class="col-8">
-                                        <div class="col-12">UPS12-220MRX 120 ลูก</div>
-                                        <div class="col-12">UPS12-320MRX 50  ลูก</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="col-12 border rounded p-4 my-2">
-                        <div class="row">
-                            <div class="col-4 border-right">
-                                <input type="checkbox"><span> Job 65/003 : True</span>
-                            </div>
-                            <div class="col-8">
-                                <div class="row my-2">
-                                    <div class="col-4">
-                                        <input type="checkbox"><span> OrderSheet 65/003/1</span>
-                                    </div>
-                                    <div class="col-8">
-                                        <div class="col-12">UPS12-220MRX 120 ลูก</div>
-                                        <div class="col-12">UPS12-320MRX 50  ลูก</div>
-                                    </div>
-                                </div>
-
-                                <div class="row my-2">
-                                    <div class="col-4">
-                                        <input type="checkbox"><span> OrderSheet 65/003/(R)</span>
-                                    </div>
-                                    <div class="col-8">
-                                        <div class="col-12">UPS12-220MRX 120 ลูก</div>
-                                        <div class="col-12">UPS12-320MRX 50  ลูก</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
+                    
                 </div>
 
-                <!-- <div class="col-12 border p-4">
-                    <div id="data" class="col-12">
 
-                    </div>
-                    <div class="col-12">
-                        <button id="addjob" class="btn btn-warning col-12 text-white" type="button" data-row="1" disabled >Add Job No</button>
-                    </div>
-
-                </div>
-
-                <div class="d-flex justify-content-center row-hl my-5">
-                    <a class="btn btn-secondary col-2 mr-2" type="button" href="/Battery/pecpoList">Cancel</a>
-                    <button class="btn btn-danger  col-2 " type="submit">Save</button>
-
-                </div> -->
 
             </div>
         </div>
@@ -213,7 +113,7 @@ export default {
         
         async function predata(){
             var job_arr = []
-            var condition_arr = []
+            var all_condition_arr = []
             var uniq_condition_arr = []
             var ordersheet_arr = []
             const get_ordersheet = await projectFirestore.collection("Projects").where('inter_validate','==',true).get()
@@ -221,19 +121,18 @@ export default {
             get_ordersheet.forEach((ordersheet)=>{
                 job_arr.push(ordersheet.data())
             })
-            console.log('job_arr : ',job_arr)
 
-            await fun1()
-            await fun2()
-            await fun3()
-
-            function fun1(){
+            await get_all_con()
+            await get_uni_con()
+            await render_con_box()
+            await render_job()
+            function get_all_con(){
                 for(let i = 0; i < job_arr.length; i++){
                     for(let j = 0; j < job_arr[i].orderSheet.length; j++){
                         if(job_arr[i].orderSheet[j].po == false){
-                            condition_arr.push({
+                            all_condition_arr.push({
                                 warranty:job_arr[i].orderSheet[j].warranty,
-                                delivery:job_arr[i].orderSheet[j].deliverydate,
+                                deliverydate:job_arr[i].orderSheet[j].deliverydate,
                                 origin:job_arr[i].orderSheet[j].origin
                             })
                         }
@@ -241,22 +140,110 @@ export default {
                 }
             }
 
-            function fun2(){
-                console.log(condition_arr)
-                for(let i = 0; i < condition_arr.length; i++){
+            function get_uni_con(){
+                for(let i = 0; i < all_condition_arr.length; i++){
                     
-                        uniq_condition_arr.push(condition_arr[i])
-                        console.log(uniq_condition_arr.length)
-                    for(let j = 0; j < uniq_condition_arr.length; j++){
-                        // if(uniq_condition_arr[j] )
+                    if(uniq_condition_arr.length == 0){
+                        uniq_condition_arr.push(all_condition_arr[i])
                     }
-                    
+                    else{
+                        const count = check()
+                        function check(){
+                            for(let j = 0; j < uniq_condition_arr.length; j++){
+                                if(uniq_condition_arr[j].warranty == all_condition_arr[i].warranty && uniq_condition_arr[j].deliverydate == all_condition_arr[i].deliverydate && uniq_condition_arr[j].origin == all_condition_arr[i].origin){
+                                    return false
+                                }
+                                if(j == uniq_condition_arr.length - 1){
+                                    if(uniq_condition_arr[j].warranty == all_condition_arr[i].warranty && uniq_condition_arr[j].deliverydate == all_condition_arr[i].deliverydate && uniq_condition_arr[j].origin == all_condition_arr[i].origin){
+                                        return false
+                                    }
+                                    else{
+                                        return true
+                                    }  
+                                }
+                            }
+                        }
+                        if(count == true){
+                            // console.log(all_condition_arr[i].)
+                            uniq_condition_arr.push({
+                                    no:i,
+                                    warranty:all_condition_arr[i].warranty,
+                                    deliverydate:all_condition_arr[i].deliverydate,
+                                    origin:all_condition_arr[i].origin
+                                }
+                                    
+                            )
+                        }
+
+                    }
                 }
             }
 
-            function fun3(){
-                // console.log('uniq : ',uniq_condition_arr)
+
+            function render_con_box(){
+                console.log('all_condition_arr : ',all_condition_arr)
+                console.log('uniq_condition_arr : ',uniq_condition_arr)
+                for(let i = 0; i < uniq_condition_arr.length; i++){
+                    $('#data').append(
+                        '<div class="col-12 border rounded p-4 my-2">'+
+                            '<div class="row">'+
+                                '<div class="col-3 border-right">'+
+                                    '<div class="font-weight-bold">Origin : '+uniq_condition_arr[i].origin+'</div>'+
+                                    '<div class="font-weight-bold">Warranty : '+uniq_condition_arr[i].warranty+'</div>'+
+                                    '<div class="font-weight-bold">Delivery Date : '+uniq_condition_arr[i].deliverydate+'</div>'+
+                                '</div>'+
+                                '<div id="con_no_'+uniq_condition_arr[i].no+'" class="col-9">'+
+
+                                '</div>'+
+                            '</div>'+
+                        '</div>'
+                    )
+                }
+               
             }
+
+            function render_job(){
+                get_ordersheet.forEach((ordersheet)=>{
+                    job_arr.push(ordersheet.data())
+                    for(let i = 0; i < ordersheet.data().orderSheet.length; i++){
+                        if(ordersheet.data().orderSheet[i].po == false){
+                            
+                            for(let j = 0; j < uniq_condition_arr.length; j++){
+                                if(ordersheet.data().orderSheet[i].warranty == uniq_condition_arr[j].warranty &&
+                                     ordersheet.data().orderSheet[i].deliverydate == uniq_condition_arr[j].deliverydate &&
+                                      ordersheet.data().orderSheet[i].origin == uniq_condition_arr[j].origin)
+                                    {
+
+                                        $('#con_no_'+uniq_condition_arr[j].no).append(
+                                            '<div id="con_'+uniq_condition_arr[j].no+'_job'+ordersheet.id+'" class="row">'+
+                                                '<div class="col-4 border-right">'+
+                                                        '<input class="" type="checkbox">'+
+                                                        '<span class="pl-4 font-weight-bold">Job No : '+ordersheet.data().JobNoFirst+'/'+ordersheet.data().JobNoSecond+'</span>'+
+                                                '</div>'+
+                                                '<div class="col-8">'+
+                                                    '<div class="row">'+
+                                                        '<div class="col-6">'+
+                                                            '<input class="" type="checkbox">'+
+                                                            '<span class="pl-4 font-weight-bold">OrderSheet : '+ordersheet.data().JobNoFirst+'/'+ordersheet.data().JobNoSecond+'/'+ordersheet.data().orderSheet[i].no+'</span>'+
+                                                            '</div>'+
+                                                        '<div class="col-6">'+
+                                                        '</div>'+
+                                                    '</div>'+
+                                                '</div>'+
+                                            '</div>'
+                                        )
+
+                                    }
+                            }
+
+                        }
+                    }
+                })
+
+            }
+
+
+
 
         }
 
