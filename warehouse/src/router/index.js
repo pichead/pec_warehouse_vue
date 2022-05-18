@@ -69,6 +69,15 @@ import PoNew from '../views/Po/PoNew.vue'
 
 // End PO
 
+
+// Claim
+import ClaimIndex from '../views/Claim/index.vue'
+import ClaimView from '../views/Claim/view.vue'
+
+
+// End Claim
+
+
 import BatterySpec from '../views/Battery/spec.vue'
 import Pmindex from '../views/finder/pmIndex.vue'
 import Pmedit from '../views/finder/pmedit.vue'
@@ -281,6 +290,18 @@ const routes = [
     path: '/pecpo_print/:id',
     name: 'PrintPecpo',
     component: PrintPecpo,
+    beforeEnter: requireAuth
+  },
+  {
+    path: '/Claim',
+    name: 'ClaimIndex',
+    component: ClaimIndex,
+    beforeEnter: requireAuth
+  },
+  {
+    path: '/Claim/view',
+    name: 'ClaimView',
+    component: ClaimView,
     beforeEnter: requireAuth
   },
   {

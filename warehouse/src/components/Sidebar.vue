@@ -69,7 +69,9 @@
                     </li>
                 </ul>
             </li>
-            
+            <li id="" class="nav-item   py-2 pl-3" >
+                <a class="nav-link text-light font-weight-bold" href="/claim">Claim</a>
+            </li>
             <!-- <li id="" class="nav-item   py-2 pl-3"  >
                 <a class="nav-link text-light font-weight-bold" href="/Battery/batterylist">Stock</a>
             </li> -->

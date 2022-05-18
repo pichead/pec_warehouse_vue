@@ -7,10 +7,10 @@
 <template>
     <Sidebar />
     <div id="content" style="margin-left: 250px">
-        <div>
+        <form>
             <div class="container">
-                <div class="h3 mt-5 font-weight-bold">ลงทะเบียน PEC PO</div>
-                <form id="addform" class="border mt-5 mb-2 p-3 bg-white">
+                <div class="h3 mt-3 font-weight-bold">ลงทะเบียน PEC PO</div>
+                <form id="addform" class="border mt-3 mb-2 p-3 bg-white">
                     <div class="row">
                         <div class="col-6">
                             <div class="form-group row">
@@ -71,16 +71,40 @@
                 </form>
 
                 <br>
-                <div id="data">
+                <div id="data" class="overflow-auto border p-3" style="height: 350px;">
                     
 
                     
                 </div>
+                <br>
+                <div class="d-flex justify-content-end row-hl">
+                    <button class="col-2 item-hl btn btn-secondary" type="button">Cancel</button>
+                    <button class="col-2 ml-3 item-hl btn btn-primary" type="submit">Save</button>
+                </div>
 
-
+                <div class="modal" id="batt_modal" aria-hidden="true" style="display: none;">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 id="modal_head" class="modal-title"></h5>
+                            <button class="close" data-dismiss="modal">×</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="col-10 mx-auto">
+                                <div id="modal_data" class="row">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
-        </div>
+        </form>
     </div>
     
 </template>
@@ -184,15 +208,26 @@ export default {
                 console.log('all_condition_arr : ',all_condition_arr)
                 console.log('uniq_condition_arr : ',uniq_condition_arr)
                 for(let i = 0; i < uniq_condition_arr.length; i++){
+                    var cdate = new Date(uniq_condition_arr[i].deliverydate);
+                    var cday = cdate.getDate();
+                    var cmonth = cdate.getMonth() + 1;
+                    var cyear = cdate.getFullYear();
+                    if (cday < 10) {
+                        cday = "0" + cday;
+                    }
+                    if (cmonth < 10) {
+                        cmonth = "0" + cmonth;
+                    }
+                    var cnew_date = cday + "-" + cmonth + "-" + cyear;
                     $('#data').append(
                         '<div class="col-12 border rounded p-4 my-2">'+
                             '<div class="row">'+
-                                '<div class="col-3 border-right">'+
+                                '<div class="col-4 border-right">'+
                                     '<div class="font-weight-bold">Origin : '+uniq_condition_arr[i].origin+'</div>'+
-                                    '<div class="font-weight-bold">Warranty : '+uniq_condition_arr[i].warranty+'</div>'+
-                                    '<div class="font-weight-bold">Delivery Date : '+uniq_condition_arr[i].deliverydate+'</div>'+
+                                    '<div class="font-weight-bold">Warranty : '+uniq_condition_arr[i].warranty+' Month</div>'+
+                                    '<div class="font-weight-bold">Delivery Date : '+cnew_date+'</div>'+
                                 '</div>'+
-                                '<div id="con_no_'+uniq_condition_arr[i].no+'" class="col-9">'+
+                                '<div id="con_no_'+uniq_condition_arr[i].no+'" class="col-8">'+
 
                                 '</div>'+
                             '</div>'+
@@ -212,26 +247,37 @@ export default {
                                 if(ordersheet.data().orderSheet[i].warranty == uniq_condition_arr[j].warranty &&
                                      ordersheet.data().orderSheet[i].deliverydate == uniq_condition_arr[j].deliverydate &&
                                       ordersheet.data().orderSheet[i].origin == uniq_condition_arr[j].origin)
-                                    {
-
-                                        $('#con_no_'+uniq_condition_arr[j].no).append(
-                                            '<div id="con_'+uniq_condition_arr[j].no+'_job'+ordersheet.id+'" class="row">'+
-                                                '<div class="col-4 border-right">'+
-                                                        '<input class="" type="checkbox">'+
-                                                        '<span class="pl-4 font-weight-bold">Job No : '+ordersheet.data().JobNoFirst+'/'+ordersheet.data().JobNoSecond+'</span>'+
-                                                '</div>'+
-                                                '<div class="col-8">'+
-                                                    '<div class="row">'+
-                                                        '<div class="col-6">'+
-                                                            '<input class="" type="checkbox">'+
-                                                            '<span class="pl-4 font-weight-bold">OrderSheet : '+ordersheet.data().JobNoFirst+'/'+ordersheet.data().JobNoSecond+'/'+ordersheet.data().orderSheet[i].no+'</span>'+
+                                    {   
+                                        if($('#con_'+uniq_condition_arr[j].no+'_job'+ordersheet.id).length == 0){
+                                            $('#con_no_'+uniq_condition_arr[j].no).append(
+                                                '<div id="con_'+uniq_condition_arr[j].no+'_job'+ordersheet.id+'" class="row my-3">'+
+                                                    '<div class="col-5 border-right">'+
+                                                            '<input type="checkbox" style="width:15px;height:15px;">'+
+                                                            '<span class="pl-4 font-weight-bold">Job No : '+ordersheet.data().JobNoFirst+'/'+ordersheet.data().JobNoSecond+'</span>'+
+                                                            '<div class="font-weight-bold">Project : '+ordersheet.data().ProjectName+'</div>'+
+                                                    '</div>'+
+                                                    '<div class="col-7">'+
+                                                        '<div id="sheet_con_'+uniq_condition_arr[j].no+'_job'+ordersheet.id+'" class="row">'+
+                                                            '<div class="col-12">'+
+                                                                '<input type="checkbox" style="width:15px;height:15px;">'+
+                                                                '<span class="pl-4 font-weight-bold">OrderSheet : '+ordersheet.data().JobNoFirst+'/'+ordersheet.data().JobNoSecond+'/'+ordersheet.data().orderSheet[i].no+'</span>'+
+                                                                '<span class="pl-4"><i class="bi bi-question-circle batt-modal" type="button" data-toggle="modal" data-target="#batt_modal" data-id="'+ordersheet.id+'" data-ordersheet="'+ordersheet.data().orderSheet[i].no+'"></i></span>'+
                                                             '</div>'+
-                                                        '<div class="col-6">'+
                                                         '</div>'+
                                                     '</div>'+
-                                                '</div>'+
-                                            '</div>'
-                                        )
+                                                '</div>'
+                                            )
+
+                                        }
+                                        else{
+                                            $('#sheet_con_'+uniq_condition_arr[j].no+'_job'+ordersheet.id).append(
+                                                '<div class="col-12">'+
+                                                    '<input type="checkbox" style="width:15px;height:15px;">'+
+                                                    '<span class="pl-4 font-weight-bold">OrderSheet : '+ordersheet.data().JobNoFirst+'/'+ordersheet.data().JobNoSecond+'/'+ordersheet.data().orderSheet[i].no+'</span>'+
+                                                    '<span class="pl-4"><i class="bi bi-question-circle batt-modal" type="button" data-toggle="modal" data-target="#batt_modal" data-id="'+ordersheet.id+'" data-ordersheet="'+ordersheet.data().orderSheet[i].no+'"></i></span>'+
+                                                '</div>'
+                                            )
+                                        }
 
                                     }
                             }
@@ -246,6 +292,34 @@ export default {
 
 
         }
+
+
+        $('#data').on('click','.batt-modal',async function(){
+            const batt_jobid = $(this).data('id')
+            const batt_ordersheet = $(this).data('ordersheet')
+            const get_modal_ordersheet = await projectFirestore.collection("Projects").doc(batt_jobid).get()
+            $('#modal_data').html('')
+            for(let i = 0; i < get_modal_ordersheet.data().orderSheet.length; i++){
+                
+                if(batt_ordersheet == get_modal_ordersheet.data().orderSheet[i].no){
+                    $('#modal_head').html(
+                        'OrderSheet : '+get_modal_ordersheet.data().JobNoFirst+'/'+get_modal_ordersheet.data().JobNoSecond+'/'+get_modal_ordersheet.data().orderSheet[i].no
+                    )
+
+                    for(let j = 0; j < get_modal_ordersheet.data().orderSheet[i].battery.length; j++){
+                        $('#modal_data').append(
+                            '<div class="col-8">Model : '+get_modal_ordersheet.data().orderSheet[i].battery[j].series+'</div>'+
+                            '<div class="col-4">'+get_modal_ordersheet.data().orderSheet[i].battery[j].order_amount+' ลูก</div>'
+                        )
+                    }
+                }
+
+                
+
+                
+            }
+
+        })
 
     }
 }
