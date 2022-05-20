@@ -299,7 +299,7 @@ const routes = [
     beforeEnter: requireAuth
   },
   {
-    path: '/Claim/view',
+    path: '/Claim/view/:id',
     name: 'ClaimView',
     component: ClaimView,
     beforeEnter: requireAuth
