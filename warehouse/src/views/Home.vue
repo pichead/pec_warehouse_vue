@@ -33,6 +33,8 @@ export default {
         $('#test_btn').on('click',function(){
             main()
         })
+        
+
 
     },
     data() {
