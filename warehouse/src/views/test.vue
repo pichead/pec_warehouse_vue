@@ -29,105 +29,26 @@ import axios from "axios";
 export default {
     components: { Sidebar },
     mounted() {
-        const obj = [
-            {a:1,b:2},
-            {a:2,b:3},
-            {a:1,b:2},
-            {a:3,b:3},
-            {a:2,b:3},
-            {a:2,b:2},
-            {a:1,b:2},
-            {a:1,b:4},
-        ]
 
+        // test()
 
-        async function test_fun1(){
-            var result_data = []
-            await test1()
-            await result()
+        // async function test(){
+        //     await update()
 
-            function test1(){
-                for(let i = 0; i < obj.length; i++){
-                    
-                    if(result_data.length == 0){
-                        result_data.push(obj[i])
-                    }
-                    else{
-                        const count = check()
-                        function check(){
-                            for(let j = 0; j < result_data.length; j++){
-                                if(result_data[j].a == obj[i].a && result_data[j].b == obj[i].b){
-                                    return false
-                                }
-                                if(j == result_data.length - 1){
-                                    if(result_data[j].a == obj[i].a && result_data[j].b == obj[i].b){
-                                        return false
-                                    }
-                                    else{
-                                        return true
-                                    }  
-                                }
-                            }
-                        }
-                        if(count == true){
-                            result_data.push(obj[i])
-                        }
+        //     function update(){
+        //         get_batt.forEach((battdata)=>{
 
-                    }
-                }
-            }
+        //             projectFirestore.collection('Batteries_beta').doc(battdata.id).update({
+        //                 history:[{
+        //                     location:'โกดัง PEC',
+        //                     job_id:battdata.data().jobId,
+        //                     status:'Charge'
+        //                 }]
+        //             })
+        //         })
+        //     }
+        // }
 
-            function result(){
-                console.log('obj : ',obj)
-                console.log('result : ',result_data)
-            }
-
-        }
-
-
-
-
-        $('#test1').on('click',function(){
-            console.log('test....')
-            test_fun1()
-        })
-
-        
-
-        async function test_fun2(){
-            var data = []
-            var row = 5
-            
-
-            await get_data1()
-            await get_data2()
-            await res()
-
-            function get_data1(){
-                for(let i = 0; i < row; i++){
-                    data.push([])
-                }
-            }
-            function get_data2(){
-                for(let i = 0; i < data.length; i++){
-                    if(i < 5){
-                        data[i].push(i+1)
-                    }
-                }
-            }
-            function res(){
-                console.log('res : ',data)
-                
-            }
-        }
-
-
-
-
-        $('#test2').on('click',function(){
-            console.log('test....')
-            test_fun2()
-        })
 
     },
     data() {

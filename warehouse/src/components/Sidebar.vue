@@ -33,6 +33,10 @@
                         <a class="nav-link text-light font-weight-bold" href="/BatteryModel">Battery Model</a>
                     </li>
                     <li id="" class="nav-item    py-2 pl-3" >
+                        <a class="nav-link text-light font-weight-bold" href="/BatteryStatus">Battery Status</a>
+                    </li>
+                    
+                    <li id="" class="nav-item    py-2 pl-3" >
                         <a class="nav-link text-light font-weight-bold" href="/BatteryMaintenanceNew">Maintenance(New)</a>
                     </li>
                     <li id="" class="nav-item    py-2 pl-3" >

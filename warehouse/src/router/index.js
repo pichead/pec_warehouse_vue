@@ -48,6 +48,7 @@ import BatteryMaintenanceNew from '../views/BatteryModel/maintenance_new.vue'
 import BatteryMaintenanceInStock from '../views/BatteryModel/maintenance_instock.vue'
 import BatteryMaintenanceSetup from '../views/BatteryModel/maintenance_setup.vue'
 import BatteryMaintenanceImport from '../views/BatteryModel/import_excel.vue'
+import BatteryStatusIndex from '../views/BatteryModel/status_batt.vue'
 
 // end battery
 
@@ -394,7 +395,12 @@ const routes = [
     component: BatteryMaintenanceSetup,
     beforeEnter: requireAuth
   },
-  
+  {
+    path: '/BatteryStatus',
+    name: 'BatteryStatusIndex',
+    component: BatteryStatusIndex,
+    beforeEnter: requireAuth
+  },
   {
     path: '/Battery/Specification',
     name: 'BatterySpec',

@@ -118,8 +118,7 @@
                                     <div class="row">
                                         <div class="col-4 my-2 col-form-label">Job No.</div>
                                         <div class="col-8 my-2">
-                                            <select id="" class="form-control">
-                                                <option value="">65/031</option>
+                                            <select id="job_newclaim" class="form-control">
                                             </select>
                                         </div>
                                         <div class="col-4 my-2 col-form-label">ใบเคลม</div>
@@ -194,13 +193,34 @@ import router from "@/router";
 export default {
     components: { Sidebar },
     mounted() {
-
+        var claim_batt
         preload()
+        render_new_claim_modal()
+        async function render_new_claim_modal(){
+            
+            const load_batt_claim = await projectFirestore.collection("Batteries_beta").where('status','==','รอเครม').get()
+
+            await get_all_claim_batt()
+
+            function get_all_claim_batt(){
+                load_batt_claim.forEach((batt_claim)=>{
+                    claim_batt.push({
+                        id:batt_claim.id,
+                        data:batt_claim.data()
+                    })
+                })
+            }
+
+
+            
+        }
 
         async function preload(){
             const load_claim = await projectFirestore.collection("Claim").get()
-
+            
             await render_claim()
+            
+            
 
             function render_claim(){
                 $('#data').html('')
@@ -277,6 +297,8 @@ export default {
                     running_number++
                 })
             }
+
+            
         }
 
         $('#data').on('click','.edit-btn',async function(){
