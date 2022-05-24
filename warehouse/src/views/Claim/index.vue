@@ -106,7 +106,7 @@
 
             <div class="modal" id="addModal" aria-hidden="true" style="display: none;">
                 
-                <div class="modal-dialog">
+                <form id="addform" class="modal-dialog">
 
                     <div class="modal-content">
 
@@ -135,19 +135,19 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="modalfooter" class="modal-footer">
-                            <button class="btn red-btn col-3" data-dismiss="modal">Close</button>
-                            <button class="btn blue-btn col-3" type="button">Confirm</button>
+                        <div id="modalfooter_create" class="modal-footer">
+                            <button class="btn red-btn col-3" data-dismiss="modal" type="button">Close</button>
+                            <button class="btn blue-btn col-3" type="submit">Confirm</button>
 
                         </div>
                     </div>
                     
-                </div>
+                </form>
             </div>
 
             <div class="modal" id="editModal" aria-hidden="true" style="display: none;">
                 
-                <div class="modal-dialog">
+                <form id="edit_form" class="modal-dialog">
 
                     <div class="modal-content">
 
@@ -169,18 +169,32 @@
                                         <div class="col-8 my-2">
                                             <select id="modal_claim_type" class="form-control"></select>
                                         </div>
+                                        <div class="col-4 my-2 col-form-label">สถานะ</div>
+                                        <div class="col-8 my-2">
+                                            <select id="modal_status" class="form-control" required>
+                                                <option value="" disabled selected>เลือกสถานะ</option>
+                                                <option value="อัปโหลดข้อมูล">อัปโหลดข้อมูล</option>
+                                                <option value="Mail to C&D">Mail to C&D</option>
+                                                <option value="Approved">Approved</option>
+                                                <option value="เสร็จสมบูรณ์">เสร็จสมบูรณ์</option>
+                                                <option value="ยกเลิก">ยกเลิก</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-4 my-2 col-form-label">หลักฐานยืนยัน</div>
+                                        <div class="col-8 my-2">
+                                            <input id="modal_valid_file" class="" type="file" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div id="modalfooter" class="modal-footer">
-                            <button class="btn red-btn col-3" data-dismiss="modal">Close</button>
-                            <button class="btn blue-btn col-3" type="button">Confirm</button>
+                        <div id="modalfooter_edit" class="modal-footer">
+                            
 
                         </div>
                     </div>
                     
-                </div>
+                </form>
             </div>
         </div>
         </div>
@@ -193,14 +207,37 @@ import router from "@/router";
 export default {
     components: { Sidebar },
     mounted() {
-        var claim_batt
+        const timestamp = Math.round(new Date().getTime() / 1000);
+        var claim_batt = []
+        var claim_job = []
+        var uniq_claim_job = []
+        var job = []
+        var login_user
+        
+        projectAuth.onAuthStateChanged((user) => {
+            projectFirestore.collection("Users").get().then((Users) => {
+                Users.forEach((currentuser)=>{
+                    if(currentuser.data().email == user.email){
+                        login_user = currentuser.data().name
+                    }
+                })
+            })
+            
+        });
+
         preload()
         render_new_claim_modal()
+
         async function render_new_claim_modal(){
+
             
             const load_batt_claim = await projectFirestore.collection("Batteries_beta").where('status','==','รอเครม').get()
-
+            const load_job = await projectFirestore.collection("Projects").where('visible','==',true).get()
             await get_all_claim_batt()
+            await get_all_claim_job()
+            await get_uniq_job_claim()
+            await count_batt_in_job()
+            await render_modal_job()
 
             function get_all_claim_batt(){
                 load_batt_claim.forEach((batt_claim)=>{
@@ -209,10 +246,52 @@ export default {
                         data:batt_claim.data()
                     })
                 })
+                load_job.forEach((load_job_data)=>{
+                    job.push({
+                        id:load_job_data.id,
+                        data:load_job_data.data()
+                    })
+                })
+            }
+            
+            function get_all_claim_job(){
+                for(let i = 0; i < claim_batt.length; i++){
+                    claim_job.push(claim_batt[i].data.history[claim_batt[i].data.history.length -1].job_id)
+                }
             }
 
+            function get_uniq_job_claim(){
+                var unique = claim_job.filter(function(itm, i, a) {
+                    return i == claim_job.indexOf(itm);
+                });
+                for(let i = 0; i < unique.length; i++){
+                    uniq_claim_job.push({
+                        id:unique[i],
+                        count:0
+                    })
+                }
+            }
 
-            
+            function count_batt_in_job(){
+                for(let i = 0; i < claim_batt.length; i++){
+                    for(let j = 0; j < uniq_claim_job.length; j++){
+                        if(uniq_claim_job[j].id == claim_batt[i].data.history[claim_batt[i].data.history.length - 1].job_id){
+                            uniq_claim_job[j].count = uniq_claim_job[j].count + 1 
+                        }
+                    }
+                }
+            }
+
+            function render_modal_job(){
+                $('#job_newclaim').html('<option value="" disabled selected>เลือก Job No.</option>')
+                for( let i = 0; i < uniq_claim_job.length; i++){
+                    const get_job_claim = job.find(x => x.id === uniq_claim_job[i].id);
+                    $('#job_newclaim').append(
+                        '<option value="'+get_job_claim.id+'">Job No. '+get_job_claim.data.JobNoFirst+'/'+get_job_claim.data.JobNoSecond+' : Qty '+uniq_claim_job[i].count+'</option>'
+                    )
+                }
+            }
+
         }
 
         async function preload(){
@@ -279,7 +358,7 @@ export default {
                                 '<div  class="col-form-label">'+claim_type+'</div>'+
                             '</td>'+
                             '<td class="text-center">'+
-                                '<div class="col-form-label">'+claim.data().status+'</div>'+
+                                '<div class="col-form-label">'+claim.data().status[claim.data().status.length - 1].status+'</div>'+
                             '</td>'+
                             '<td class="text-center">'+
                                 '<div class="row">'+
@@ -305,7 +384,10 @@ export default {
             const edit_id = $(this).data('docid')
             $('#modal_mail').html('')
             $('#modal_approved').html('')
-
+            $('#modalfooter_edit').html(
+                '<button class="btn red-btn col-3" data-dismiss="modal" type="button">Close</button>'+
+                '<button id="edit_save_btn" class="btn blue-btn col-3" type="submit" value="'+edit_id+'">Confirm</button>'
+            )
             const model_claim = await projectFirestore.collection("Claim").doc(edit_id).get()
             
             
@@ -314,10 +396,10 @@ export default {
             const modal_claim_type = get_modal_claim_type()
             function get_modal_mail(){
                 if(model_claim.data().mail_date == ''){
-                    return '<input id="modal_mail" type="date" class="form-control" value="" />'
+                    return '<input id="modal_mail_date" type="date" class="form-control" />'
                 }
                 else{
-                    return '<input id="modal_mail" type="date" class="form-control" value="'+model_claim.data().mail_date+'" />'
+                    return '<input id="modal_mail_date" type="date" class="form-control" value="'+model_claim.data().mail_date+'" />'
                 }
             }
             function get_modal_approved(){
@@ -366,16 +448,175 @@ export default {
                 $('#modal_mail').html(modal_mail)
                 $('#modal_approved').html(modal_approved)
                 $('#modal_claim_type').html(modal_claim_type)
-
-
             }
-
-
         })
 
         $('#data').on('click','.view_btn',function(){
             const claim_view_id = $(this).data('docid')
             router.push({ path: `/Claim/view/${claim_view_id}` });
+        })
+
+        var file = 0
+        $('#modal_valid_file').on("change", function(){
+            var files = !!this.files ? this.files : [];
+            file = files[0]
+        })
+
+
+        const add_form = document.querySelector('#addform');
+        add_form.addEventListener('submit', async function(e){
+            e.preventDefault();
+            const count_claim = await projectFirestore.collection("Claim").get()
+            const claim_no = await get_claim_no()
+            const claim_new_id = 'Wrrt'+claim_no+'/'+new Date().getFullYear();
+            const job_id_select = $('#job_newclaim').val()
+            const create_claim_status = 'อัปโหลดข้อมูล'
+            
+            var battery_id = []
+            var job_no = job.find(x => x.id === job_id_select)
+
+
+        
+
+            await get_batt_id_claim()
+            await create_save()
+
+            function get_claim_no(){
+                if(count_claim.size < 100){
+                    if(count_claim.size < 10){
+                        return '00'+  (count_claim.size + 1).toString()
+                    }
+                    else{
+                        return '0'+(count_claim.size + 1).toString()
+                    }
+                }
+                else{
+                    return (count_claim.size + 1).toString()
+                }
+            }
+
+            function get_batt_id_claim(){
+                for(let i = 0; i < claim_batt.length; i++){
+                    if(claim_batt[i].data.history[claim_batt[i].data.history.length -1].job_id == job_id_select){
+                        battery_id.push(claim_batt[i].id)
+                    }
+                }
+            }
+
+            function create_save(){
+                projectFirestore.collection('Claim').add({
+                    ClaimNo:claim_new_id,
+                    JobNo:job_no.data.JobNoFirst+'/'+job_no.data.JobNoSecond,
+                    job_id:job_id_select,
+                    approve:false,
+                    claim_type:'',
+                    mail_date:'',
+                    status:[{status:create_claim_status,timestamp:timestamp,create_user:login_user}],
+                    create_date:timestamp,
+                    batt_claim:battery_id,
+                    claim_file:[],
+                    report_file:[],
+                    valid_file:[]
+                }).then(()=>{
+                    location.reload()
+                })
+            }
+
+        })
+
+        const edit_form = document.querySelector('#edit_form');
+        edit_form.addEventListener('submit', async function(e){
+            e.preventDefault();
+            const edit_id_save = $('#edit_save_btn').val()
+            const edit_mail_date = await get_mail_date()
+            const edit_approve_save = await get_approve_model()
+            const edit_claim_type_save = await get_claim_type() 
+            const edit_status_save = $('#modal_status').val()
+            const get_edit_claim_id = await projectFirestore.collection("Claim").doc(edit_id_save).get()
+            const new_status_update = await get_edit_new_status()
+            var valid_file = await filesave()
+            const new_valid_update = await new_valid_file()
+            async function filesave(){
+                if(file == 0){
+                    return 'nofile'
+                }
+                else{
+                    var filename =  timestamp + '_' + file.name.replace(/\s/g, '_')
+                    var fileref = storageRef.child(`Files//${filename}`);
+                    const snapshot = await fileref.put(file);
+                    const y = await snapshot.ref.getDownloadURL();
+                    console.log('my main image',y);
+                    return {name: filename, src :  y};
+                }
+                
+            }
+
+            function get_mail_date(){
+                if($('#modal_mail_date').val() == ''){
+                    return ''
+                }
+                else{
+                    return $('#modal_mail_date').val()
+                }
+            }
+
+            function get_approve_model(){
+                if( $('#modal_approved').val() == 'false'){
+                    return false
+                }
+                else{
+                    return true
+                }
+            }
+
+            function get_claim_type(){
+                if($('#modal_claim_type').val() == 'false'){
+                    return ''
+                }
+                else{
+                    return $('#modal_claim_type').val()
+                }
+            }
+
+            function get_edit_new_status(){
+                var new_status = get_edit_claim_id.data().status
+                new_status.push({
+                    status:edit_status_save,
+                    timestamp:timestamp,
+                    create_user:login_user
+                })
+                return new_status
+            }
+
+            function new_valid_file(){
+                var new_valid = get_edit_claim_id.data().valid_file
+                if(valid_file == 'nofile'){
+                    return valid_file
+                }
+                else{
+                    return new_valid.push(valid_file)
+                }
+                
+            }
+
+            await edit_save()
+
+            function edit_save(){
+                projectFirestore.collection('Claim').doc(edit_id_save).update({
+                    mail_date:edit_mail_date,
+                    approve:edit_approve_save,
+                    claim_type:edit_claim_type_save,
+                    status:new_status_update,
+                    valid_file:new_valid_update
+                }).then(()=>{
+                    location.reload()
+                })
+            }
+
+            console.log(edit_id_save)
+            console.log(edit_approve_save)
+
+
         })
 
     }
