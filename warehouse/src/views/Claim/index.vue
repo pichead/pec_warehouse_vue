@@ -201,12 +201,13 @@
 </template>
 
 <script>
-import { projectFirestore, projectAuth } from "../../firebase/config";
+import { projectFirestore,storage, projectAuth } from "../../firebase/config";
 import Sidebar from "../../components/Sidebar.vue";
 import router from "@/router";
 export default {
     components: { Sidebar },
     mounted() {
+        const storageRef = storage.ref();
         const timestamp = Math.round(new Date().getTime() / 1000);
         var claim_batt = []
         var claim_job = []
@@ -308,7 +309,6 @@ export default {
                     var mail = getmail()
                     var Approved = getapproved()
                     var claim_type = getclaim()
-
                     function getmail(){
                         if(claim.data().mail_date == ''){
                             return '-'
@@ -332,7 +332,14 @@ export default {
                             return '-'
                         }
                         else{
-                            return claim.data().claim_type
+                            
+                            if(claim.data().claim_type == 'Batteries'){
+                                return claim.data().batt_claim.length + ' Batteries'
+                            }
+                            else{
+                                return claim.data().claim_type
+                            }
+                            
                         }
                     }
 
@@ -588,13 +595,16 @@ export default {
                 return new_status
             }
 
-            function new_valid_file(){
+            function new_valid_file(){                
+
                 var new_valid = get_edit_claim_id.data().valid_file
+
                 if(valid_file == 'nofile'){
-                    return valid_file
+                    return new_valid
                 }
                 else{
-                    return new_valid.push(valid_file)
+                    new_valid.push(valid_file)
+                    return new_valid
                 }
                 
             }
@@ -611,10 +621,9 @@ export default {
                 }).then(()=>{
                     location.reload()
                 })
+
             }
 
-            console.log(edit_id_save)
-            console.log(edit_approve_save)
 
 
         })
