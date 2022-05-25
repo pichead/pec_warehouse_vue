@@ -252,14 +252,14 @@ export default {
                                             $('#con_no_'+uniq_condition_arr[j].no).append(
                                                 '<div id="con_'+uniq_condition_arr[j].no+'_job'+ordersheet.id+'" class="row my-3">'+
                                                     '<div class="col-5 border-right">'+
-                                                            '<input type="checkbox" style="width:15px;height:15px;">'+
+                                                            '<input class="maincheck" data-con="'+uniq_condition_arr[j].no+'" type="checkbox" style="width:15px;height:15px;">'+
                                                             '<span class="pl-4 font-weight-bold">Job No : '+ordersheet.data().JobNoFirst+'/'+ordersheet.data().JobNoSecond+'</span>'+
                                                             '<div class="font-weight-bold">Project : '+ordersheet.data().ProjectName+'</div>'+
                                                     '</div>'+
                                                     '<div class="col-7">'+
                                                         '<div id="sheet_con_'+uniq_condition_arr[j].no+'_job'+ordersheet.id+'" class="row">'+
                                                             '<div class="col-12">'+
-                                                                '<input type="checkbox" style="width:15px;height:15px;">'+
+                                                                '<input id="child_'+uniq_condition_arr[j].no+'" class="childcheck" disabled type="checkbox" style="width:15px;height:15px;">'+
                                                                 '<span class="pl-4 font-weight-bold">OrderSheet : '+ordersheet.data().JobNoFirst+'/'+ordersheet.data().JobNoSecond+'/'+ordersheet.data().orderSheet[i].no+'</span>'+
                                                                 '<span class="pl-4"><i class="bi bi-question-circle batt-modal" type="button" data-toggle="modal" data-target="#batt_modal" data-id="'+ordersheet.id+'" data-ordersheet="'+ordersheet.data().orderSheet[i].no+'"></i></span>'+
                                                             '</div>'+
@@ -314,11 +314,18 @@ export default {
                     }
                 }
 
-                
-
-                
             }
 
+        })
+
+
+        $('#data').on('click','.maincheck',async function(){
+            $('.maincheck').prop('checked', false)
+            $(this).prop('checked', true)
+            const check_con = $(this).data('con')
+            $(".childcheck").prop('checked', false)
+            $(".childcheck").prop('disabled', true)
+            $('#child_'+check_con).prop('disabled', false)
         })
 
     }

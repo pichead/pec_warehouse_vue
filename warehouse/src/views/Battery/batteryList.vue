@@ -242,7 +242,8 @@ export default {
                         statusArray.push({id:statusid,timestamp:timestamp,comments:""})
                         save(statusArray)
                     })
-                    
+
+                     
                     function save(statusArray){
                         projectFirestore.collection('Batteries').doc(item).update({
                             statusItems:statusArray
@@ -251,23 +252,20 @@ export default {
                             if(i == itemCount){
                                 location.reload();
                             }
-                            
                         })
                     }
-                    
+
+
                 });
-
             }
-
-
         })
 
 
     },
     data() {
         return {
-        option: 1,
-        totalItem: 1,
+            option: 1,
+            totalItem: 1,
         };
     },
     methods: {
