@@ -28,32 +28,47 @@
             <div class="border p-5 my-3 font-weight-bold">
                 <div class="h3 border-bottom pb-3 my-2">Infomation</div>
                 <br>
-                <div class="row">
+                <form id="form-data" class="row">
                     <div class="col-6">
                         <div class="row">
-                            <div class="col-4 my-2">Claim No. : </div>
-                            <div id="claim_no" class="col-8 my-2"></div>
-                            <div class="col-4 my-2">Date : </div>
-                            <div id="create_date" class="col-8 my-2"></div>
-                            <div class="col-4 my-2">Job No : </div>
-                            <div id="job_no" class="col-8 my-2"></div>
-                            <div class="col-4 my-2">Invoice No. : </div>
-                            <div id="invoice" class="col-8 my-2"></div>
+                            <div class="col-4 my-2 col-form-label">Claim No. : </div>
+                            <div id="claim_no" class="col-8 my-2  col-form-label"></div>
+                            <div class="col-4 my-2  col-form-label">Date : </div>
+                            <div id="create_date" class="col-8 my-2  col-form-label"></div>
+                            <div class="col-4 my-2  col-form-label">Job No : </div>
+                            <div id="job_no" class="col-8 my-2  col-form-label"></div>
+                            <div class="col-4 my-2  col-form-label">Invoice No. : </div>
+                            <div class="col-8 my-2">
+                                <input id="invoice" type="text" class="form-control col-8" required>
+                            </div>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="row">
-                            <div class="col-4 my-2">User Name : </div>
-                            <div id="user_name" class="col-8 my-2"></div>
-                            <div class="col-4 my-2">Model : </div>
-                            <div id="model" class="col-8 my-2"></div>
-                            <div class="col-4 my-2">Qty. : </div>
-                            <div id="qty" class="col-8 my-2"></div>
-                            <div class="col-4 my-2">MFG Code : </div>
-                            <div id="mfg_code" class="col-8 my-2"></div>
+                            <div class="col-4 my-2 col-form-label">User Name : </div>
+                            <div  class="col-8 my-2">
+                                <input id="user_name" type="text" class="form-control col-8" required>
+                            </div>
+                            <div class="col-4 my-2  col-form-label">Model : </div>
+                            <div id="model" class="col-8 my-2  col-form-label"></div>
+                            <div class="col-4 my-2  col-form-label">Qty. : </div>
+                            <div id="qty" class="col-8 my-2  col-form-label"></div>
+                            <div class="col-4 my-2  col-form-label">MFG Code : </div>
+                            <div  class="col-8 my-2">
+                                <input id="mfg_code" type="text" class="form-control col-8" required>
+                            </div>
                         </div>
                     </div>
-                </div>
+                    
+                    <div class="col-12 mt-4">
+                        <div class="d-flex flex-row-reverse row-hl">
+                            <div class="col-2 item-hl">
+                                <button id="save" class="blue-btn btn col-12" type="submit">Save</button>
+                            </div>
+                        </div>
+                    
+                    </div>
+                </form>
             </div>
             <div class="border p-5 my-3 font-weight-bold">
                 <div class="h3 border-bottom pb-3 my-2">File</div>
@@ -144,12 +159,21 @@ export default {
             $('#user_name').html(claim.data().user_name)
             $('#model').html(claim.data().model)
             $('#qty').html(claim.data().batt_claim.length)
-            $('#mfg_code').html(batt.data().mfg_code)
             $('#model').html(batt.data().series)
+            $('#invoice').val(claim.data().invoice)
+            $('#user_name').val(claim.data().user_name)
+            $('#mfg_code').val(claim.data().mfg_code)
 
             
+            $('#file_claim').html(
+                '<span>'+claim.data().claim_file[0].name+'</span><span class="ml-5"><a target="_blank" href="'+claim.data().claim_file[0].src+'"><i class="bi bi-download text-dark" style="font-size:25px" ></i></a></span>'
+            )
+            $('#file_report').html(
+                '<span>'+claim.data().report_file[0].name+'</span><span class="ml-5"><a target="_blank" href="'+claim.data().report_file[0].src+'"><i class="bi bi-download text-dark" style="font-size:25px" ></i></a></span>'
+            )
 
-            // console.log(claim.data().status.length -1)
+
+
             $('#status_timeline').html('')
             for(let i = claim.data().status.length-1 ;i > -1 ; i--){
                 
@@ -207,6 +231,28 @@ export default {
 
         }
 
+        const add_form = document.querySelector('#form-data');
+        add_form.addEventListener('submit', async function(e){
+            e.preventDefault();
+            const invoice = $('#invoice').val()
+            const user_name = $('#user_name').val()
+            const mfg_code = $('#mfg_code').val()
+            console.log(invoice)
+            console.log(user_name)
+            console.log(mfg_code)
+
+            projectFirestore.collection('Claim').doc(dataid).update({
+                invoice:invoice,
+                user_name:user_name,
+                mfg_code:mfg_code
+            }).then(()=>{
+                location.reload()
+            })
+        })
+
+
     }
+
+
 }
 </script>

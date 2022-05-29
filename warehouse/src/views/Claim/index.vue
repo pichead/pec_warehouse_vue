@@ -118,19 +118,21 @@
                                     <div class="row">
                                         <div class="col-4 my-2 col-form-label">Job No.</div>
                                         <div class="col-8 my-2">
-                                            <select id="job_newclaim" class="form-control">
+                                            <select id="job_newclaim" class="form-control" required>
                                             </select>
                                         </div>
                                         <div class="col-4 my-2 col-form-label">ใบเคลม</div>
                                         <div class="col-8 my-2">
-                                            <input type="file" class="d-none">
-                                            <button class="col-8 btn btn-success">เลือกไฟล์ (.xls)</button>
+                                            <input id="claim_file" type="file" name="claim_file" style="display:none" required>
+                                            <button id="claim_file_btn" class="col-8 btn btn-success" type="button">เลือกไฟล์</button>
                                         </div>
                                         <div class="col-4 my-2 col-form-label">รายงานปัญหา</div>
                                         <div class="col-8 my-2">
-                                            <input type="file" class="d-none">
-                                            <button class="col-8 btn btn-success">เลือกไฟล์</button>
+                                            <input id="report_file" type="file" name="report_file" style="display:none" required>
+                                            <button id="report_file_btn" class="col-8 btn btn-success" type="button">เลือกไฟล์</button>
+                                            
                                         </div>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -171,11 +173,12 @@
                                         </div>
                                         <div class="col-4 my-2 col-form-label">สถานะ</div>
                                         <div class="col-8 my-2">
+                                            
                                             <select id="modal_status" class="form-control" required>
                                                 <option value="" disabled selected>เลือกสถานะ</option>
                                                 <option value="อัปโหลดข้อมูล">อัปโหลดข้อมูล</option>
                                                 <option value="Mail to C&D">Mail to C&D</option>
-                                                <option value="Approved">Approved</option>
+                                                <option value="Approved">Approved by C&D</option>
                                                 <option value="เสร็จสมบูรณ์">เสร็จสมบูรณ์</option>
                                                 <option value="ยกเลิก">ยกเลิก</option>
                                             </select>
@@ -470,9 +473,18 @@ export default {
         })
 
 
+        $('#claim_file_btn').on('click',()=>{
+            $('#claim_file').click()
+        })
+        $('#report_file_btn').on('click',()=>{
+            $('#report_file').click()
+        })
+
+
         const add_form = document.querySelector('#addform');
         add_form.addEventListener('submit', async function(e){
             e.preventDefault();
+            console.log('Create New')
             const count_claim = await projectFirestore.collection("Claim").get()
             const claim_no = await get_claim_no()
             const claim_new_id = 'Wrrt'+claim_no+'/'+new Date().getFullYear();
@@ -482,7 +494,26 @@ export default {
             var battery_id = []
             var job_no = job.find(x => x.id === job_id_select)
 
+            const claim_file = await get_claim_file()
+            const report_file = await get_report_file()
 
+            async function get_claim_file(){
+
+                const get_claim_file =  $('#claim_file')[0].files[0]
+                var claim_filename =  timestamp + '_' + get_claim_file.name.replace(/\s/g, '_')
+                var claim_fileref = storageRef.child(`Files//${claim_filename}`);
+                const claim_file_snapshot = await claim_fileref.put(get_claim_file);
+                const claim_file_src = await claim_file_snapshot.ref.getDownloadURL();
+                return {name: claim_filename, src :  claim_file_src};
+            }
+            async function get_report_file(){
+                const get_report_file =  $('#report_file')[0].files[0]
+                var report_filename =  timestamp + '_' + get_report_file.name.replace(/\s/g, '_')
+                var report_fileref = storageRef.child(`Files//${report_filename}`);
+                const report_file_snapshot = await report_fileref.put(get_claim_file);
+                const report_file_src = await report_file_snapshot.ref.getDownloadURL();
+                return {name: report_filename, src :  report_file_src};
+            }
         
 
             await get_batt_id_claim()
@@ -521,9 +552,12 @@ export default {
                     status:[{status:create_claim_status,timestamp:timestamp,create_user:login_user}],
                     create_date:timestamp,
                     batt_claim:battery_id,
-                    claim_file:[],
-                    report_file:[],
-                    valid_file:[]
+                    claim_file:[claim_file],
+                    report_file:[report_file],
+                    valid_file:[],
+                    invoice:'',
+                    user_name:'',
+                    mfg_code:''
                 }).then(()=>{
                     location.reload()
                 })

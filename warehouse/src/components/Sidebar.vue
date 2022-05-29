@@ -74,7 +74,7 @@
                 </ul>
             </li>
             <li id="" class="nav-item   py-2 pl-3" >
-                <a class="nav-link text-light font-weight-bold" href="/claim">Claim</a>
+                <a class="nav-link text-light font-weight-bold" href="/claim">Claim <i id="claim_alarm" class=" ml-1 d-none bi bi-exclamation-circle-fill text-danger" ></i></a>
             </li>
             <!-- <li id="" class="nav-item   py-2 pl-3"  >
                 <a class="nav-link text-light font-weight-bold" href="/Battery/batterylist">Stock</a>
@@ -167,6 +167,41 @@ export default {
             
         }
         ordersheet_alarm()
+
+
+
+        claim_alarm()
+
+        async function claim_alarm(){
+
+            const claim_alarm  = await projectFirestore.collection("Claim").get()
+            var count_claim = 0
+            await count_claim_alarm()
+
+            await render_claim_alarm()
+            
+
+            function count_claim_alarm(){
+
+                claim_alarm.forEach((claim)=>{
+                    if(claim.data().status[claim.data().status.length - 1].status != 'เสร็จสมบูรณ์'){
+                        count_claim++
+                    }
+                })
+            }   
+            
+
+            function render_claim_alarm(){
+                if( count_claim > 0){
+                    console.log(count_claim)
+                    $('#claim_alarm').removeClass('d-none')
+                }
+                else{
+                    $('#claim_alarm').addClass('d-none')
+                }
+            }
+            
+        }
         
     },
     setup(){
