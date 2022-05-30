@@ -298,6 +298,8 @@ export default {
 
         }
 
+        
+
         async function preload(){
             const load_claim = await projectFirestore.collection("Claim").get()
             
@@ -320,7 +322,29 @@ export default {
                             return claim.data().mail_date
                         }
                     }
+                    const toTimestamp=(strDate)=>{
+                        var datum = Date.parse(strDate);
+                        return datum/1000;
+                    }
 
+                    const mail_alert = get_mail_alert()
+                    function get_mail_alert(){
+                        if(toTimestamp(claim.data().mail_date) + 604800 < timestamp && claim.data().approve == false){
+                            console.log(toTimestamp(claim.data().mail_date) + 604800)
+                            console.log(timestamp)
+                            return '<i class="ml-2 text-danger bi bi-exclamation-circle" data-toggle="tooltip" data-placement="top" title="ขณะนี้รอการ Approve มากกว่า 7 วันแล้ว &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*กรุณาติดตามสถานะการเคลมนี้" data-original-title=""></i>'
+                        }   
+                        else{
+                            console.log('no')
+                            console.log(toTimestamp(claim.data().mail_date) + 604800)
+                            console.log(timestamp)
+                            return '<div></dliv>'
+
+                        }
+                    }
+                    $('[data-toggle="tooltip"]').tooltip();
+
+                    
                     function getapproved(){
                         if(claim.data().approve == false){
                             return '-'
@@ -359,7 +383,7 @@ export default {
                                 '<div class="col-form-label">'+claim.data().JobNo+'</div>'+
                             '</td>'+
                             '<td class="text-center">'+
-                                '<div class="col-form-label">'+mail+'</div>'+
+                                '<div class="col-form-label">'+mail+mail_alert+'</div>'+
                             '</td>'+
                             '<td class="text-center">'+
                                 '<div class="col-form-label">'+Approved+'</div>'+
