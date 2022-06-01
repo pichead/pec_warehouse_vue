@@ -1,10 +1,20 @@
+<style>
+    #table_main_filter {
+        display:none;
+    }
+</style>
 <template>
+
+
 <Sidebar />
     <div id="content" style="margin-left: 250px">
         <div class="container">
             <div class="h3 my-5 font-weight-bold  font-weight-bold">Battery Status</div>
 
             <div class="border rounded p-4 my-3">
+                <div class="dataTables_filter">
+                    <label>Search:<input type="text" id="myInputTextField" /></label>
+                </div>
                 <div class="row">
                     <div class="col-6">
                         <div class="row">
@@ -118,7 +128,7 @@ export default {
         var model
         var job = []
         var status = []
-
+        var table
         preload()
 
         async function preload(){
@@ -186,13 +196,22 @@ export default {
             }
 
             function data_table(){
-                $('#table_main').DataTable({
-                    "searching": false,
+                table = $('#table_main').DataTable({
+                    "searching": true,
                     "ordering": false,
                     "pageLength": 10,
                     "info":false,
                     "lengthChange": false
                 })
+                var data = $('#table_main').DataTable()
+                $('#myInputTextField').keyup(function(){
+
+                    // table.search($(this).val()).draw() ;
+                    table.columns( 3 ).search( this.value ).draw();
+        
+                })
+                
+
             }
 
 
@@ -275,7 +294,8 @@ export default {
 
         })
 
-
+        
+        
 
     }
 }
