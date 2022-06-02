@@ -30,24 +30,31 @@ export default {
     components: { Sidebar },
     mounted() {
 
-        // test()
+        test()
+        const timestamp = Math.round(new Date().getTime() / 1000);
+        async function test(){
+            const get_batt = await projectFirestore.collection("Batteries_beta").get()
 
-        // async function test(){
-        //     await update()
+            await update()
 
-        //     function update(){
-        //         get_batt.forEach((battdata)=>{
+            function update(){
+                get_batt.forEach((battdata)=>{
 
-        //             projectFirestore.collection('Batteries_beta').doc(battdata.id).update({
-        //                 history:[{
-        //                     location:'โกดัง PEC',
-        //                     job_id:battdata.data().jobId,
-        //                     status:'Charge'
-        //                 }]
-        //             })
-        //         })
-        //     }
-        // }
+                    projectFirestore.collection('Batteries_beta').doc(battdata.id).update({
+                        location:'Warehouse',
+                        location_id:'U1CHpc83zGdhZhudwQ36',
+                        status:'Preventive Maintenance',
+                        history:[{
+                            building:'โกดัง PEC',
+                            room:'Zone A',
+                            system:"",
+                            status:'Preventive Maintenance',
+                            timestamp:timestamp
+                        }]
+                    })
+                })
+            }
+        }
 
 
     },

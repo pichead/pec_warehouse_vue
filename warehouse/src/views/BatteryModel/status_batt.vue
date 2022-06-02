@@ -12,17 +12,21 @@
             <div class="h3 my-5 font-weight-bold  font-weight-bold">Battery Status</div>
 
             <div class="border rounded p-4 my-3">
-                <div class="dataTables_filter">
-                    <label>Search:<input type="text" id="myInputTextField" /></label>
-                </div>
                 <div class="row">
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-4 my-2 pl-5 col-form-label  font-weight-bold">Barcode</div>
+                            <div class="col-8 my-2">
+                                <input id="search_barcode" type="text"  class="form-control" placeholder="Search...."/>
+                            </div>
+                            
+                        </div>
+                    </div>
                     <div class="col-6">
                         <div class="row">
                             <div class="col-4 my-2 pl-5 col-form-label  font-weight-bold">Job No</div>
                             <div class="col-8 my-2">
-                                <select id="" class="form-control">
-                                    <option value=""></option>
-                                </select>
+                                <input id="search_job" type="text"  class="form-control" placeholder="Search...."/>
                             </div>
                             
                         </div>
@@ -31,14 +35,35 @@
                         <div class="row">
                             <div class="col-4 my-2 pl-5 col-form-label  font-weight-bold">Location</div>
                             <div class="col-8 my-2">
-                                <select id="" class="form-control">
-                                    <option value=""></option>
+                                <select id="location" class="form-control">
+                                    <option value="">ทั้งหมด</option>
+                                    <option value="โกดัง PEC">โกดัง PEC</option>
+                                    <option value="โกดัง พระราม2">โกดัง พระราม2</option>
                                 </select>
                             </div>
-                            
                         </div>
                     </div>
-                    <div class="col-12 mt-3">
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-4 my-2 pl-5 col-form-label  font-weight-bold">Model</div>
+                            <div class="col-8 my-2">
+                                <select id="model" class="form-control">
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-4 my-2 pl-5 col-form-label  font-weight-bold">Status</div>
+                            <div class="col-8 my-2">
+                                <select id="status" class="form-control">
+                                    
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 mt-3">
                         <div class="d-flex flex-row-reverse row-hl">
 
                             <div class="pl-4 pr-0 item-hl">
@@ -55,6 +80,7 @@
                     <th>No</th>
                     <th>Job No</th>
                     <th>Location</th>
+                    <th>Zone</th>
                     <th>Barcode</th>
                     <th>Model</th>
                     <th>Status</th>
@@ -78,12 +104,12 @@
                     <div class="modal-body">
                         <div class="col-11 mx-auto">
                             <div class="row">
-                                <div class="col-4 my-2 col-form-label font-weight-bold">Job No</div>
+                                <!-- <div class="col-4 my-2 col-form-label font-weight-bold">Job No</div>
                                 <div class="col-8 my-2">
                                     <select id="modal-job" class="form-control" required>
 
                                     </select>
-                                </div>
+                                </div> -->
 
                                 <div class="col-4 my-2 col-form-label font-weight-bold">Location</div>
                                 <div class="col-8 my-2">
@@ -91,7 +117,14 @@
                                         <option value="" disabled selected >เลือกสถานที่</option>
                                         <option value="โกดัง PEC">โกดัง PEC</option>
                                         <option value="โกดัง พระราม2">โกดัง พระราม2</option>
-                                        <option value="Site">Site</option>
+                                    </select>
+                                </div>
+                                <div class="col-4 my-2 col-form-label font-weight-bold">Zone</div>
+                                <div class="col-8 my-2">
+                                    <select id="modal-location" class="form-control" required>
+                                        <option value="" disabled selected >เลือก Zone</option>
+                                        <option value="Zone A">Zone A</option>
+                                        <option value="Zone B">Zone B</option>
                                     </select>
                                 </div>
 
@@ -123,9 +156,9 @@ import router from "@/router";
 export default {
     components: { Sidebar },
     mounted() {
-        
+        const timestamp = Math.round(new Date().getTime() / 1000);
         var batt = []
-        var model
+        var model = []
         var job = []
         var status = []
         var table
@@ -133,10 +166,10 @@ export default {
 
         async function preload(){
 
-            const get_batt = await projectFirestore.collection("Batteries_beta").get()
+            const get_batt = await projectFirestore.collection("Batteries_beta").where('location_id','==','U1CHpc83zGdhZhudwQ36').get()
             const get_job = await projectFirestore.collection("Projects").where('visible','==',true).get()
-            const get_status = await projectFirestore.collection("StatusItems").get()
-
+            const get_status = await projectFirestore.collection("StatusItemsWarehouse").orderBy("number","asc").get()
+            const get_batt_model = await projectFirestore.collection("BatterySpecifications").where('visible','==',true).orderBy("series","asc").get()
 
 
             await get_all_data()
@@ -156,6 +189,11 @@ export default {
                 get_status.forEach((statusdata)=>{
                     status.push({id:statusdata.id,data:statusdata.data()})
                 })
+
+                get_batt_model.forEach((batt_model_data)=>{
+                    model.push({id:batt_model_data.id,data:batt_model_data.data()})
+                })
+
             }
 
             
@@ -165,14 +203,14 @@ export default {
 
 
         async function render(){
-            
-            console.log('batt : ',batt)
-            console.log('job : ',job)
+
 
             await render_data()
                 
             function render_data(){
                 $('#data').html('')
+                $('#model').html('<option value="" >ทั้งหมด</option>')
+                $('#status').html('<option value="" >ทั้งหมด</option>')
                 var running_number = 1
                 for(let i = 0; i < batt.length; i++){
                     const job_data = job.find(x => x.id === batt[i].data.jobId);
@@ -180,7 +218,8 @@ export default {
                         '<tr>'+
                             '<td class="text-center">'+running_number+'</td>'+
                             '<td class="text-center">'+job_data.data.JobNoFirst+'/'+job_data.data.JobNoSecond+'</td>'+
-                            '<td class="text-center">'+batt[i].data.history[batt[i].data.history.length - 1].location+'</td>'+
+                            '<td class="text-center">'+batt[i].data.history[batt[i].data.history.length - 1].building+'</td>'+
+                            '<td class="text-center">'+batt[i].data.history[batt[i].data.history.length - 1].room+'</td>'+
                             '<td class="text-center">'+batt[i].data.barcode+'</td>'+
                             '<td class="text-center">'+batt[i].data.series+'</td>'+
                             '<td class="text-center">'+batt[i].data.history[batt[i].data.history.length - 1].status+'</td>'+
@@ -193,6 +232,19 @@ export default {
                     }
 
                 }
+
+                for(let i = 0; i < model.length; i++ ){
+                    $('#model').append(
+                        '<option value="'+model[i].data.series+'">'+model[i].data.series+'</option>'
+                    )
+                }
+
+                for(let i = 0; i < status.length; i++){
+                    $('#status').append(
+                        '<option value="'+status[i].data.name+'">'+status[i].data.name+'</option>'
+                    )
+                }
+
             }
 
             function data_table(){
@@ -203,13 +255,7 @@ export default {
                     "info":false,
                     "lengthChange": false
                 })
-                var data = $('#table_main').DataTable()
-                $('#myInputTextField').keyup(function(){
-
-                    // table.search($(this).val()).draw() ;
-                    table.columns( 3 ).search( this.value ).draw();
-        
-                })
+                
                 
 
             }
@@ -271,9 +317,11 @@ export default {
                     var history_data = batt.find(x => x.id === batt_arr[i]).data.history;
 
                     history_data.push({
-                        job_id:save_job,
-                        location:save_location,
-                        status:save_status
+                        building:save_location,
+                        room:'Zone A',
+                        system:"",
+                        status:save_status,
+                        timestamp:timestamp
                     })
 
                     projectFirestore.collection('Batteries_beta').doc(batt_arr[i]).update({
@@ -293,9 +341,31 @@ export default {
 
 
         })
+        
+        
 
-        
-        
+        $('#search_job').keyup(function(){
+            table.columns( 1 ).search( this.value ).draw();
+
+        })
+
+        $('#location').change(function(){
+            table.columns( 2 ).search( this.value ).draw();
+        })
+
+        $('#search_barcode').keyup(function(){
+            table.columns( 4 ).search( this.value ).draw();
+
+        })
+
+        $('#model').change(function(){
+            table.columns( 5 ).search( this.value ).draw();
+        })
+
+        $('#status').change(function(){
+            table.columns( 6 ).search( this.value ).draw();
+        })
+
 
     }
 }

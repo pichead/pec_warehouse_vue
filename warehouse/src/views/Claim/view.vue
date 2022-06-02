@@ -164,13 +164,18 @@ export default {
             $('#user_name').val(claim.data().user_name)
             $('#mfg_code').val(claim.data().mfg_code)
 
+            console.log('claim.data() : ',claim.data())
+            if(claim.data().claim_file[0]){
+                $('#file_claim').html(
+                    '<span>'+claim.data().claim_file[0].name+'</span><span class="ml-5"><a target="_blank" href="'+claim.data().claim_file[0].src+'"><i class="bi bi-download text-dark" style="font-size:25px" ></i></a></span>'
+                )
+            }
+            if(claim.data().report_file[0]){
+                $('#file_report').html(
+                    '<span>'+claim.data().report_file[0].name+'</span><span class="ml-5"><a target="_blank" href="'+claim.data().report_file[0].src+'"><i class="bi bi-download text-dark" style="font-size:25px" ></i></a></span>'
+                )
+            }
             
-            $('#file_claim').html(
-                '<span>'+claim.data().claim_file[0].name+'</span><span class="ml-5"><a target="_blank" href="'+claim.data().claim_file[0].src+'"><i class="bi bi-download text-dark" style="font-size:25px" ></i></a></span>'
-            )
-            $('#file_report').html(
-                '<span>'+claim.data().report_file[0].name+'</span><span class="ml-5"><a target="_blank" href="'+claim.data().report_file[0].src+'"><i class="bi bi-download text-dark" style="font-size:25px" ></i></a></span>'
-            )
 
 
 
