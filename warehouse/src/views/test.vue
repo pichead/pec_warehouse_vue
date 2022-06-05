@@ -29,32 +29,39 @@ import axios from "axios";
 export default {
     components: { Sidebar },
     mounted() {
+        
+        test2()
 
-        test()
-        const timestamp = Math.round(new Date().getTime() / 1000);
-        async function test(){
-            const get_batt = await projectFirestore.collection("Batteries_beta").get()
-
-            await update()
-
-            function update(){
-                get_batt.forEach((battdata)=>{
-
-                    projectFirestore.collection('Batteries_beta').doc(battdata.id).update({
-                        location:'Warehouse',
-                        location_id:'U1CHpc83zGdhZhudwQ36',
-                        status:'Preventive Maintenance',
-                        history:[{
-                            building:'โกดัง PEC',
-                            room:'Zone A',
-                            system:"",
-                            status:'Preventive Maintenance',
-                            timestamp:timestamp
-                        }]
-                    })
-                })
-            }
+        function test2(){
+            var x = 10
+            console.log('data ',x,' mama')
         }
+
+        // test()
+        // const timestamp = Math.round(new Date().getTime() / 1000);
+        // async function test(){
+        //     const get_batt = await projectFirestore.collection("Batteries_beta").get()
+
+        //     await update()
+
+        //     function update(){
+        //         get_batt.forEach((battdata)=>{
+
+        //             projectFirestore.collection('Batteries_beta').doc(battdata.id).update({
+        //                 location:'Warehouse',
+        //                 location_id:'U1CHpc83zGdhZhudwQ36',
+        //                 status:'Preventive Maintenance',
+        //                 history:[{
+        //                     building:'โกดัง PEC',
+        //                     room:'Zone A',
+        //                     system:"",
+        //                     status:'Preventive Maintenance',
+        //                     timestamp:timestamp
+        //                 }]
+        //             })
+        //         })
+        //     }
+        // }
 
 
     },
