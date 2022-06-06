@@ -7,10 +7,10 @@
 <template>
     <Sidebar />
     <div id="content" style="margin-left: 250px">
-        <form>
+        <form id="addform">
             <div class="container">
                 <div class="h3 mt-3 font-weight-bold">ลงทะเบียน PEC PO</div>
-                <form id="addform" class="border mt-3 mb-2 p-3 bg-white">
+                <div  class="border mt-3 mb-2 p-3 bg-white">
                     <div class="row">
                         <div class="col-6">
                             <div class="form-group row">
@@ -26,7 +26,7 @@
                             <div class="form-group row">
                                 <label class="col-4 col-form-label font-weight-bold">Term of payment</label >
                                 <div class="col-4">
-                                    <input id="Tpayment" class="form-control" type="number" required/>
+                                    <input id="Tpayment" class="form-control" type="number" min="0" required/>
                                 </div>
                                 <div class="col-4 col-form-label">days</div>
                             </div>
@@ -68,7 +68,7 @@
 
 
                     </div>
-                </form>
+                </div>
 
                 <br>
                 <div id="data" class="overflow-auto border p-3" style="height: 350px;">
@@ -79,7 +79,7 @@
                 <br>
                 <div class="d-flex justify-content-end row-hl">
                     <button class="col-2 item-hl btn btn-secondary" type="button">Cancel</button>
-                    <button class="col-2 ml-3 item-hl btn btn-primary" type="submit">Save</button>
+                    <button id="save" class="col-2 ml-3 item-hl btn btn-primary" type="submit">Save</button>
                 </div>
 
                 <div class="modal" id="batt_modal" aria-hidden="true" style="display: none;">
@@ -117,7 +117,7 @@ import router from "@/router";
 export default {
     components: { Sidebar },
     mounted() {
-        
+        const timestamp = Math.round(new Date().getTime() / 1000);
         var project
         var con_origin = ""
         var con_warranty = ""
@@ -168,7 +168,13 @@ export default {
                 for(let i = 0; i < all_condition_arr.length; i++){
                     
                     if(uniq_condition_arr.length == 0){
-                        uniq_condition_arr.push(all_condition_arr[i])
+                        uniq_condition_arr.push({
+                                no:i,
+                                warranty:all_condition_arr[i].warranty,
+                                deliverydate:all_condition_arr[i].deliverydate,
+                                origin:all_condition_arr[i].origin
+                            }
+                        )
                     }
                     else{
                         const count = check()
@@ -205,8 +211,7 @@ export default {
 
 
             function render_con_box(){
-                console.log('all_condition_arr : ',all_condition_arr)
-                console.log('uniq_condition_arr : ',uniq_condition_arr)
+
                 for(let i = 0; i < uniq_condition_arr.length; i++){
                     var cdate = new Date(uniq_condition_arr[i].deliverydate);
                     var cday = cdate.getDate();
@@ -238,6 +243,7 @@ export default {
             }
 
             function render_job(){
+                console.log(uniq_condition_arr)
                 get_ordersheet.forEach((ordersheet)=>{
                     job_arr.push(ordersheet.data())
                     for(let i = 0; i < ordersheet.data().orderSheet.length; i++){
@@ -248,7 +254,9 @@ export default {
                                      ordersheet.data().orderSheet[i].deliverydate == uniq_condition_arr[j].deliverydate &&
                                       ordersheet.data().orderSheet[i].origin == uniq_condition_arr[j].origin)
                                     {   
+
                                         if($('#con_'+uniq_condition_arr[j].no+'_job'+ordersheet.id).length == 0){
+                                            
                                             $('#con_no_'+uniq_condition_arr[j].no).append(
                                                 '<div id="con_'+uniq_condition_arr[j].no+'_job'+ordersheet.id+'" class="row my-3">'+
                                                     '<div class="col-5 border-right">'+
@@ -259,7 +267,7 @@ export default {
                                                     '<div class="col-7">'+
                                                         '<div id="sheet_con_'+uniq_condition_arr[j].no+'_job'+ordersheet.id+'" class="row">'+
                                                             '<div class="col-12">'+
-                                                                '<input id="child_'+uniq_condition_arr[j].no+'" data-con="'+uniq_condition_arr[j].no+'"  data-jobid="'+ordersheet.id+'" class="childcheck" disabled type="checkbox" style="width:15px;height:15px;">'+
+                                                                '<input id="" data-con="'+uniq_condition_arr[j].no+'"  data-jobid="'+ordersheet.id+'" data-ordersheet="'+ordersheet.data().orderSheet[i].no+'" class="childcheck child_'+uniq_condition_arr[j].no+'_'+ordersheet.id+'" disabled type="checkbox" style="width:15px;height:15px;">'+
                                                                 '<span class="pl-4 font-weight-bold">OrderSheet : '+ordersheet.data().JobNoFirst+'/'+ordersheet.data().JobNoSecond+'/'+ordersheet.data().orderSheet[i].no+'</span>'+
                                                                 '<span class="pl-4"><i class="bi bi-question-circle batt-modal" type="button" data-toggle="modal" data-target="#batt_modal" data-id="'+ordersheet.id+'" data-ordersheet="'+ordersheet.data().orderSheet[i].no+'"></i></span>'+
                                                             '</div>'+
@@ -272,7 +280,7 @@ export default {
                                         else{
                                             $('#sheet_con_'+uniq_condition_arr[j].no+'_job'+ordersheet.id).append(
                                                 '<div class="col-12">'+
-                                                    '<input id="child_'+uniq_condition_arr[j].no+'" data-con="'+uniq_condition_arr[j].no+'"  data-jobid="'+ordersheet.id+'" class="childcheck" disabled type="checkbox" style="width:15px;height:15px;">'+
+                                                    '<input id="" data-con="'+uniq_condition_arr[j].no+'"  data-jobid="'+ordersheet.id+'" data-ordersheet="'+ordersheet.data().orderSheet[i].no+'" class="childcheck child_'+uniq_condition_arr[j].no+'_'+ordersheet.id+'" disabled type="checkbox" style="width:15px;height:15px;">'+
                                                     '<span class="pl-4 font-weight-bold">OrderSheet : '+ordersheet.data().JobNoFirst+'/'+ordersheet.data().JobNoSecond+'/'+ordersheet.data().orderSheet[i].no+'</span>'+
                                                     '<span class="pl-4"><i class="bi bi-question-circle batt-modal" type="button" data-toggle="modal" data-target="#batt_modal" data-id="'+ordersheet.id+'" data-ordersheet="'+ordersheet.data().orderSheet[i].no+'"></i></span>'+
                                                 '</div>'
@@ -347,6 +355,86 @@ export default {
             }
 
         })
+
+        const addform = document.querySelector('#addform');
+        addform.addEventListener('submit', async function(e){
+            e.preventDefault()
+            const company = $('#company').val()
+            const termPayment = $('#Tpayment').val()
+            const poNo = $('#pecpono').val()
+            const poYear = $('#pecpoyear').val()
+            const deliveryDate = $('#delivery_date').val()
+            const comment = $('#comment').val()
+            var conCheck = []
+
+            console.log(company)
+            console.log(termPayment)
+            console.log(poNo)
+            console.log(poYear)
+            console.log(deliveryDate)
+            console.log(comment)
+
+            await check_data()
+            function check_data(){
+                for(let i = 0; i < $('.maincheck').length; i++){
+                    if( $($('.maincheck')[i]).prop('checked') ){
+                        
+                        const checked_con = $($('.maincheck')[i]).data('con')
+                        const checked_jobid = $($('.maincheck')[i]).data('jobid')
+                        const classCheck = $('.child_'+checked_con+'_'+checked_jobid)
+                        
+                        for(let j = 0; j < classCheck.length; j++){
+                            if( $(classCheck[j]).prop('checked') ){
+                                
+                            }
+                        }
+
+                        
+
+                    }
+                }
+            }
+
+
+            // await create_new_po()
+
+
+            function create_new_po(){
+                projectFirestore.collection('Po').add({
+                    pecpo_no:poNo,
+                    pecpo_year:poYear,
+                    company:company,
+                    tpayment:termPayment,
+                    delivery:deliveryDate,
+                    comment:comment,
+                    createdate:timestamp,
+                    update_time:timestamp,
+
+                    origin:orgin,
+                    warranty:warranty,
+                    delivery_date:delivery_date,
+
+                    visible:true,
+                    approve_status:false,
+                    manager_approve_status:false,
+                    generalmanager_approve_status:false,
+                    reject:false,
+                    shipment:[],
+                    msg:[],
+                    battorder:[],
+                    register_batt:false
+
+
+                }).then( function(docRef){
+                    router.push({ 
+                        path: `/editPecpo/${docRef.id}`
+                    })
+            })
+            }
+
+        })
+
+
 
     }
 }
