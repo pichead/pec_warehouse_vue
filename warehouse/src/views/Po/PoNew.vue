@@ -122,6 +122,9 @@ export default {
         var con_origin = ""
         var con_warranty = ""
         var con_delivery = ""
+        var uniq_condition_arr
+        var job = []
+        var battorder = []
         
         projectFirestore.collection("ContactCompany").where('visible','==',true).get().then((compdata)=>{
             compdata.forEach((data)=>{
@@ -138,12 +141,16 @@ export default {
         async function predata(){
             var job_arr = []
             var all_condition_arr = []
-            var uniq_condition_arr = []
+            uniq_condition_arr = []
             var ordersheet_arr = []
             const get_ordersheet = await projectFirestore.collection("Projects").where('inter_validate','==',true).get()
             
             get_ordersheet.forEach((ordersheet)=>{
                 job_arr.push(ordersheet.data())
+                job.push({
+                    id:ordersheet.id,
+                    data:ordersheet.data()
+                })
             })
 
             await get_all_con()
@@ -243,7 +250,6 @@ export default {
             }
 
             function render_job(){
-                console.log(uniq_condition_arr)
                 get_ordersheet.forEach((ordersheet)=>{
                     job_arr.push(ordersheet.data())
                     for(let i = 0; i < ordersheet.data().orderSheet.length; i++){
@@ -366,7 +372,8 @@ export default {
             const deliveryDate = $('#delivery_date').val()
             const comment = $('#comment').val()
             var conCheck = []
-
+            var count_job = 0
+            var get_con
             console.log(company)
             console.log(termPayment)
             console.log(poNo)
@@ -375,6 +382,9 @@ export default {
             console.log(comment)
 
             await check_data()
+            await save_data()
+            await create()
+
             function check_data(){
                 for(let i = 0; i < $('.maincheck').length; i++){
                     if( $($('.maincheck')[i]).prop('checked') ){
@@ -382,23 +392,55 @@ export default {
                         const checked_con = $($('.maincheck')[i]).data('con')
                         const checked_jobid = $($('.maincheck')[i]).data('jobid')
                         const classCheck = $('.child_'+checked_con+'_'+checked_jobid)
-                        
+                        conCheck.push({
+                            con:checked_con,
+                            jobid:checked_jobid,
+                            ordersheet:[]
+                        })
+                        count_job++
                         for(let j = 0; j < classCheck.length; j++){
                             if( $(classCheck[j]).prop('checked') ){
-                                
+
+                                conCheck[count_job-1].ordersheet.push(
+                                    $(classCheck[j]).data('ordersheet')
+                                )
                             }
                         }
-
-                        
 
                     }
                 }
             }
+            
+            async function save_data(){
+                console.log('conCheck : ',conCheck)
+                get_con = uniq_condition_arr.find(x => x.no === conCheck[0].con);
+                
+                for(let i = 0; i < conCheck.length; i++){
+                    const find_job = job.find(x => x.id === conCheck[i].jobid)
+                    console.log('find_job : ',find_job)
+                    const ordersheet = {
+                        job: find_job.id,
+                        project_first: find_job.data.JobNoFirst,
+                        project_second: find_job.data.JobNoSecond,
+                        projectname: find_job.data.ProjectName,
+                        ordersheet:[]
+                    }
+                    for(let j = 0; j < find_job.data.orderSheet.length; j++){
+                        const ordersheet_batt = ({
+                            
+                        })
+                    }
+                }
 
 
+            }
+
+            function create(){
+                console.log('battorder : ',battorder)
+            }
+            
+            
             // await create_new_po()
-
-
             function create_new_po(){
                 projectFirestore.collection('Po').add({
                     pecpo_no:poNo,
@@ -410,9 +452,9 @@ export default {
                     createdate:timestamp,
                     update_time:timestamp,
 
-                    origin:orgin,
-                    warranty:warranty,
-                    delivery_date:delivery_date,
+                    origin:get_con.origin,
+                    warranty:get_con.warranty,
+                    delivery_date:get_con.deliverydate,
 
                     visible:true,
                     approve_status:false,
