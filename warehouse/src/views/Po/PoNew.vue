@@ -412,23 +412,39 @@ export default {
             }
             
             async function save_data(){
-                console.log('conCheck : ',conCheck)
                 get_con = uniq_condition_arr.find(x => x.no === conCheck[0].con);
                 
                 for(let i = 0; i < conCheck.length; i++){
                     const find_job = job.find(x => x.id === conCheck[i].jobid)
-                    console.log('find_job : ',find_job)
                     const ordersheet = {
                         job: find_job.id,
                         project_first: find_job.data.JobNoFirst,
                         project_second: find_job.data.JobNoSecond,
                         projectname: find_job.data.ProjectName,
                         ordersheet:[]
-                    }
-                    for(let j = 0; j < find_job.data.orderSheet.length; j++){
-                        const ordersheet_batt = ({
-                            
+                    }                                             
+                    battorder.push(ordersheet)
+                    for(let j = 0; j <  conCheck[i].ordersheet.length; j++){
+                        const job_ordersheet = find_job.data.orderSheet
+                        const find_ordersheet = job_ordersheet.find(x => x.no === (conCheck[i].ordersheet[j]).toString())
+                        const ordersheet_data =({
+                            ordersheet: (conCheck[i].ordersheet[j]).toString(),
+                            battery:[]
                         })
+                        battorder[i].ordersheet.push(ordersheet_data)
+                        for(let k = 0; k < find_ordersheet.battery.length; k++){
+       
+                            battorder[i].ordersheet[j].battery.push({
+                                batt_no: parseInt(find_ordersheet.battery[k].no),
+                                batt_unit_price: '',
+                                orderSheet: (battorder[i].ordersheet[j].ordersheet).toString(),
+                                order_amount: parseInt(find_ordersheet.battery[k].order_amount),
+                                project_id: find_job.id,
+                                register_amount: 0,
+                                register_barcode: [],
+                                series: find_ordersheet.battery[k].series
+                            })
+                        }
                     }
                 }
 
