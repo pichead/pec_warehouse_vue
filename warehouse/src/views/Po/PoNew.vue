@@ -103,6 +103,29 @@
                     </div>
                 </div>
 
+
+                <div class="modal" id="alert_modal" aria-hidden="true" style="display: none;">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">ข้อผิดพลาด</h5>
+                            <button class="close" data-dismiss="modal">×</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="col-10 mx-auto">
+                                <div id="alert_modal_data" class="row">
+                                    <p>ข้อมูลไม่ถูกต้อง</p>
+                                    <p>กรุณากรอกข้อมูลใหม่ให้ถูกต้อง</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </form>
     </div>
@@ -125,6 +148,7 @@ export default {
         var uniq_condition_arr
         var job = []
         var battorder = []
+        var final_battorder = []
         
         projectFirestore.collection("ContactCompany").where('visible','==',true).get().then((compdata)=>{
             compdata.forEach((data)=>{
@@ -365,6 +389,8 @@ export default {
         const addform = document.querySelector('#addform');
         addform.addEventListener('submit', async function(e){
             e.preventDefault()
+            battorder = []
+            final_battorder = []
             const company = $('#company').val()
             const termPayment = $('#Tpayment').val()
             const poNo = $('#pecpono').val()
@@ -382,11 +408,18 @@ export default {
             console.log(comment)
 
             await check_data()
-            await save_data()
-            await create()
-
+            if(conCheck.length != 0){
+                await get_data()
+                await valid_data()
+                await create_new()
+            }
+            else{
+                console.log('uncheck')
+            }
+            
             function check_data(){
                 for(let i = 0; i < $('.maincheck').length; i++){
+                    // console.log($($('.maincheck')[i]).prop('checked'))
                     if( $($('.maincheck')[i]).prop('checked') ){
                         
                         const checked_con = $($('.maincheck')[i]).data('con')
@@ -411,7 +444,7 @@ export default {
                 }
             }
             
-            async function save_data(){
+            async function get_data(){
                 get_con = uniq_condition_arr.find(x => x.no === conCheck[0].con);
                 
                 for(let i = 0; i < conCheck.length; i++){
@@ -451,8 +484,23 @@ export default {
 
             }
 
-            function create(){
+            function valid_data(){
                 console.log('battorder : ',battorder)
+                
+
+                for(let i = 0; i < battorder.length; i++){
+                    if(battorder[i].ordersheet.length != 0){
+                        final_battorder.push( battorder[i] )
+                    }
+                }
+            }
+
+            function create_new(){
+                if(final_battorder.length != 0){
+                    console.log('Create')
+                    console.log('final_battorder : ',final_battorder)
+                }
+                
             }
             
             
