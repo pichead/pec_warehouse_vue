@@ -67,6 +67,10 @@ import ConfirmPecpo from '../views/Po/confirm.vue'
 // import EditPecpo from '../views/Po/editPecpo.vue'
 import PrintPecpo from '../views/Po/preview.vue'
 import PoNew from '../views/Po/PoNew.vue'
+import PoEditNew from '../views/Po/editNew.vue'
+import PoIndexNew from '../views/Po/poIndexNew.vue'
+
+
 
 // End PO
 
@@ -270,9 +274,21 @@ const routes = [
     beforeEnter: requireAuth
   },
   {
+    path: '/poIndexNew',
+    name: 'PoIndexNew',
+    component: PoIndexNew,
+    beforeEnter: requireAuth
+  },
+  {
     path: '/editPecpo/:id',
     name: 'EditPecpo',
     component: EditPecpo,
+    beforeEnter: requireAuth
+  },
+  {
+    path: '/poEditNew/:id',
+    name: 'PoEditNew',
+    component: PoEditNew,
     beforeEnter: requireAuth
   },
   {

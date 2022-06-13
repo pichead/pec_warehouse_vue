@@ -7,13 +7,14 @@
 
     <div id="content" style="margin-left: 250px">
         <div class="col-10 mx-auto">
-          <div class="h3">Test Page</div>
+          <div class="h3">{{page}}</div>
           <!-- <div id="test_btn" class="btn border">test</div>
           <div id="results"></div> -->
         </div>
         <br>
         <br>
         <button id="test1">TEST 1</button>
+        <br>
         <button id="test2">TEST 2</button>
     </div>
 </template>
@@ -30,45 +31,49 @@ export default {
     components: { Sidebar },
     mounted() {
         
-        test2()
+        $('#test1').on('click',()=>{
+            test1()
+        })
 
-        function test2(){
-            var x = 10
-            console.log('data ',x,' mama')
+       
+        const timestamp = Math.round(new Date().getTime() / 1000);
+        async function test1(){
+
+            const get_batt = await projectFirestore.collection("Batteries_beta").get()
+            await update()
+            function update(){
+                get_batt.forEach((battdata)=>{
+                    projectFirestore.collection('Batteries_beta').doc(battdata.id).update({
+                        location:'Warehouse',
+                        location_id:'U1CHpc83zGdhZhudwQ36',
+                        status:'สมบูรณ์',
+                        claim:{
+                            claim_id:"",
+                            claim:false
+                        },
+                        history:[{
+                            building:'โกดัง PEC',
+                            room:'Zone A',
+                            system:"",
+                            status:'สมบูรณ์',
+                            timestamp:timestamp
+                        }]
+                    })
+                    .then(()=>{
+                        console.log(
+                            'Test 1 Complete'
+                        )
+                    })
+                })
+            }
         }
-
-        // test()
-        // const timestamp = Math.round(new Date().getTime() / 1000);
-        // async function test(){
-        //     const get_batt = await projectFirestore.collection("Batteries_beta").get()
-
-        //     await update()
-
-        //     function update(){
-        //         get_batt.forEach((battdata)=>{
-
-        //             projectFirestore.collection('Batteries_beta').doc(battdata.id).update({
-        //                 location:'Warehouse',
-        //                 location_id:'U1CHpc83zGdhZhudwQ36',
-        //                 status:'Preventive Maintenance',
-        //                 history:[{
-        //                     building:'โกดัง PEC',
-        //                     room:'Zone A',
-        //                     system:"",
-        //                     status:'Preventive Maintenance',
-        //                     timestamp:timestamp
-        //                 }]
-        //             })
-        //         })
-        //     }
-        // }
 
 
     },
     data() {
         return {
-        option: 1,
-        totalItem: 1,
+            page: 'Test Page',
+            totalItem: 1,
         };
     },
     methods: {

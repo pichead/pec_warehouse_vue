@@ -134,6 +134,24 @@
 
                                     </select>
                                 </div>
+                                <div id="claim_type" class="d-none col-12 p-0">
+                                    
+                                    <div class="col-12 my-2 col-form-label font-weight-bold">Claim</div>
+                                    <div class="col-12 my-2">
+                                        <div class="row mx-auto col-10">
+                                            <div class="col-6">
+                                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="claim_type1" value="รอทำลาย" checked>
+                                                <label class="form-check-label" for="inlineRadio1">รอทำลาย</label>
+                                            </div>
+                                            <div class="col-6">
+                                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="claim_type2" value="สำรอง">
+                                                <label class="form-check-label" for="inlineRadio2">สำรอง</label>
+                                            </div>
+                                        </div>
+                                       
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -153,6 +171,7 @@
 import { projectFirestore, projectAuth } from "../../firebase/config";
 import Sidebar from "../../components/Sidebar.vue";
 import router from "@/router";
+import { async } from "q";
 export default {
     components: { Sidebar },
     mounted() {
@@ -195,9 +214,6 @@ export default {
                 })
 
             }
-
-            
-            
 
         }
 
@@ -250,7 +266,7 @@ export default {
             function data_table(){
                 table = $('#table_main').DataTable({
                     "searching": true,
-                    "ordering": false,
+                    "ordering": true,
                     "pageLength": 10,
                     "info":false,
                     "lengthChange": false
@@ -285,10 +301,24 @@ export default {
             }
 
             for(let i = 0; i < status.length; i++){
-                $('#modal-status').append(
-                    '<option value="'+status[i].data.name+'">'+status[i].data.name+'</option>'
-                )
+                if(status[i].data.name != 'เคลม' || status[i].data.name != 'ทำลาย' ){
+                    $('#modal-status').append(
+                        '<option value="'+status[i].data.name+'">'+status[i].data.name+'</option>'
+                    )
+                }
+                
             }
+        })
+
+        $('#modal-status').on('change',async()=>{
+            const moadl_status = $('#modal-status').val()
+            if(moadl_status == 'รอเคลม'){
+                $('#claim_type').removeClass('d-none')
+            }
+            else{
+                $('#claim_type').addClass('d-none')
+            }
+            
         })
 
         

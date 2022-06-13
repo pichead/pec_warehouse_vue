@@ -103,6 +103,7 @@
                     </div>
                 </div>
 
+                <button id="btn_alert_modal" type="button" class="btn btn-primary d-none" data-toggle="modal" data-target="#alert_modal"></button>
 
                 <div class="modal" id="alert_modal" aria-hidden="true" style="display: none;">
                     <div class="modal-dialog">
@@ -415,6 +416,7 @@ export default {
             }
             else{
                 console.log('uncheck')
+                $('#btn_alert_modal').click()
             }
             
             function check_data(){
@@ -499,6 +501,10 @@ export default {
                 if(final_battorder.length != 0){
                     console.log('Create')
                     console.log('final_battorder : ',final_battorder)
+                    create_new_po()
+                }
+                else{
+                    $('#btn_alert_modal').click()
                 }
                 
             }
@@ -527,15 +533,16 @@ export default {
                     reject:false,
                     shipment:[],
                     msg:[],
-                    battorder:[],
+                    battorder:final_battorder,
                     register_batt:false
 
 
-                }).then( function(docRef){
-                    router.push({ 
-                        path: `/editPecpo/${docRef.id}`
-                    })
-            })
+                })
+                // .then( function(docRef){
+                //         router.push({ 
+                //             path: `/editPecpo/${docRef.id}`
+                //         })
+                // })
             }
 
         })
