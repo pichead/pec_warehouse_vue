@@ -301,10 +301,14 @@ export default {
             }
 
             for(let i = 0; i < status.length; i++){
-                if(status[i].data.name != 'เคลม' || status[i].data.name != 'ทำลาย' ){
+                if(status[i].data.name != 'เคลม' && status[i].data.name != 'ทำลาย' ){
+                    console.log('status[i].data.name : ',status[i].data.name)
                     $('#modal-status').append(
                         '<option value="'+status[i].data.name+'">'+status[i].data.name+'</option>'
                     )
+                }
+                else{
+                    console.log('else')
                 }
                 
             }
@@ -325,12 +329,15 @@ export default {
         const status_form = document.querySelector('#status_form');
         status_form.addEventListener('submit', async function(e){
             e.preventDefault();
-
+            const gat_claim_type =  $("input[name=inlineRadioOptions]:checked").val()
             const save_status =  $('#modal-status').val()
             const save_job =  $('#modal-job').val()
             const save_location =  $('#modal-location').val()
             var batt_arr = []
 
+            
+            
+          
             await get_all_check()
             await save()
             
@@ -341,6 +348,10 @@ export default {
                         batt_arr.push($(this).val())
                     }
                 })
+
+
+
+
             }
             function save(){
                 for(let i = 0; i < batt_arr.length; i++){
@@ -356,7 +367,8 @@ export default {
 
                     projectFirestore.collection('Batteries_beta').doc(batt_arr[i]).update({
                         history:history_data,
-                        status:save_status
+                        status:save_status,
+                        claim_type:gat_claim_type
                     }).then(()=>{
                         if(i+1 == batt_arr.length){
                             location.reload()

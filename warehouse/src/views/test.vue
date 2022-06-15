@@ -41,16 +41,15 @@ export default {
 
             const get_batt = await projectFirestore.collection("Batteries_beta").get()
             await update()
+            await update_log()
             function update(){
                 get_batt.forEach((battdata)=>{
                     projectFirestore.collection('Batteries_beta').doc(battdata.id).update({
                         location:'Warehouse',
                         location_id:'U1CHpc83zGdhZhudwQ36',
                         status:'สมบูรณ์',
-                        claim:{
-                            claim_id:"",
-                            claim:false
-                        },
+                        claim_id:"",
+                        claim:false,
                         history:[{
                             building:'โกดัง PEC',
                             room:'Zone A',
@@ -65,6 +64,9 @@ export default {
                         )
                     })
                 })
+            }
+            update_log = ()=>{
+                console.log('task complete')
             }
         }
 
