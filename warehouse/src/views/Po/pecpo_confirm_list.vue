@@ -4,12 +4,12 @@
         <div class="container">
             <div class="h3 mt-5 font-weight-bold">รายการ PEC PO</div>
             <div class="row mt-5 mb-4">
-                <div class="col-8">
+                <div class="col-10">
                     <input class="form-control" placeholder="Search" style="background: #f4f4f4;"/>
                 </div>
-                <div class="col-2 pl-0">
+                <!-- <div class="col-2 pl-0">
                     <button class="btn btn-outline-danger col" data-toggle="modal" data-target="#createStatus">สร้างสถานะ PEC PO</button>
-                </div>
+                </div> -->
                 <div class="col-2 pl-0">
                     <a class="btn btn-outline-danger col" href="/createPecpo">Create PO</a>
                 </div>

@@ -4,11 +4,8 @@
         <div class="container">
             <div class="h3 mt-5 font-weight-bold">รายการ PEC PO</div>
             <div class="row mt-5 mb-4">
-                <div class="col-8">
+                <div class="col-10">
                     <input class="form-control" placeholder="Search" style="background: #f4f4f4;"/>
-                </div>
-                <div class="col-2 pl-0">
-                    <button class="btn btn-outline-danger col" data-toggle="modal" data-target="#createStatus">สร้างสถานะ PEC PO</button>
                 </div>
                 <div class="col-2 pl-0">
                     <a class="btn btn-outline-danger col" href="/createPecpo">Create PO</a>
@@ -95,7 +92,7 @@ export default {
                         '<div class="col my-auto">'+new_crdate+'</div>'+
                         '<div class="col-2 my-auto">no validation</div>'+
                         '<div class="col-2 d-flex justify-content-center row-hl">'+
-                            '<a class="btn btn-warning text-white p-1 mr-2 col-5" href="/editPecpo/'+po.id+'">Edit</a>'+
+                            '<a class="btn btn-warning text-white p-1 mr-2 col-5" href="/poEditNew/'+po.id+'">Edit</a>'+
                             '<a class="btn btn-info p-1 col-5" href="/pecpo_print/'+po.id+'">Print</a>'+
                         '</div>'+
                     '</div>')
