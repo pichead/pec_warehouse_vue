@@ -1,3 +1,17 @@
+<style>
+    #claim_file {
+        opacity: 0;
+        width: 0;
+        float: left; /* Reposition so the validation message shows over the label */
+    }
+    #report_file {
+        opacity: 0;
+        width: 0;
+        float: left; /* Reposition so the validation message shows over the label */
+    }
+
+</style>
+
 <template>
 <Sidebar />
     <div id="content" style="margin-left: 250px">
@@ -123,12 +137,12 @@
                                         </div>
                                         <div class="col-4 my-2 col-form-label">ใบเคลม</div>
                                         <div class="col-8 my-2">
-                                            <input id="claim_file" type="file" name="claim_file" style="display:none" required>
+                                            <input id="claim_file" type="file" name="claim_file"  required>
                                             <button id="claim_file_btn" class="col-8 btn btn-success" type="button">เลือกไฟล์</button>
                                         </div>
                                         <div class="col-4 my-2 col-form-label">รายงานปัญหา</div>
                                         <div class="col-8 my-2">
-                                            <input id="report_file" type="file" name="report_file" style="display:none" required>
+                                            <input id="report_file" type="file" name="report_file" required>
                                             <button id="report_file_btn" class="col-8 btn btn-success" type="button">เลือกไฟล์</button>
                                             
                                         </div>
@@ -235,7 +249,7 @@ export default {
         async function render_new_claim_modal(){
 
             
-            const load_batt_claim = await projectFirestore.collection("Batteries_beta").where('status','==','รอเครม').get()
+            const load_batt_claim = await projectFirestore.collection("Batteries_beta").where('status','==','รอเคลม').get()
             const load_job = await projectFirestore.collection("Projects").where('visible','==',true).get()
             await get_all_claim_batt()
             await get_all_claim_job()
@@ -259,8 +273,9 @@ export default {
             }
             
             function get_all_claim_job(){
+                
                 for(let i = 0; i < claim_batt.length; i++){
-                    claim_job.push(claim_batt[i].data.history[claim_batt[i].data.history.length -1].job_id)
+                    claim_job.push(claim_batt[i].data.jobId)
                 }
             }
 
@@ -277,9 +292,10 @@ export default {
             }
 
             function count_batt_in_job(){
+                // console.log('claim_batt : ',claim_batt)
                 for(let i = 0; i < claim_batt.length; i++){
                     for(let j = 0; j < uniq_claim_job.length; j++){
-                        if(uniq_claim_job[j].id == claim_batt[i].data.history[claim_batt[i].data.history.length - 1].job_id){
+                        if(uniq_claim_job[j].id == claim_batt[i].data.jobId){
                             uniq_claim_job[j].count = uniq_claim_job[j].count + 1 
                         }
                     }
@@ -330,14 +346,11 @@ export default {
                     const mail_alert = get_mail_alert()
                     function get_mail_alert(){
                         if(toTimestamp(claim.data().mail_date) + 604800 < timestamp && claim.data().approve == false){
-                            console.log(toTimestamp(claim.data().mail_date) + 604800)
-                            console.log(timestamp)
+
                             return '<i class="ml-2 text-danger bi bi-exclamation-circle" data-toggle="tooltip" data-placement="top" title="ขณะนี้รอการ Approve มากกว่า 7 วันแล้ว &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*กรุณาติดตามสถานะการเคลมนี้" data-original-title=""></i>'
                         }   
                         else{
-                            console.log('no')
-                            console.log(toTimestamp(claim.data().mail_date) + 604800)
-                            console.log(timestamp)
+
                             return '<div></dliv>'
 
                         }
@@ -592,6 +605,7 @@ export default {
         const edit_form = document.querySelector('#edit_form');
         edit_form.addEventListener('submit', async function(e){
             e.preventDefault();
+
             const edit_id_save = $('#edit_save_btn').val()
             const edit_mail_date = await get_mail_date()
             const edit_approve_save = await get_approve_model()

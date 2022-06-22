@@ -296,9 +296,11 @@ export default {
             function get_checked_batt(){
                 $('.check-item').each(function () {
                     if($(this).is(":checked")){
-                        if( $(this).data('claim') == 'true' ){
+                        if( $(this).data('claim') == true ){
                             checked_batt++
+ 
                         }
+                        
                     }
                 })
             }
@@ -315,9 +317,8 @@ export default {
 
                 for(let i = 0; i < status.length; i++){
                     if(status[i].data.name != 'เคลม' && status[i].data.name != 'ทำลาย' ){
-                        console.log('status[i].data.name : ',status[i].data.name)
                         if(checked_batt > 0){
-                            if(status[i].data.name != 'รอเครม'){
+                            if(status[i].data.name != 'รอเคลม'){
                                 $('#modal-status').append(
                                     '<option value="'+status[i].data.name+'">'+status[i].data.name+'</option>'
                                 )
@@ -330,9 +331,7 @@ export default {
                         }
                         
                     }
-                    else{
-                        console.log('else')
-                    }
+
                     
                 }
             }
@@ -377,7 +376,7 @@ export default {
             function save(){
                 for(let i = 0; i < batt_arr.length; i++){
                     var history_data = batt.find(x => x.id === batt_arr[i]).data.history;
-
+                    
                     history_data.push({
                         building:save_location,
                         room:'Zone A',
@@ -385,7 +384,10 @@ export default {
                         status:save_status,
                         timestamp:timestamp
                     })
-
+                    // console.log('save')
+                    // console.log({history:history_data,
+                    //     status:save_status,
+                    //     claim_type:gat_claim_type})
                     projectFirestore.collection('Batteries_beta').doc(batt_arr[i]).update({
                         history:history_data,
                         status:save_status,
