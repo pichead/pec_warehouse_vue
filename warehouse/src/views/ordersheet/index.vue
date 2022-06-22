@@ -85,7 +85,7 @@
                             </div>
                             <div class="col-6">
                                 <div class="form-group row">
-                                    <label class="col-4 col-form-label font-weight-bold">Final Date</label >
+                                    <label class="col-4 col-form-label font-weight-bold">Handover Date</label >
                                     <div id="deliverydate" class="col-8">
                                     </div>
                                 </div>
@@ -115,14 +115,14 @@
                             </colgroup>
                             <thead class="thead-dark text-center">
                                 <tr>
-                                    <th>model</th>
-                                    <th>company</th>
-                                    <th>origin</th>
-                                    <th>warranty</th>
-                                    <th>amount</th>
-                                    <th>in stock</th>
-                                    <th>delivery date</th>
-                                    <th>warehouse</th>
+                                    <th>Model</th>
+                                    <th>Company</th>
+                                    <th>Origin</th>
+                                    <th>Warranty</th>
+                                    <th>Amount</th>
+                                    <th>In stock</th>
+                                    <th>PEC WH Date</th>
+                                    <th>Warehouse</th>
                                     <th>International</th>
                                 </tr>
                             </thead>
@@ -146,14 +146,14 @@
                                     </colgroup>
                                     <thead class="thead-dark text-center">
                                         <tr>
-                                            <th>model</th>
-                                            <th>company</th>
-                                            <th>origin</th>
-                                            <th>warranty</th>
-                                            <th>amount</th>
-                                            <th>in stock</th>
-                                            <th>delivery date</th>
-                                            <th>warehouse</th>
+                                            <th>Model</th>
+                                            <th>Company</th>
+                                            <th>Origin</th>
+                                            <th>Warranty</th>
+                                            <th>Amount</th>
+                                            <th>In stock</th>
+                                            <th>PEC WH Date</th>
+                                            <th>Warehouse</th>
                                             <th>International</th>
                                         </tr>
                                     </thead>

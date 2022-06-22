@@ -17,7 +17,7 @@
                     <th>Job No</th>
                     <th>Project Name</th>
                     <th>WH validate</th>
-                    <th>inter validate</th>
+                    <th>Inter validate</th>
                     <th></th>
                 </tr>
             </thead>

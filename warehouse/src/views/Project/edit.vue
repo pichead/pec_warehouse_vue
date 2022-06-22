@@ -72,7 +72,7 @@
                         </div> -->
                         <div class="col-6">
                             <div class="form-group row">
-                                <label class="col-4 col-form-label font-weight-bold">Final Date</label >
+                                <label class="col-4 col-form-label font-weight-bold">Handover Date</label >
                                 <div class="col-8">
                                     <input id="deliverydate" type="date" class="form-control" />
                                 </div>
@@ -94,23 +94,23 @@
                             <div class="font-weight-bold col-form-label">Requirements</div>
                             <table class="table col-12">
                                 <colgroup>
-                                    <col span="1" style="width: 15%;">
-                                    <col span="1" style="width: 13%;">
+                                    <col span="1" style="width: 12%;">
+                                    <col span="1" style="width: 12%;">
                                     <col span="1" style="width: 12%;">
                                     <col span="1" style="width: 16%;">
                                     <col span="1" style="width: 8%;">
-                                    <col span="1" style="width: 8%;">
-                                    <col span="1" style="width: 8%;">
+                                    <col span="1" style="width: 14%;">
+                                    <col span="1" style="width: 6%;">
 
                                 </colgroup>
                                         <thead class="thead-dark">
                                             <tr class="text-center">
-                                                <th>model</th>
-                                                <th>brand</th>
-                                                <th>origin</th>
-                                                <th>warranty(month)</th>
-                                                <th>amount</th>
-                                                <th>delivery date</th>
+                                                <th>Model</th>
+                                                <th>Brand</th>
+                                                <th>Origin</th>
+                                                <th>Warranty(month)</th>
+                                                <th>Amount</th>
+                                                <th>PEC WH Date</th>
                                                 <th></th>
                                             </tr>
                                         </thead>

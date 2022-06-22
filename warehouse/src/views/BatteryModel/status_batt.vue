@@ -239,7 +239,7 @@ export default {
                             '<td class="text-center">'+batt[i].data.barcode+'</td>'+
                             '<td class="text-center">'+batt[i].data.series+'</td>'+
                             '<td class="text-center">'+batt[i].data.history[batt[i].data.history.length - 1].status+'</td>'+
-                            '<td class="text-center"><input type="checkbox" class="check-item" value="'+batt[i].id+'" style="width:15px;height:15px" /></td>'+
+                            '<td class="text-center"><input type="checkbox" class="check-item" value="'+batt[i].id+'" data-claim="'+batt[i].data.claim+'" style="width:15px;height:15px" /></td>'+
                         '</tr>'
                     )
                     running_number++
@@ -271,9 +271,6 @@ export default {
                     "info":false,
                     "lengthChange": false
                 })
-                
-                
-
             }
 
 
@@ -290,28 +287,57 @@ export default {
         })
 
 
-        $('#status-btn').on('click',function(){
-            $('#modal-job').html('<option disabled selected value="">เลือก Job No</option>')
-            $('#modal-status').html('<option disabled selected value="">เลือก Status</option>')
+        $('#status-btn').on('click',async function(){
 
-            for(let i = 0; i < job.length; i++){
-                $('#modal-job').append(
-                    '<option value="'+job[i].id+'">'+job[i].data.JobNoFirst+'/'+job[i].data.JobNoSecond+' : '+job[i].data.ProjectName+'</option>'
-                )
+            let checked_batt = 0
+
+            await get_checked_batt()
+            await modal_status_render()
+            function get_checked_batt(){
+                $('.check-item').each(function () {
+                    if($(this).is(":checked")){
+                        if( $(this).data('claim') == 'true' ){
+                            checked_batt++
+                        }
+                    }
+                })
             }
+            
+            function modal_status_render(){
+                $('#modal-job').html('<option disabled selected value="">เลือก Job No</option>')
+                $('#modal-status').html('<option disabled selected value="">เลือก Status</option>')
 
-            for(let i = 0; i < status.length; i++){
-                if(status[i].data.name != 'เคลม' && status[i].data.name != 'ทำลาย' ){
-                    console.log('status[i].data.name : ',status[i].data.name)
-                    $('#modal-status').append(
-                        '<option value="'+status[i].data.name+'">'+status[i].data.name+'</option>'
+                for(let i = 0; i < job.length; i++){
+                    $('#modal-job').append(
+                        '<option value="'+job[i].id+'">'+job[i].data.JobNoFirst+'/'+job[i].data.JobNoSecond+' : '+job[i].data.ProjectName+'</option>'
                     )
                 }
-                else{
-                    console.log('else')
+
+                for(let i = 0; i < status.length; i++){
+                    if(status[i].data.name != 'เคลม' && status[i].data.name != 'ทำลาย' ){
+                        console.log('status[i].data.name : ',status[i].data.name)
+                        if(checked_batt > 0){
+                            if(status[i].data.name != 'รอเครม'){
+                                $('#modal-status').append(
+                                    '<option value="'+status[i].data.name+'">'+status[i].data.name+'</option>'
+                                )
+                            }
+                        }
+                        else{
+                            $('#modal-status').append(
+                                '<option value="'+status[i].data.name+'">'+status[i].data.name+'</option>'
+                            )
+                        }
+                        
+                    }
+                    else{
+                        console.log('else')
+                    }
+                    
                 }
-                
             }
+
+            
         })
 
         $('#modal-status').on('change',async()=>{
@@ -336,8 +362,6 @@ export default {
             var batt_arr = []
 
             
-            
-          
             await get_all_check()
             await save()
             
@@ -348,11 +372,8 @@ export default {
                         batt_arr.push($(this).val())
                     }
                 })
-
-
-
-
             }
+
             function save(){
                 for(let i = 0; i < batt_arr.length; i++){
                     var history_data = batt.find(x => x.id === batt_arr[i]).data.history;

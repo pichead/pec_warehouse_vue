@@ -13,13 +13,14 @@
                 <a class="nav-link text-light font-weight-bold" href="/Project">Job No</a>
             </li>
             <li id="" class="nav-item   py-2  pl-3" >
-                <a id="order_booking" class="nav-link text-light font-weight-bold"  data-toggle="collapse" data-target=".Order-collapse" >Order<span id="alarm_order" class="d-none mx-2 p-2  badge badge-danger"></span><i id="sign-down" class="bi bi-caret-down "></i><i id="sign-right" class="bi bi-caret-right d-none"></i></a>
+                <a id="order_booking" class="nav-link text-light font-weight-bold"  data-toggle="collapse" data-target=".Order-collapse" >Order Sheet<span id="alarm_order" class="d-none mx-2 p-2  badge badge-danger"></span><i id="sign-down" class="bi bi-caret-down "></i><i id="sign-right" class="bi bi-caret-right d-none"></i></a>
                 <ul class="collapse pl-3 Order-collapse">
+                    
                     <li class="nav-item" >
-                        <a class="nav-link text-light pl-0 font-weight-bold" href="/Order_N_Booking"><i class="bi bi-caret-right-fill"></i>International Order<span id="alarm_ordersheet" class=" mx-2 p-2 d-none badge badge-danger"></span></a>
+                        <a class="nav-link text-light pl-0 font-weight-bold" href="/Order_check/Wh"><i class="bi bi-caret-right-fill"></i>Warehouse<span id="alarm_order_wh" class=" mx-2 p-2 d-none badge badge-danger"></span></a>
                     </li>
                     <li class="nav-item" >
-                        <a class="nav-link text-light pl-0 font-weight-bold" href="/Order_check/Wh"><i class="bi bi-caret-right-fill"></i>Warehouse Order<span id="alarm_order_wh" class=" mx-2 p-2 d-none badge badge-danger"></span></a>
+                        <a class="nav-link text-light pl-0 font-weight-bold" href="/Order_N_Booking"><i class="bi bi-caret-right-fill"></i>International<span id="alarm_ordersheet" class=" mx-2 p-2 d-none badge badge-danger"></span></a>
                     </li>
                 </ul>
             </li>

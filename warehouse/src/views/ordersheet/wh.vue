@@ -15,7 +15,7 @@
                     <th>No.</th>
                     <th>Job No</th>
                     <th>Project Name</th>
-                    <th>sale validate</th>
+                    <th>Sale validate</th>
                     <th>warehouse validate</th>
                     <th></th>
                 </tr>

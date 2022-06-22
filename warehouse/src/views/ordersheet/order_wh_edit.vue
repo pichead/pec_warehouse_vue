@@ -50,7 +50,7 @@
                         </div>
                         <div class="col-6">
                             <div class="form-group row">
-                                <label class="col-4 col-form-label font-weight-bold">Delivery Date</label >
+                                <label class="col-4 col-form-label font-weight-bold">Handover Date</label >
                                 <div class="col-8">
                                     <p id="deliverydate" class=" col-form-label"></p>
                                 </div>
@@ -89,13 +89,13 @@
                                 </colgroup>
                                         <thead class="thead-dark">
                                             <tr class="text-center">
-                                                <th>model</th>
-                                                <th>brand</th>
-                                                <th>origin</th>
-                                                <th>order warranty(month)</th>
-                                                <th>amount</th>
-                                                <th>delivery date</th>
-                                                <th>stock</th>
+                                                <th>Model</th>
+                                                <th>Brand</th>
+                                                <th>Origin</th>
+                                                <th>Order warranty(month)</th>
+                                                <th>Amount</th>
+                                                <th>PEC WH Date</th>
+                                                <th>Stock</th>
                                             </tr>
                                         </thead>
                                         <tbody id="inputdata" class="bg-white">

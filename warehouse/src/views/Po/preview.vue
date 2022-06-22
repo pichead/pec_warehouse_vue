@@ -202,17 +202,26 @@
                         </div> -->
                     </div>
                 </div>
-                <div class="row" style="margin-top:150px">
+                <div class="row">
                     <div class="col-4">
+                        <div id="signature_inter_corr" class="col-12 my-5">
+                            <div style="height:80px"></div>
+                        </div>
                         <div class="text-center my-2">Teeranai Sukemoke</div>
                         <div class="text-center my-2">International Correspondence</div>
 
                     </div>
                     <div class="col-4">
+                        <div id="signature_manager" class="col-12  my-5">
+                            <div style="height:80px"></div>
+                        </div>
                         <div class="text-center my-2">Punnawit Ritthiprapa</div>
                         <div class="text-center my-2">Manager</div>
                     </div>
                     <div class="col-4">
+                        <div id="signature_gen_manager" class="col-12  my-5">
+                            <div style="height:80px"></div>
+                        </div>
                         <div class="text-center my-2">Kasiean Sukemoke</div>
                         <div class="text-center my-2">General Manager</div>
                     </div>
@@ -255,6 +264,26 @@ export default {
             $('#tpayment').html(Po.data().tpayment+' Days')
             $('#deliverydate').html(Po.data().delivery+' Days')
             $('#project').html()
+            console.log('Po.data().approve_status',Po.data().approve_status)
+            console.log('Po.data().manager_approve_status',Po.data().manager_approve_status)
+            console.log('Po.data().generalmanager_approve_status',Po.data().generalmanager_approve_status)
+            if(Po.data().approve_status == true){
+                $('#signature_inter_corr').html(
+                    '<img src="https://firebasestorage.googleapis.com/v0/b/warehouse-327518.appspot.com/o/Signature%2FmessageImage_1655865885930.jpg?alt=media&token=214fdf8c-2b21-4945-aaf0-05c209be7af8" alt="Girl in a jacket" height="80">'
+                )
+            }
+            if(Po.data().manager_approve_status == true){
+                $('#signature_manager').html(
+                    '<img src="https://firebasestorage.googleapis.com/v0/b/warehouse-327518.appspot.com/o/Signature%2FmessageImage_1655865913812.jpg?alt=media&token=7c1be47e-4882-4cd5-a128-6aef09793295" alt="Girl in a jacket" height="80">'
+                )
+            }
+            if(Po.data().generalmanager_approve_status == true){
+                 $('#signature_gen_manager').html(
+                    '<img src="https://firebasestorage.googleapis.com/v0/b/warehouse-327518.appspot.com/o/Signature%2FmessageImage_1655865900991.jpg?alt=media&token=4fbd9b8b-f84f-416d-aeb6-c4dc34c811b6" alt="Girl in a jacket" height="80">'
+                )
+            }
+
+
 
             
             var date = new Date(Po.data().createdate*1000);
