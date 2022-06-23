@@ -521,7 +521,7 @@ export default {
         const add_form = document.querySelector('#addform');
         add_form.addEventListener('submit', async function(e){
             e.preventDefault();
-            console.log('Create New')
+
             const count_claim = await projectFirestore.collection("Claim").get()
             const claim_no = await get_claim_no()
             const claim_new_id = 'Wrrt'+claim_no+'/'+new Date().getFullYear();
@@ -571,8 +571,9 @@ export default {
             }
 
             function get_batt_id_claim(){
+                
                 for(let i = 0; i < claim_batt.length; i++){
-                    if(claim_batt[i].data.history[claim_batt[i].data.history.length -1].job_id == job_id_select){
+                    if(claim_batt[i].data.jobId == job_id_select){
                         battery_id.push(claim_batt[i].id)
                     }
                 }
@@ -681,9 +682,47 @@ export default {
                 
             }
 
-            await edit_save()
+            await edit_batt_save()
+            await edid_claim_save()
+            async function edit_batt_save(){
+                
+                if(edit_mail_date != ''){
+                   
+                    for(let i = 0; i < get_edit_claim_id.data().batt_claim.length; i++){
+                        const batt_claim_status = await projectFirestore.collection("Batteries_beta").doc(get_edit_claim_id.data().batt_claim[i]).get()
+                        var batt_history_arr = batt_claim_status.data().history
+                        var batt_claim_type = batt_claim_status.data().claim_type
+                        if(batt_claim_status.data().claim == false){
+                             console.log(batt_claim_status.data().history[batt_claim_status.data().history.length - 1].building)
+                             console.log(batt_claim_status.data().history[batt_claim_status.data().history.length - 1].room)
+                             console.log(batt_claim_type)
+                             console.log(batt_claim_status.data().history[batt_claim_status.data().history.length - 1].system)
+                             console.log(timestamp)
 
-            function edit_save(){
+                            batt_history_arr.push({
+                                building:batt_claim_status.data().history[batt_claim_status.data().history.length - 1].building,
+                                room:batt_claim_status.data().history[batt_claim_status.data().history.length - 1].room,
+                                status:batt_claim_type,
+                                system:batt_claim_status.data().history[batt_claim_status.data().history.length - 1].system,
+                                timestamp:timestamp
+                            })
+                            projectFirestore.collection('Batteries_beta').doc(get_edit_claim_id.data().batt_claim[i]).update({
+                                history:batt_history_arr,
+                                claim_id:edit_id_save,
+                                claim:true
+                            })
+                        }
+                    }
+                }
+                else{
+                    console.log('batt unsave')
+                }
+
+
+
+            }
+            function edid_claim_save(){
+
                 projectFirestore.collection('Claim').doc(edit_id_save).update({
                     mail_date:edit_mail_date,
                     approve:edit_approve_save,

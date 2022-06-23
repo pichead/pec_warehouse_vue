@@ -230,18 +230,35 @@ export default {
                 var running_number = 1
                 for(let i = 0; i < batt.length; i++){
                     const job_data = job.find(x => x.id === batt[i].data.jobId);
-                    $('#data').append(
-                        '<tr>'+
-                            '<td class="text-center">'+running_number+'</td>'+
-                            '<td class="text-center">'+job_data.data.JobNoFirst+'/'+job_data.data.JobNoSecond+'</td>'+
-                            '<td class="text-center">'+batt[i].data.history[batt[i].data.history.length - 1].building+'</td>'+
-                            '<td class="text-center">'+batt[i].data.history[batt[i].data.history.length - 1].room+'</td>'+
-                            '<td class="text-center">'+batt[i].data.barcode+'</td>'+
-                            '<td class="text-center">'+batt[i].data.series+'</td>'+
-                            '<td class="text-center">'+batt[i].data.history[batt[i].data.history.length - 1].status+'</td>'+
-                            '<td class="text-center"><input type="checkbox" class="check-item" value="'+batt[i].id+'" data-claim="'+batt[i].data.claim+'" style="width:15px;height:15px" /></td>'+
-                        '</tr>'
-                    )
+                    if(batt[i].data.claim == true){
+                        $('#data').append(
+                            '<tr>'+
+                                '<td class="text-center">'+running_number+'</td>'+
+                                '<td class="text-center">'+job_data.data.JobNoFirst+'/'+job_data.data.JobNoSecond+'</td>'+
+                                '<td class="text-center">'+batt[i].data.history[batt[i].data.history.length - 1].building+'</td>'+
+                                '<td class="text-center">'+batt[i].data.history[batt[i].data.history.length - 1].room+'</td>'+
+                                '<td class="text-center">'+batt[i].data.barcode+'</td>'+
+                                '<td class="text-center">'+batt[i].data.series+'</td>'+
+                                '<td class="text-center">'+batt[i].data.history[batt[i].data.history.length - 1].status+'*</td>'+
+                                '<td class="text-center"><input type="checkbox" class="check-item" value="'+batt[i].id+'" data-claim="'+batt[i].data.claim+'" style="width:15px;height:15px" /></td>'+
+                            '</tr>'
+                        )
+                    }
+                    else{
+                        $('#data').append(
+                            '<tr>'+
+                                '<td class="text-center">'+running_number+'</td>'+
+                                '<td class="text-center">'+job_data.data.JobNoFirst+'/'+job_data.data.JobNoSecond+'</td>'+
+                                '<td class="text-center">'+batt[i].data.history[batt[i].data.history.length - 1].building+'</td>'+
+                                '<td class="text-center">'+batt[i].data.history[batt[i].data.history.length - 1].room+'</td>'+
+                                '<td class="text-center">'+batt[i].data.barcode+'</td>'+
+                                '<td class="text-center">'+batt[i].data.series+'</td>'+
+                                '<td class="text-center">'+batt[i].data.history[batt[i].data.history.length - 1].status+'</td>'+
+                                '<td class="text-center"><input type="checkbox" class="check-item" value="'+batt[i].id+'" data-claim="'+batt[i].data.claim+'" style="width:15px;height:15px" /></td>'+
+                            '</tr>'
+                        )
+                    }
+
                     running_number++
                     if(i+1 == batt.length){
                         data_table()
