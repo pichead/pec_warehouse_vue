@@ -76,34 +76,145 @@
                 </div>
 
                 <table class="table col-12">
-                                <colgroup>
-                                    <col span="1" style="width: 20%;">
-                                    <col span="1" style="width: 10%;">
-                                    <col span="1" style="width: 10%;">
-                                    <col span="1" style="width: 20%;">
-                                    <col span="1" style="width: 10%;">
-                                    <col span="1" style="width: 20%;">
-                                    <col span="1" style="width: 10%;">
+                    <colgroup>
+                        <col span="1" style="width: 20%;">
+                        <col span="1" style="width: 10%;">
+                        <col span="1" style="width: 10%;">
+                        <col span="1" style="width: 20%;">
+                        <col span="1" style="width: 10%;">
+                        <col span="1" style="width: 20%;">
+                        <col span="1" style="width: 10%;">
+                    </colgroup>
+                    <thead class="thead-dark">
+                        <tr class="text-center">
+                            <th>Model</th>
+                            <th>Brand</th>
+                            <th>Origin</th>
+                            <th>Order warranty(month)</th>
+                            <th>Amount</th>
+                            <th>PEC WH Date</th>
+                            <th>Stock</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inputdata" class="bg-white">
 
+                    </tbody>
+                </table>
+                <table class="table col-12">
 
-                                </colgroup>
-                                        <thead class="thead-dark">
-                                            <tr class="text-center">
-                                                <th>Model</th>
-                                                <th>Brand</th>
-                                                <th>Origin</th>
-                                                <th>Order warranty(month)</th>
-                                                <th>Amount</th>
-                                                <th>PEC WH Date</th>
-                                                <th>Stock</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="inputdata" class="bg-white">
-
-
-
-                                        </tbody>
-                            </table>
+                    <thead class="thead-dark">
+                        <tr class="text-center">
+                            <th>Barcode</th>
+                            <th>Model</th>
+                            <th>warranty</th>
+                            <th>Location</th>
+                            <th>Zone</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="inputdata" class="bg-white text-center">
+                        <tr>
+                            <td>
+                                PEC-A2200109
+                            </td>
+                            <td>
+                                UPS12-320R MRX
+                            </td>
+                            <td>
+                                3 years
+                            </td>
+                            <td>
+                                โกดัง PEC
+                            </td>
+                            <td>
+                                Zone A
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                PEC-A2200110
+                            </td>
+                            <td>
+                                UPS12-320R MRX
+                            </td>
+                            <td>
+                                3 years
+                            </td>
+                            <td>
+                                โกดัง PEC
+                            </td>
+                            <td>
+                                Zone A
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                PEC-A2200111
+                            </td>
+                            <td>
+                                UPS12-320R MRX
+                            </td>
+                            <td>
+                                3 years
+                            </td>
+                            <td>
+                                โกดัง PEC
+                            </td>
+                            <td>
+                                Zone A
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                PEC-A2200112
+                            </td>
+                            <td>
+                                UPS12-320R MRX
+                            </td>
+                            <td>
+                                3 years
+                            </td>
+                            <td>
+                                โกดัง PEC
+                            </td>
+                            <td>
+                                Zone A
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                PEC-A2200113
+                            </td>
+                            <td>
+                                UPS12-320R MRX
+                            </td>
+                            <td>
+                                3 years
+                            </td>
+                            <td>
+                                โกดัง PEC
+                            </td>
+                            <td>
+                                Zone A
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
     
 
 

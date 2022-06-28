@@ -154,20 +154,21 @@ export default {
                     const general_mangager_approve_status = get_generalmanager_approve_status()
 
                     function get_view_btn(){
-                        if(po.data().approve_status == true){
-                            if(role == 'manager'){
-                                return '<button class="btn btn-warning p-1 mr-2 col-5"><a class=" text-white text-decoration-none" href="/viewPecpo/'+po.id+'">View</a></button>'
-                            }
-                            else if(role = 'g manager' &&  po.data().manager_approve_status == true){
-                                return '<button class="btn btn-warning p-1 mr-2 col-5"><a class=" text-white text-decoration-none" href="/viewPecpo/'+po.id+'">View</a></button>'
-                            }
-                            else{
-                                return '<button class="btn btn-warning text-white p-1 mr-2 col-5" disabled>View</button>'
-                            }
-                        }
-                        else{
-                            return '<button class="btn btn-warning text-white p-1 mr-2 col-5" disabled>View</button>'
-                        }
+                        return '<button class="btn btn-warning p-1 mr-2 col-5"><a class=" text-white text-decoration-none" href="/viewPecpo/'+po.id+'">View</a></button>'
+                        // if(po.data().approve_status == true){
+                        //     if(role == 'manager'){
+                        //         return '<button class="btn btn-warning p-1 mr-2 col-5"><a class=" text-white text-decoration-none" href="/viewPecpo/'+po.id+'">View</a></button>'
+                        //     }
+                        //     else if(role = 'g manager' &&  po.data().manager_approve_status == true){
+                        //         return '<button class="btn btn-warning p-1 mr-2 col-5"><a class=" text-white text-decoration-none" href="/viewPecpo/'+po.id+'">View</a></button>'
+                        //     }
+                        //     else{
+                        //         return '<button class="btn btn-warning text-white p-1 mr-2 col-5" disabled>View</button>'
+                        //     }
+                        // }
+                        // else{
+                        //     return '<button class="btn btn-warning text-white p-1 mr-2 col-5" disabled>View</button>'
+                        // }
                     }
                     function get_approve_status(){
                         if(po.data().approve_status == true){

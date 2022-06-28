@@ -1203,16 +1203,12 @@ export default {
                         params: { mserror: true} 
                     })
                 })
-
-
             }
-
         })
-        
         
         const approve_form = document.querySelector('#approve_form');
         approve_form.addEventListener('submit', async function(e){
-            e.preventDefault();
+           e.preventDefault();
             const appove_select = $('input[name=approve_status]:checked', '#approve_form').val()
              $('#approve-modal').modal('toggle');
             if(appove_select == 'true'){

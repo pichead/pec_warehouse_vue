@@ -187,7 +187,7 @@
                     
 
                     <div id="approve_valid" class="d-flex flex-row-reverse row-hl my-5">
-                        <button class="btn btn-info col-2 " type="button" data-toggle="modal" data-target="#approve-modal">Approve</button>
+                        <button id="approve_btn" class="btn btn-info col-2 " type="button" data-toggle="modal" data-target="#approve-modal" disabled>Approve</button>
                         <a class="btn btn-secondary col-2 mr-2" type="button" href="/pecpo_confirm_list">Back</a>
                         
                     </div>
@@ -255,6 +255,7 @@ export default {
         var username
         pre_approve_btn()
         async function pre_approve_btn(){
+            
             const Po_confirm = await projectFirestore.collection('Po').doc(id).get()
             const auth = projectAuth;
             const user_email = auth.currentUser.email;
@@ -270,7 +271,7 @@ export default {
                 return name
             }
             await render_permission_data()
-
+            await predata()
             if(Po_confirm.data().msg.length > 0){
                 msg = Po_confirm.data().msg
                 $('#msg-data').html('')
@@ -358,8 +359,17 @@ export default {
             const Companys = await projectFirestore.collection('ContactCompany').get()
             const ordersheet_list = Po.data().battorder
             
-
-            
+            if(Po.data().approve_status == false){
+                $("#approve_btn").attr('disabled',true)
+            }
+            else{
+                if(Po.data().manager_approve_status == false){
+                    $("#approve_btn").attr('disabled',true)
+                }
+                else{
+                    $("#approve_btn").attr('disabled',false)
+                }
+            }
 
             var cdate = new Date(Po.data().createdate*1000);
             var cday = cdate.getDate();
@@ -763,7 +773,7 @@ export default {
 
         }
 
-        predata()
+        
 
         const approve_form = document.querySelector('#approve_form');
         approve_form.addEventListener('submit', async function(e){
