@@ -349,8 +349,7 @@ export default {
                         '</div>'
                     )
                 }
-                
-
+            
             }
         }
 
@@ -358,8 +357,9 @@ export default {
             const Po = await projectFirestore.collection('Po').doc(id).get()
             const Companys = await projectFirestore.collection('ContactCompany').get()
             const ordersheet_list = Po.data().battorder
-            
-            if(Po.data().approve_status == false){
+
+            console.log('test')
+            if(Po.data().approve_status == false){ 
                 $("#approve_btn").attr('disabled',true)
             }
             else{

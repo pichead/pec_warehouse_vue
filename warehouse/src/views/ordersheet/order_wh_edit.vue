@@ -118,7 +118,7 @@
                                 PEC-A2200109
                             </td>
                             <td>
-                                UPS12-320R MRX
+                                AT-15P
                             </td>
                             <td>
                                 3 years
@@ -138,7 +138,7 @@
                                 PEC-A2200110
                             </td>
                             <td>
-                                UPS12-320R MRX
+                                AT-15P
                             </td>
                             <td>
                                 3 years
@@ -158,7 +158,7 @@
                                 PEC-A2200111
                             </td>
                             <td>
-                                UPS12-320R MRX
+                                AT-15P
                             </td>
                             <td>
                                 3 years
@@ -178,7 +178,7 @@
                                 PEC-A2200112
                             </td>
                             <td>
-                                UPS12-320R MRX
+                                AT-15P
                             </td>
                             <td>
                                 3 years
@@ -198,7 +198,7 @@
                                 PEC-A2200113
                             </td>
                             <td>
-                                UPS12-320R MRX
+                                AT-15P
                             </td>
                             <td>
                                 3 years
