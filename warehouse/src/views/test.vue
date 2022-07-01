@@ -58,14 +58,9 @@ export default {
                             timestamp:timestamp
                         }]
                     })
-                    .then(()=>{
-                        console.log(
-                            'Test 1 Complete'
-                        )
-                    })
                 })
             }
-            update_log = ()=>{
+            function update_log(){
                 console.log('task complete')
             }
         }

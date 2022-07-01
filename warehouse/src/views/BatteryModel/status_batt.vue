@@ -145,7 +145,7 @@
                                             </div>
                                             <div class="col-6">
                                                 <input class="form-check-input" type="radio" name="inlineRadioOptions" id="claim_type2" value="สำรอง">
-                                                <label class="form-check-label" for="inlineRadio2">สำรอง</label>
+                                                <label class="form-check-label" for="inlineRadio2">สำรอง*</label>
                                             </div>
                                         </div>
                                        

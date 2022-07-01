@@ -70,9 +70,17 @@ import PoNew from '../views/Po/PoNew.vue'
 import PoEditNew from '../views/Po/editNew.vue'
 import PoIndexNew from '../views/Po/poIndexNew.vue'
 
-
-
 // End PO
+
+
+
+// Booking
+import Booking from '../views/booking/index.vue'
+import BookingCreate from '../views/booking/create.vue'
+
+// End Booking
+
+
 
 
 // Claim
@@ -307,6 +315,18 @@ const routes = [
     path: '/pecpo_print/:id',
     name: 'PrintPecpo',
     component: PrintPecpo,
+    beforeEnter: requireAuth
+  },
+  {
+    path: '/Booking',
+    name: 'Booking',
+    component: Booking,
+    beforeEnter: requireAuth
+  },
+  {
+    path: '/Booking/Create',
+    name: 'BookingCreate',
+    component: BookingCreate,
     beforeEnter: requireAuth
   },
   {

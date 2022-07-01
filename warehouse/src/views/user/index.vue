@@ -36,6 +36,34 @@
                         <button class="close" data-dismiss="modal">×</button>
                     </div>
                     <div id="modal-edit-content" class="modal-body">
+                        <div class="row my-1">
+                            <div class="col-4 font-weight-bold pt-2">
+                                ชื่อภาษาไทย
+                            </div>
+                            <div class="col-8">
+                                <input type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row my-1">
+                            <div class="col-4 font-weight-bold pt-2">
+                                ชื่อภาษาอังกฤษ
+                            </div>
+                            <div class="col-8">
+                                <input type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row my-1">
+                            <div class="col-4 font-weight-bold pt-2">
+                                ตำแหน่ง
+                            </div>
+                            <div class="col-8">
+                                <select name="" id="" class="form-control">
+                                    <option value="" disabled selected>Position</option>
+
+                                    <option value="Programer">Programer</option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-4 font-weight-bold pt-2">
                                 การเปิดใช้งาน

@@ -100,7 +100,13 @@
 
                     </tbody>
                 </table>
-                <table class="table col-12">
+                <div class="col-12 pl-0 mt-5">
+                    <div class="row">
+                        <h3 class="font-weight-bold col-6">Warehouse Stock </h3>
+                        <h5 class="font-weight-bold col-6 text-right col-form-label">Checked <span id="stock_checking">0</span>/<span id="stock_count">0</span></h5>
+                    </div>
+                </div>
+                <table id="stock_table" class="table col-12 px-0">
 
                     <thead class="thead-dark">
                         <tr class="text-center">
@@ -112,107 +118,8 @@
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody id="inputdata" class="bg-white text-center">
-                        <tr>
-                            <td>
-                                PEC-A2200109
-                            </td>
-                            <td>
-                                AT-15P
-                            </td>
-                            <td>
-                                3 years
-                            </td>
-                            <td>
-                                โกดัง PEC
-                            </td>
-                            <td>
-                                Zone A
-                            </td>
-                            <td>
-                                <input type="checkbox">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                PEC-A2200110
-                            </td>
-                            <td>
-                                AT-15P
-                            </td>
-                            <td>
-                                3 years
-                            </td>
-                            <td>
-                                โกดัง PEC
-                            </td>
-                            <td>
-                                Zone A
-                            </td>
-                            <td>
-                                <input type="checkbox">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                PEC-A2200111
-                            </td>
-                            <td>
-                                AT-15P
-                            </td>
-                            <td>
-                                3 years
-                            </td>
-                            <td>
-                                โกดัง PEC
-                            </td>
-                            <td>
-                                Zone A
-                            </td>
-                            <td>
-                                <input type="checkbox">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                PEC-A2200112
-                            </td>
-                            <td>
-                                AT-15P
-                            </td>
-                            <td>
-                                3 years
-                            </td>
-                            <td>
-                                โกดัง PEC
-                            </td>
-                            <td>
-                                Zone A
-                            </td>
-                            <td>
-                                <input type="checkbox">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                PEC-A2200113
-                            </td>
-                            <td>
-                                AT-15P
-                            </td>
-                            <td>
-                                3 years
-                            </td>
-                            <td>
-                                โกดัง PEC
-                            </td>
-                            <td>
-                                Zone A
-                            </td>
-                            <td>
-                                <input type="checkbox">
-                            </td>
-                        </tr>
+                    <tbody id="stock_data" class="bg-white text-center">
+
                     </tbody>
                 </table>
     
@@ -259,11 +166,70 @@ export default {
 
         var url = window.location.pathname;
         var id = url.substring(url.lastIndexOf('/') + 1);
-        console.log(id)
         
         var battery_count
         var all_batt
-        
+        var stock_batt = []
+        var batt_model = []
+        predata()
+
+        async function predata(){
+            var all_model = ["UPS12-320R MRX"]
+            const stock_data = await projectFirestore.collection("Batteries_beta").get()
+            const job_data = await projectFirestore.collection("Projects").doc(id).get()
+            $('#stock_count').html(stock_data.size)
+            stock_data.forEach((batt)=>{
+                stock_batt.push({
+                    id:batt.id,
+                    data:batt.data()
+                })
+            })
+            await get_batt_model()
+            await render_stock_batt()
+            await data_table()
+            function get_batt_model(){
+                for(let i = 0; i < job_data.data().battery.length; i++){
+                    if(job_data.data().battery[i].main == true){
+                        all_model.push(
+                            job_data.data().battery[i].series
+                        )
+                    }
+                }
+            }
+
+            function render_stock_batt(){
+                batt_model = Array.from(new Set(all_model))
+                console.log("all_model : ",all_model)
+                console.log("stock_batt : ",stock_batt)
+                for(let i = 0; i < stock_batt.length; i++){
+                    if( batt_model.includes(stock_batt[i].data.series) ){
+                        $('#stock_data').append(
+                            '<tr class="text-center">'+
+                                '<td>'+stock_batt[i].data.barcode+'</td>'+
+                                '<td>'+stock_batt[i].data.series+'</td>'+
+                                '<td>'+stock_batt[i].data.warranty+'</td>'+
+                                '<td>'+stock_batt[i].data.history[stock_batt[i].data.history.length - 1].building+'</td>'+
+                                '<td>'+stock_batt[i].data.history[stock_batt[i].data.history.length - 1].room+'</td>'+
+                                '<td>'+
+                                    '<input type="checkbox" class="text-center stock_checkbox">'+
+                                '</td>'+
+                            '</tr>'
+                        )
+                    }
+                }
+
+            }
+            function data_table(){
+                $('#stock_table').DataTable({
+                    "searching": false,
+                    "ordering": true,
+                    "pageLength": 10,
+                    "info":false,
+                    "lengthChange": false
+                })
+            }
+        } 
+
         projectFirestore.collection("Projects").doc(id).get().then((Project) => {
 
             // timestamp converter
@@ -345,7 +311,14 @@ export default {
 
         })
 
+        $('#stock_data').on('change','.stock_checkbox',function(){
+            var checked_count = 0
+            console.log('$(this).length : ',$('.stock_checkbox').length)
+            for(let i = 0; i < $(this).length; i++){
 
+            }
+
+        })
 
         const addform = document.querySelector('#addform');
         addform.addEventListener('submit',(e)=>{

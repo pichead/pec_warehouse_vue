@@ -63,7 +63,9 @@
             <li id="" class="nav-item   py-2 pl-3" >
                 <a class="nav-link text-light font-weight-bold" href="/createPecpoNew">PEC PO Create(NEW)</a>
             </li> -->
-           
+            <li id="" class="nav-item  py-2 pl-3" >
+                <a class="nav-link text-light font-weight-bold" href="/Booking">Booking</a>
+            </li>
             <li id="" class="nav-item   py-2  pl-3" >
                 <a id="warehouse" class="nav-link text-light font-weight-bold"  data-toggle="collapse" data-target=".warehouse-collapse" >Warehouse<span id="alarm_warehouse" class="d-none mx-2 p-2  badge badge-danger"></span><i id="sign-down-wh" class="bi bi-caret-down "></i><i id="sign-right-wh" class="bi bi-caret-right d-none"></i></a>
                 <ul class="collapse pl-3 warehouse-collapse">
