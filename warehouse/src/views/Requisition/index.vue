@@ -2,13 +2,13 @@
 <Sidebar />
     <div id="content" style="margin-left: 250px">
         <div class="container">
-            <div class="h3 mt-5 font-weight-bold">Battery Booking</div>
+            <div class="h3 mt-5 font-weight-bold">Battery Requisition</div>
             <div class="row mt-5 mb-4">
                 <div class="col-10">
                     <input id="searchbar" class="form-control" placeholder="Search" style="background: #f4f4f4;"/>
                 </div>
                 <div class="col-2 pl-0">
-                    <a type="button" href="/Booking/Create" class="btn col-12 btn-success">Create Booking</a>
+                    <a type="button" href="/Requisition/Create" class="btn col-12 btn-success">Create Requisition</a>
                 </div>
 
             </div>
@@ -16,11 +16,11 @@
             <table id="table" class="table font-weight-bold">
                 <thead class="thead-dark">
                     <tr id="head" class="text-center">
-                        <th>Booking ID</th>
+                        <th>Request ID</th>
                         <th>Job No</th>
-                        <th>Booking User</th>
+                        <th>Request User</th>
                         <th>Confirm User</th>
-                        <th>Booking Date</th>
+                        <th>Request Date</th>
                         <th></th>
                     </tr>
                 </thead>

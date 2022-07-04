@@ -413,6 +413,7 @@ export default {
                 await get_data()
                 await valid_data()
                 await create_new()
+                
             }
             else{
                 console.log('uncheck')
@@ -497,11 +498,12 @@ export default {
                 }
             }
 
-            function create_new(){
+            async function create_new(){
                 if(final_battorder.length != 0){
                     console.log('Create')
                     console.log('final_battorder : ',final_battorder)
-                    create_new_po()
+                    await update_ordersheet_data()
+                    await create_new_po()
                 }
                 else{
                     $('#btn_alert_modal').click()
@@ -509,40 +511,56 @@ export default {
                 
             }
             
-            
-            // await create_new_po()
+            async function update_ordersheet_data(){
+                console.log('final_battorder : ',final_battorder)
+                for(let i = 0; i < final_battorder.length; i++){
+                    var new_ordersheet = []
+                    const job_update = await projectFirestore.collection('Projects').doc(final_battorder[i].job).get()
+                    for(let j = 0; j < job_update.orderSheet.length; j++){
+                        for(let k = 0; k < final_battorder[i].ordersheet.length; k++){
+                            if(final_battorder[i].orderSheet.no == final_battorder[i].ordersheet[k].ordersheet){
+                                // new_ordersheet.push
+                            }
+                        }
+                    }
+                    // projectFirestore.collection('Projects').doc(final_battorder[i].job).update({
+
+                    // })
+                }
+            }
+
             function create_new_po(){
-                projectFirestore.collection('Po').add({
-                    pecpo_no:poNo,
-                    pecpo_year:poYear,
-                    company:company,
-                    tpayment:termPayment,
-                    delivery:deliveryDate,
-                    comment:comment,
-                    createdate:timestamp,
-                    update_time:timestamp,
+                // projectFirestore.collection('Po').add({
+                //     pecpo_no:poNo,
+                //     pecpo_year:poYear,
+                //     company:company,
+                //     tpayment:termPayment,
+                //     delivery:deliveryDate,
+                //     comment:comment,
+                //     createdate:timestamp,
+                //     update_time:timestamp,
 
-                    origin:get_con.origin,
-                    warranty:get_con.warranty,
-                    delivery_date:get_con.deliverydate,
+                //     origin:get_con.origin,
+                //     warranty:get_con.warranty,
+                //     delivery_date:get_con.deliverydate,
 
-                    visible:true,
-                    approve_status:false,
-                    manager_approve_status:false,
-                    generalmanager_approve_status:false,
-                    reject:false,
-                    shipment:[],
-                    msg:[],
-                    battorder:final_battorder,
-                    register_batt:false
+                //     visible:true,
+                //     approve_status:false,
+                //     manager_approve_status:false,
+                //     generalmanager_approve_status:false,
+                //     reject:false,
+                //     shipment:[],
+                //     msg:[],
+                //     battorder:final_battorder,
+                //     register_batt:false
 
 
-                })
-                .then( function(docRef){
-                        router.push({ 
-                            path: `/Battery/pecpoList`
-                        })
-                })
+                // })
+                // .then( function(docRef){
+                //         router.push({ 
+                //             path: `/Battery/pecpoList`
+                //         })
+                // })
             }
 
         })

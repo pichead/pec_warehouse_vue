@@ -74,11 +74,11 @@ import PoIndexNew from '../views/Po/poIndexNew.vue'
 
 
 
-// Booking
-import Booking from '../views/booking/index.vue'
-import BookingCreate from '../views/booking/create.vue'
+// Requisition
+import Requisition from '../views/Requisition/index.vue'
+import RequisitionCreate from '../views/Requisition/create.vue'
 
-// End Booking
+// End Requisition
 
 
 
@@ -168,7 +168,7 @@ const routes = [
     beforeEnter: requireNoAuth
   },
   {
-    path: '/Order_N_Booking',
+    path: '/Order_N_Requisition',
     name: 'OrderSheetIndex',
     component: OrderSheetIndex,
     beforeEnter: requireAuth
@@ -186,19 +186,19 @@ const routes = [
     beforeEnter: requireAuth
   },
   {
-    path: '/Order_N_Booking/Wh',
+    path: '/Order_N_Requisition/Wh',
     name: 'OrderSheetWh',
     component: OrderSheetWh,
     beforeEnter: requireAuth
   },
   {
-    path: '/Order_N_Booking/Sale',
+    path: '/Order_N_Requisition/Sale',
     name: 'OrderSheetSale',
     component: OrderSheetSale,
     beforeEnter: requireAuth
   },
   {
-    path: '/Order_N_Booking/Preview/:id',
+    path: '/Order_N_Requisition/Preview/:id',
     name: 'OrderSheetPreview',
     component: OrderSheetPreview,
     beforeEnter: requireAuth
@@ -318,15 +318,15 @@ const routes = [
     beforeEnter: requireAuth
   },
   {
-    path: '/Booking',
-    name: 'Booking',
-    component: Booking,
+    path: '/Requisition',
+    name: 'Requisition',
+    component: Requisition,
     beforeEnter: requireAuth
   },
   {
-    path: '/Booking/Create',
-    name: 'BookingCreate',
-    component: BookingCreate,
+    path: '/Requisition/Create',
+    name: 'RequisitionCreate',
+    component: RequisitionCreate,
     beforeEnter: requireAuth
   },
   {

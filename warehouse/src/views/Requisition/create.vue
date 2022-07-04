@@ -2,7 +2,7 @@
 <Sidebar />
     <div id="content" style="margin-left: 250px">
         <div class="container">
-            <div class="h3 my-5 font-weight-bold">Battery Booking Create</div>
+            <div class="h3 my-5 font-weight-bold">Requisition Create</div>
 
             <div class="border rounded">
                 <div class="row p-4">
