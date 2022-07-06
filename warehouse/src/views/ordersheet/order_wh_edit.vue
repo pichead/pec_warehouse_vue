@@ -107,7 +107,7 @@
                     </div>
                 </div>
                 <table id="stock_table" class="table col-12 px-0">
-
+                    
                     <thead class="thead-dark">
                         <tr class="text-center">
                             <th>Barcode</th>
@@ -146,6 +146,9 @@ import router from "@/router";
 export default {
     components: { Sidebar },
     mounted() {
+
+
+
         var login_user
         
         projectAuth.onAuthStateChanged((user) => {
@@ -166,7 +169,7 @@ export default {
 
         var url = window.location.pathname;
         var id = url.substring(url.lastIndexOf('/') + 1);
-        
+        var jobNo
         var battery_count
         var all_batt
         var stock_batt = []
@@ -174,10 +177,10 @@ export default {
         predata()
 
         async function predata(){
-            var all_model = ["UPS12-320R MRX"]
-            const stock_data = await projectFirestore.collection("Batteries_beta").get()
+            var all_model = []
+            const stock_data = await projectFirestore.collection("Batteries_beta").where('jobNo','==','stock').get()
             const job_data = await projectFirestore.collection("Projects").doc(id).get()
-            $('#stock_count').html(stock_data.size)
+            
             stock_data.forEach((batt)=>{
                 stock_batt.push({
                     id:batt.id,
@@ -199,10 +202,10 @@ export default {
 
             function render_stock_batt(){
                 batt_model = Array.from(new Set(all_model))
-                console.log("all_model : ",all_model)
-                console.log("stock_batt : ",stock_batt)
+                var stock_count = 0
                 for(let i = 0; i < stock_batt.length; i++){
                     if( batt_model.includes(stock_batt[i].data.series) ){
+                        stock_count++
                         $('#stock_data').append(
                             '<tr class="text-center">'+
                                 '<td>'+stock_batt[i].data.barcode+'</td>'+
@@ -211,14 +214,16 @@ export default {
                                 '<td>'+stock_batt[i].data.history[stock_batt[i].data.history.length - 1].building+'</td>'+
                                 '<td>'+stock_batt[i].data.history[stock_batt[i].data.history.length - 1].room+'</td>'+
                                 '<td>'+
-                                    '<input type="checkbox" class="text-center stock_checkbox">'+
+                                    '<input value="'+stock_batt[i].id+'" type="checkbox" class="text-center stock_checkbox">'+
                                 '</td>'+
                             '</tr>'
                         )
                     }
                 }
+                $('#stock_count').html(stock_count)
 
             }
+
             function data_table(){
                 $('#stock_table').DataTable({
                     "searching": false,
@@ -228,6 +233,7 @@ export default {
                     "lengthChange": false
                 })
             }
+
         } 
 
         projectFirestore.collection("Projects").doc(id).get().then((Project) => {
@@ -259,6 +265,7 @@ export default {
             }
             var fnew_date = fday + "-" + fmonth + "-" + fyear;
             // end ymd converter
+            jobNo =  Project.data().JobNoFirst+"/"+Project.data().JobNoSecond
 
             $('#jobno').text(Project.data().JobNoFirst+"/"+Project.data().JobNoSecond)
             $('#projectname').text(Project.data().ProjectName)
@@ -313,10 +320,13 @@ export default {
 
         $('#stock_data').on('change','.stock_checkbox',function(){
             var checked_count = 0
-            console.log('$(this).length : ',$('.stock_checkbox').length)
-            for(let i = 0; i < $(this).length; i++){
-
+            
+            for(let i = 0; i < $('.stock_checkbox').length; i++){
+                if($($('.stock_checkbox')[i]).prop('checked')){
+                    checked_count++
+                }
             }
+            $('#stock_checking').html(checked_count)
 
         })
 
@@ -334,18 +344,17 @@ export default {
             const file = $('#file').val()
             var orderSheetNo = 0
             var battery = []
-
+            var stock_checked = []
             async function saveData(){
                 await GetAllData()
+                await bookingSave()
                 await filebaseSave()
-
+               
 
                 function GetAllData(){
                     for(let i = 0; i < battery_count; i++){
 
                         const wh_stock = $('#wh-stock-'+(i+1)).val()
-
-                        console.log('***********order sheet***********')
                         if(all_batt.battery[i].main == true){
                             battery.push({no:all_batt.battery[i].no,series:all_batt.battery[i].series,company:all_batt.battery[i].company,origin:all_batt.battery[i].origin,warranty:all_batt.battery[i].warranty,amount:all_batt.battery[i].amount,deliverydate:all_batt.battery[i].deliverydate,wh_stock:wh_stock,lock:all_batt.battery[i].lock,main:all_batt.battery[i].main})
                         }
@@ -357,25 +366,40 @@ export default {
                     
 
                 }
+
+                function bookingSave(){
+                    for(let i = 0; i < $('.stock_checkbox').length; i++){
+                        if($($('.stock_checkbox')[i]).prop('checked')){
+                            const stock_checked_id = $($('.stock_checkbox')[i]).val()
+                            projectFirestore.collection('Batteries_beta').doc(stock_checked_id).update({
+                                jobNo:jobNo,
+                                jobId:id
+                            })
+
+                        }
+                    }
+                }
+
                 function filebaseSave(){
-                    
+                    console.log(stock_checked)
                     var timestamp = Math.round(new Date().getTime() / 1000);
 
-                    projectFirestore.collection('Projects').doc(id).update({
+                    // projectFirestore.collection('Projects').doc(id).update({
 
-                        battery:battery,
-                        wh_update_by:login_user,
-                        wh_update_time:timestamp,
-                        wh_validate:true,
-                        inter_validate:false
+                    //     battery:battery,
+                    //     wh_update_by:login_user,
+                    //     wh_update_time:timestamp,
+                    //     wh_validate:true,
+                    //     inter_validate:false
 
-                    }).then(()=>{
-                        router.push({ 
-                            name: 'OrderCheckWh',
-                            params: { mserror: true} 
+                    // }).then(()=>{
+                    //     router.push({ 
+                    //         name: 'OrderCheckWh',
+                    //         params: { mserror: true} 
 
-                        })
-                    })
+                    //     })
+                    // })
+
                 }
                 
                 

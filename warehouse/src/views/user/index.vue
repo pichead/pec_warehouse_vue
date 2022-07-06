@@ -7,7 +7,6 @@
             <div class="col-12">
                 <input id="searchbar" class="form-control" placeholder="Search" style="background: #f4f4f4;"/>
             </div>
-
         </div>
 
         <table id="table" class="table font-weight-bold">
@@ -22,10 +21,9 @@
                 </tr>
             </thead>
             <tbody id="data">
-                
+        
             </tbody>
         </table>
-
 
         <div class="modal" id="editModal" aria-hidden="true" style="display: none;">
             <div class="modal-dialog modal-lg">
@@ -76,46 +74,45 @@
                         <br>
                         <div class="font-weight-bold mb-2">การเข้าถึง</div>
                         <div id="modal-edit-role" class="border p-3 col-10 mx-auto disable" >
-                                <div class="col-12 pl-5 font-weight-bold">Job</div>
-                                <div class="row">
-                                    <input id="create_edite_job" type="checkbox" class="col-1 offset-3 my-1 permis" value="create_edite_job" style="width: 25px; height: 25px"/>
-                                    <div class="col-8 my-1">Create/Edit Job</div>
-                                    <input id="view_job" type="checkbox" class="col-1 offset-3 my-1 permis" value="view_job" style="width: 25px; height: 25px"/>
-                                    <div class="col-8 my-1">View Job</div>
-                                </div>
-                                <!-- <div class="col-12 pl-5 font-weight-bold">Warehouse</div>
-                                <div class="row">
-                                    <input type="checkbox" class="col-1 offset-3 my-1" style="width: 25px; height: 25px"/>
-                                    <div class="col-8 my-1">Stock</div>
-                                    <input type="checkbox" class="col-1 offset-3 my-1" style="width: 25px; height: 25px"/>
-                                    <div class="col-8 my-1">Battery Specifications</div>
-                                    <input type="checkbox" class="col-1 offset-3 my-1" style="width: 25px; height: 25px"/>
-                                    <div class="col-8 my-1">Project Order</div>
-                                    
-                                </div> -->
-                                <div class="col-12 mt-2 pl-5 font-weight-bold">PEC PO</div>
-                                <div class="row">
-                                    <input id="create_pecpo" type="checkbox" class="col-1 offset-3 my-1 permis" value="create_pecpo" style="width: 25px; height: 25px"/>
-                                    <div class="col-8 my-1">Create PEC PO</div>
-                                    <input id="confirm_pecpo_manager" type="checkbox" class="col-1 offset-3 my-1 permis" value="confirm_pecpo_manager" style="width: 25px; height: 25px"/>
-                                    <div class="col-8 my-1">Confirm PEC PO (Manager)</div>
-                                    <input id="confirm_pecpo_general_manager" type="checkbox" class="col-1 offset-3 my-1 permis" value="confirm_pecpo_general_manager" style="width: 25px; height: 25px"/>
-                                    <div class="col-8 my-1">Confirm PEC PO (Gengeral Manager)</div>
-                                </div>
+                            <div class="col-12 pl-5 font-weight-bold">Job</div>
+                            <div class="row">
+                                <input id="create_edite_job" type="checkbox" class="col-1 offset-3 my-1 permis" value="create_edite_job" style="width: 25px; height: 25px"/>
+                                <div class="col-8 my-1">Create/Edit Job</div>
+                                <input id="view_job" type="checkbox" class="col-1 offset-3 my-1 permis" value="view_job" style="width: 25px; height: 25px"/>
+                                <div class="col-8 my-1">View Job</div>
+                            </div>
+                            <!-- <div class="col-12 pl-5 font-weight-bold">Warehouse</div>
+                            <div class="row">
+                                <input type="checkbox" class="col-1 offset-3 my-1" style="width: 25px; height: 25px"/>
+                                <div class="col-8 my-1">Stock</div>
+                                <input type="checkbox" class="col-1 offset-3 my-1" style="width: 25px; height: 25px"/>
+                                <div class="col-8 my-1">Battery Specifications</div>
+                                <input type="checkbox" class="col-1 offset-3 my-1" style="width: 25px; height: 25px"/>
+                                <div class="col-8 my-1">Project Order</div>
+                            </div> -->
+                            <div class="col-12 mt-2 pl-5 font-weight-bold">PEC PO</div>
+                            <div class="row">
+                                <input id="create_pecpo" type="checkbox" class="col-1 offset-3 my-1 permis" value="create_pecpo" style="width: 25px; height: 25px"/>
+                                <div class="col-8 my-1">Create PEC PO</div>
+                                <input id="confirm_pecpo_manager" type="checkbox" class="col-1 offset-3 my-1 permis" value="confirm_pecpo_manager" style="width: 25px; height: 25px"/>
+                                <div class="col-8 my-1">Confirm PEC PO (Manager)</div>
+                                <input id="confirm_pecpo_general_manager" type="checkbox" class="col-1 offset-3 my-1 permis" value="confirm_pecpo_general_manager" style="width: 25px; height: 25px"/>
+                                <div class="col-8 my-1">Confirm PEC PO (Gengeral Manager)</div>
+                            </div>
 
-                                <!-- <div class="col-12 mt-2 pl-5 font-weight-bold">Site</div>
-                                <div class="row">
-                                    <input type="checkbox" class="col-1 offset-3 my-1" style="width: 25px; height: 25px"/>
-                                    <div class="col-8 my-1">Site</div>
-                                    <input type="checkbox" class="col-1 offset-3 my-1" style="width: 25px; height: 25px"/>
-                                    <div class="col-8 my-1">Pm Data</div>
-                                </div> -->
+                            <!-- <div class="col-12 mt-2 pl-5 font-weight-bold">Site</div>
+                            <div class="row">
+                                <input type="checkbox" class="col-1 offset-3 my-1" style="width: 25px; height: 25px"/>
+                                <div class="col-8 my-1">Site</div>
+                                <input type="checkbox" class="col-1 offset-3 my-1" style="width: 25px; height: 25px"/>
+                                <div class="col-8 my-1">Pm Data</div>
+                            </div> -->
 
-                                <div class="col-12 pl-5 font-weight-bold">User</div>
-                                <div class="row">
-                                    <input id="user_management" type="checkbox" class="col-1 offset-3 my-1 permis" value="user_management" style="width: 25px; height: 25px"/>
-                                    <div class="col-8 my-1">User management</div>                                
-                                </div>
+                            <div class="col-12 pl-5 font-weight-bold">User</div>
+                            <div class="row">
+                                <input id="user_management" type="checkbox" class="col-1 offset-3 my-1 permis" value="user_management" style="width: 25px; height: 25px"/>
+                                <div class="col-8 my-1">User management</div>                                
+                            </div>
 
 
 
