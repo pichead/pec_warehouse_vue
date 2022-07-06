@@ -45,6 +45,10 @@ export default {
             function update(){
                 get_batt.forEach((battdata)=>{
                     projectFirestore.collection('Batteries_beta').doc(battdata.id).update({
+                        job_history:[{
+                            jobId:battdata.data().jobId,
+                            jobNo:battdata.data().jobNo
+                        }],
                         location:'Warehouse',
                         location_id:'U1CHpc83zGdhZhudwQ36',
                         status:'สมบูรณ์',

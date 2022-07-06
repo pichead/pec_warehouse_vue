@@ -371,9 +371,16 @@ export default {
                     for(let i = 0; i < $('.stock_checkbox').length; i++){
                         if($($('.stock_checkbox')[i]).prop('checked')){
                             const stock_checked_id = $($('.stock_checkbox')[i]).val()
+                            var job_history = stock_batt.find(x => x.id === stock_checked_id).data.job_history
+                            console.log('job_history : ',job_history)
+                            job_history.push({
+                                jobId:id,
+                                jobNo:jobNo
+                            })
                             projectFirestore.collection('Batteries_beta').doc(stock_checked_id).update({
                                 jobNo:jobNo,
-                                jobId:id
+                                jobId:id,
+                                job_history:job_history
                             })
 
                         }
@@ -381,24 +388,23 @@ export default {
                 }
 
                 function filebaseSave(){
-                    console.log(stock_checked)
                     var timestamp = Math.round(new Date().getTime() / 1000);
 
-                    // projectFirestore.collection('Projects').doc(id).update({
+                    projectFirestore.collection('Projects').doc(id).update({
 
-                    //     battery:battery,
-                    //     wh_update_by:login_user,
-                    //     wh_update_time:timestamp,
-                    //     wh_validate:true,
-                    //     inter_validate:false
+                        battery:battery,
+                        wh_update_by:login_user,
+                        wh_update_time:timestamp,
+                        wh_validate:true,
+                        inter_validate:false
 
-                    // }).then(()=>{
-                    //     router.push({ 
-                    //         name: 'OrderCheckWh',
-                    //         params: { mserror: true} 
+                    }).then(()=>{
+                        router.push({ 
+                            name: 'OrderCheckWh',
+                            params: { mserror: true} 
 
-                    //     })
-                    // })
+                        })
+                    })
 
                 }
                 
