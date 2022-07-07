@@ -234,7 +234,7 @@ export default {
                         $('#data').append(
                             '<tr>'+
                                 '<td class="text-center">'+running_number+'</td>'+
-                                '<td class="text-center">'+job_data.data.JobNoFirst+'/'+job_data.data.JobNoSecond+'</td>'+
+                                '<td class="text-center">'+batt[i].data.jobNo+'</td>'+
                                 '<td class="text-center">'+batt[i].data.history[batt[i].data.history.length - 1].building+'</td>'+
                                 '<td class="text-center">'+batt[i].data.history[batt[i].data.history.length - 1].room+'</td>'+
                                 '<td class="text-center">'+batt[i].data.barcode+'</td>'+
@@ -248,7 +248,7 @@ export default {
                         $('#data').append(
                             '<tr>'+
                                 '<td class="text-center">'+running_number+'</td>'+
-                                '<td class="text-center">'+job_data.data.JobNoFirst+'/'+job_data.data.JobNoSecond+'</td>'+
+                                '<td class="text-center">'+batt[i].data.jobNo+'</td>'+
                                 '<td class="text-center">'+batt[i].data.history[batt[i].data.history.length - 1].building+'</td>'+
                                 '<td class="text-center">'+batt[i].data.history[batt[i].data.history.length - 1].room+'</td>'+
                                 '<td class="text-center">'+batt[i].data.barcode+'</td>'+
@@ -289,8 +289,6 @@ export default {
                     "lengthChange": false
                 })
             }
-
-
             
         }
 

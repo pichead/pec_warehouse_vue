@@ -177,9 +177,12 @@ export default {
         predata()
 
         async function predata(){
+            $('#stock_data').html('')
             var all_model = []
-            const stock_data = await projectFirestore.collection("Batteries_beta").where('jobNo','==','stock').get()
             const job_data = await projectFirestore.collection("Projects").doc(id).get()
+            const job_no = job_data.data().JobNoFirst+"/"+job_data.data().JobNoSecond
+            const stock_data = await projectFirestore.collection("Batteries_beta").where('jobNo','in',['stock',job_no]).get()
+            
             
             stock_data.forEach((batt)=>{
                 stock_batt.push({
@@ -206,18 +209,35 @@ export default {
                 for(let i = 0; i < stock_batt.length; i++){
                     if( batt_model.includes(stock_batt[i].data.series) ){
                         stock_count++
-                        $('#stock_data').append(
-                            '<tr class="text-center">'+
-                                '<td>'+stock_batt[i].data.barcode+'</td>'+
-                                '<td>'+stock_batt[i].data.series+'</td>'+
-                                '<td>'+stock_batt[i].data.warranty+'</td>'+
-                                '<td>'+stock_batt[i].data.history[stock_batt[i].data.history.length - 1].building+'</td>'+
-                                '<td>'+stock_batt[i].data.history[stock_batt[i].data.history.length - 1].room+'</td>'+
-                                '<td>'+
-                                    '<input value="'+stock_batt[i].id+'" type="checkbox" class="text-center stock_checkbox">'+
-                                '</td>'+
-                            '</tr>'
-                        )
+                        if(stock_batt[i].data.jobNo == 'stock'){
+                            $('#stock_data').append(
+                                '<tr class="text-center">'+
+                                    '<td>'+stock_batt[i].data.barcode+'</td>'+
+                                    '<td>'+stock_batt[i].data.series+'</td>'+
+                                    '<td>'+stock_batt[i].data.warranty+'</td>'+
+                                    '<td>'+stock_batt[i].data.history[stock_batt[i].data.history.length - 1].building+'</td>'+
+                                    '<td>'+stock_batt[i].data.history[stock_batt[i].data.history.length - 1].room+'</td>'+
+                                    '<td>'+
+                                        '<input value="'+stock_batt[i].id+'" data-check="false" data-model="'+stock_batt[i].data.series+'" type="checkbox" class="text-center stock_checkbox">'+
+                                    '</td>'+
+                                '</tr>'
+                            )
+                        }
+                        else{
+                            $('#stock_data').append(
+                                '<tr class="text-center" style="background-color:#D6FCEF;">'+
+                                    '<td>'+stock_batt[i].data.barcode+'</td>'+
+                                    '<td>'+stock_batt[i].data.series+'</td>'+
+                                    '<td>'+stock_batt[i].data.warranty+'</td>'+
+                                    '<td>'+stock_batt[i].data.history[stock_batt[i].data.history.length - 1].building+'</td>'+
+                                    '<td>'+stock_batt[i].data.history[stock_batt[i].data.history.length - 1].room+'</td>'+
+                                    '<td>'+
+                                        '<input value="'+stock_batt[i].id+'" data-check="true" data-model="'+stock_batt[i].data.series+'" type="checkbox" class="text-center stock_checkbox" checked>'+
+                                    '</td>'+
+                                '</tr>'
+                            )
+                        }
+
                     }
                 }
                 $('#stock_count').html(stock_count)
@@ -308,7 +328,7 @@ export default {
                                                 '<input  id="delivery-'+(i+1)+'" class="date form-control form-control-sm d-none" type="date" value="'+Project.data().battery[i].deliverydate+'" disabled required/>'+bnew_date+
                                             '</td>'+
                                             '<td>'+
-                                                '<input id="wh-stock-'+(i+1)+'" class="form-control form-control-sm" type="number" min="0" max="'+Project.data().battery[i].amount+'" value="'+Project.data().battery[i].wh_stock+'" required/>'+
+                                                '<input id="wh-stock-'+(i+1)+'" data-model="'+Project.data().battery[i].series+'" class="form-control order_model form-control-sm" type="number" min="0" max="'+Project.data().battery[i].amount+'" value="'+Project.data().battery[i].wh_stock+'" required/>'+
                                             '</td>'+
                                         '</tr>')
     
@@ -318,14 +338,44 @@ export default {
 
         })
 
+        $('#inputdata').on('change','.order_model',function(){
+            const change_model = $(this).data('model')
+            const total = $(this).val()
+            console.log('check')
+            var checked_model_count = 0
+            $('.stock_checkbox').prop('checked', false )
+            for(let i = 0; i < $('.stock_checkbox').length; i++){
+                if(checked_model_count != total && $($('.stock_checkbox')[i]).data('model') == change_model ){
+                    $($('.stock_checkbox')[i]).prop('checked',true)
+                    checked_model_count++
+                }
+            }
+        })
+
         $('#stock_data').on('change','.stock_checkbox',function(){
             var checked_count = 0
-            
+            var checked_count_model = 0
+
+            var input_model
+            const checkbox_model = $(this).data('model')
+            for(let i = 0; i < $('.order_model').length; i++){
+                if( $($('.order_model')[i]).data('model') ==  checkbox_model){
+                    input_model = i
+                }
+            }
+
             for(let i = 0; i < $('.stock_checkbox').length; i++){
                 if($($('.stock_checkbox')[i]).prop('checked')){
+                    if($($('.stock_checkbox')[i]).data('model') == checkbox_model){
+                        checked_count_model++
+                    }
                     checked_count++
                 }
             }
+            console.log(input_model)
+            console.log($($('.order_model')[input_model]).val())
+
+            $($('.order_model')[input_model]).val(checked_count_model)
             $('#stock_checking').html(checked_count)
 
         })
@@ -370,20 +420,37 @@ export default {
                 function bookingSave(){
                     for(let i = 0; i < $('.stock_checkbox').length; i++){
                         if($($('.stock_checkbox')[i]).prop('checked')){
-                            const stock_checked_id = $($('.stock_checkbox')[i]).val()
-                            var job_history = stock_batt.find(x => x.id === stock_checked_id).data.job_history
-                            console.log('job_history : ',job_history)
-                            job_history.push({
-                                jobId:id,
-                                jobNo:jobNo
-                            })
-                            projectFirestore.collection('Batteries_beta').doc(stock_checked_id).update({
-                                jobNo:jobNo,
-                                jobId:id,
-                                job_history:job_history
-                            })
+                            if($($('.stock_checkbox')[i]).data('check') == false){
+                                var stock_checked_id = $($('.stock_checkbox')[i]).val()
+                                var job_history = stock_batt.find(x => x.id === stock_checked_id).data.job_history
+                                job_history.push({
+                                    jobId:id,
+                                    jobNo:jobNo
+                                })
+                                projectFirestore.collection('Batteries_beta').doc(stock_checked_id).update({
+                                    jobNo:jobNo,
+                                    jobId:id,
+                                    job_history:job_history
+                                })
+                            }
 
                         }
+                        else{
+                            if( $($('.stock_checkbox')[i]).data('check') == true ){
+                                var stock_checked_id = $($('.stock_checkbox')[i]).val()
+                                var job_history = stock_batt.find(x => x.id === stock_checked_id).data.job_history
+                                job_history.push({
+                                    jobId:job_history[job_history.length - 2].jobId,
+                                    jobNo:job_history[job_history.length - 2].jobNo
+                                })
+                                projectFirestore.collection('Batteries_beta').doc(stock_checked_id).update({
+                                    jobNo:job_history[job_history.length - 1].jobNo,
+                                    jobId:job_history[job_history.length - 1].jobId,
+                                    job_history:job_history
+                                })
+                            }
+                        }
+
                     }
                 }
 
