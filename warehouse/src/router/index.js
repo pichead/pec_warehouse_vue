@@ -168,7 +168,7 @@ const routes = [
     beforeEnter: requireNoAuth
   },
   {
-    path: '/Order_N_Requisition',
+    path: '/Order_N_Booking',
     name: 'OrderSheetIndex',
     component: OrderSheetIndex,
     beforeEnter: requireAuth
@@ -186,19 +186,19 @@ const routes = [
     beforeEnter: requireAuth
   },
   {
-    path: '/Order_N_Requisition/Wh',
+    path: '/Order_N_Booking/Wh',
     name: 'OrderSheetWh',
     component: OrderSheetWh,
     beforeEnter: requireAuth
   },
   {
-    path: '/Order_N_Requisition/Sale',
+    path: '/Order_N_Booking/Sale',
     name: 'OrderSheetSale',
     component: OrderSheetSale,
     beforeEnter: requireAuth
   },
   {
-    path: '/Order_N_Requisition/Preview/:id',
+    path: '/Order_N_Booking/Preview/:id',
     name: 'OrderSheetPreview',
     component: OrderSheetPreview,
     beforeEnter: requireAuth
