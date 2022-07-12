@@ -500,9 +500,6 @@ export default {
 
             async function create_new(){
                 if(final_battorder.length != 0){
-                    console.log('Create')
-                    console.log('final_battorder : ',final_battorder)
-                    await update_ordersheet_data()
                     await create_new_po()
                 }
                 else{
@@ -510,57 +507,98 @@ export default {
                 }
                 
             }
-            
-            async function update_ordersheet_data(){
-                console.log('final_battorder : ',final_battorder)
-                for(let i = 0; i < final_battorder.length; i++){
-                    var new_ordersheet = []
-                    const job_update = await projectFirestore.collection('Projects').doc(final_battorder[i].job).get()
-                    for(let j = 0; j < job_update.orderSheet.length; j++){
-                        for(let k = 0; k < final_battorder[i].ordersheet.length; k++){
-                            if(final_battorder[i].orderSheet.no == final_battorder[i].ordersheet[k].ordersheet){
-                                // new_ordersheet.push
-                            }
-                        }
-                    }
-                    // projectFirestore.collection('Projects').doc(final_battorder[i].job).update({
 
-                    // })
-                }
-            }
 
             function create_new_po(){
-                // projectFirestore.collection('Po').add({
-                //     pecpo_no:poNo,
-                //     pecpo_year:poYear,
-                //     company:company,
-                //     tpayment:termPayment,
-                //     delivery:deliveryDate,
-                //     comment:comment,
-                //     createdate:timestamp,
-                //     update_time:timestamp,
+                projectFirestore.collection('Po').add({
+                    pecpo_no:poNo,
+                    pecpo_year:poYear,
+                    company:company,
+                    tpayment:termPayment,
+                    delivery:deliveryDate,
+                    comment:comment,
+                    createdate:timestamp,
+                    update_time:timestamp,
 
-                //     origin:get_con.origin,
-                //     warranty:get_con.warranty,
-                //     delivery_date:get_con.deliverydate,
+                    origin:get_con.origin,
+                    warranty:get_con.warranty,
+                    delivery_date:get_con.deliverydate,
 
-                //     visible:true,
-                //     approve_status:false,
-                //     manager_approve_status:false,
-                //     generalmanager_approve_status:false,
-                //     reject:false,
-                //     shipment:[],
-                //     msg:[],
-                //     battorder:final_battorder,
-                //     register_batt:false
+                    visible:true,
+                    approve_status:false,
+                    manager_approve_status:false,
+                    generalmanager_approve_status:false,
+                    reject:false,
+                    shipment:[],
+                    msg:[],
+                    battorder:final_battorder,
+                    register_batt:false
 
 
-                // })
-                // .then( function(docRef){
-                //         router.push({ 
-                //             path: `/Battery/pecpoList`
-                //         })
-                // })
+                })
+                .then( async function(docRef) {
+                    const po_save_doc_id =  docRef.id
+
+                    for(let i = 0; i < final_battorder.length; i++){
+                        const job_update = await projectFirestore.collection('Projects').doc(final_battorder[i].job).get()
+                        console.log('job_update : ',job_update.data())
+
+                        var update_sheet = await get_update_sheet()
+                        var set_new_ordersheet = await check_ordersheet()
+                        await update_ordersheet_lock()
+
+                        function get_update_sheet(){
+                            var sheet = []
+                            for(let j = 0; j < final_battorder[i].ordersheet.length; j++){
+                                sheet.push(
+                                    final_battorder[i].ordersheet[j].ordersheet
+                                )
+                            }
+                            return sheet
+                        }
+
+                        function check_ordersheet(){
+                            var set_new_sheet = []
+                            for(let j = 0; j < job_update.data().orderSheet.length; j++){
+                                if(update_sheet.includes(job_update.data().orderSheet[j].no)){
+                                    set_new_sheet.push({
+                                        battery:job_update.data().orderSheet[j].battery,
+                                        deliverydate:job_update.data().orderSheet[j].deliverydate,
+                                        lock:true,
+                                        no:job_update.data().orderSheet[j].no,
+                                        po:po_save_doc_id,
+                                        warranty:job_update.data().orderSheet[j].warranty
+                                    })
+                                }
+                                else{
+                                    set_new_sheet.push({
+                                        battery:job_update.data().orderSheet[j].battery,
+                                        deliverydate:job_update.data().orderSheet[j].deliverydate,
+                                        lock:false,
+                                        no:job_update.data().orderSheet[j].no,
+                                        po:job_update.data().orderSheet[j].po,
+                                        warranty:job_update.data().orderSheet[j].warranty
+                                    })
+                                }
+                            }
+
+                            return set_new_sheet
+                        }
+
+                        function update_ordersheet_lock(){
+                            projectFirestore.collection('Projects').doc(final_battorder[i].job).update({
+                                orderSheet:set_new_ordersheet 
+                            })
+                        }
+                
+
+                    }
+                })
+                .then( function(){
+                        router.push({ 
+                            path: `/Battery/pecpoList`
+                        })
+                })
             }
 
         })
