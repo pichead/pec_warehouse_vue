@@ -118,7 +118,7 @@
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody id="stock_data" class="bg-white text-center">
+                    <tbody id="stock_data" class="bg-white text-center" data-turbolinks="false">
 
                     </tbody>
                 </table>
@@ -145,6 +145,8 @@ import router from "@/router";
 
 export default {
     components: { Sidebar },
+    beforeCreate(){
+    }, 
     mounted() {
 
 
@@ -194,6 +196,7 @@ export default {
             await render_stock_batt()
             await data_table()
             function get_batt_model(){
+                console.log(1)
                 for(let i = 0; i < job_data.data().battery.length; i++){
                     if(job_data.data().battery[i].main == true){
                         all_model.push(
@@ -204,6 +207,7 @@ export default {
             }
 
             function render_stock_batt(){
+                console.log(2)
                 batt_model = Array.from(new Set(all_model))
                 var stock_count = 0
                 for(let i = 0; i < stock_batt.length; i++){
@@ -245,13 +249,17 @@ export default {
             }
 
             function data_table(){
-                $('#stock_table').DataTable({
-                    "searching": false,
-                    "ordering": true,
-                    "pageLength": 10,
-                    "info":false,
-                    "lengthChange": false
+                console.log(3)
+                 $(document).ready(function(){
+                    $('#stock_table').DataTable({
+                        "searching": false,
+                        "ordering": true,
+                        "pageLength": 10,
+                        "info":false,
+                        "lengthChange": false
+                    })
                 })
+
             }
 
         } 
@@ -297,7 +305,6 @@ export default {
             $('#rawdata').html("")
             $('#inputdata').html("")
             $('#comment').text(Project.data().comment)
-            console.log('renderdata')
             if(Project.data().file != "nofile"){
                 $('#file').html(
                     '<a class"" href="'+Project.data().file.src+'" target="_blank">คลิกเพื่อดูไฟล์แนบ</a>'
@@ -341,7 +348,6 @@ export default {
         $('#inputdata').on('change','.order_model',function(){
             const change_model = $(this).data('model')
             const total = $(this).val()
-            console.log('check')
             var checked_model_count = 0
             $('.stock_checkbox').prop('checked', false )
             for(let i = 0; i < $('.stock_checkbox').length; i++){
@@ -372,8 +378,7 @@ export default {
                     checked_count++
                 }
             }
-            console.log(input_model)
-            console.log($($('.order_model')[input_model]).val())
+
 
             $($('.order_model')[input_model]).val(checked_count_model)
             $('#stock_checking').html(checked_count)
@@ -383,7 +388,6 @@ export default {
         const addform = document.querySelector('#addform');
         addform.addEventListener('submit',(e)=>{
             e.preventDefault();
-            console.log('save')
             const po_num_f = $("#JobNo1").val()
             const po_num_s = $("#JobNo2").val()
             const ProjectName = $('#ProjectName').val()

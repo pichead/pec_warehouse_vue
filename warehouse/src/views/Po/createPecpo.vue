@@ -469,7 +469,7 @@ export default {
                         })
                         battorder[i].ordersheet.push(ordersheet_data)
                         for(let k = 0; k < find_ordersheet.battery.length; k++){
-       
+    
                             battorder[i].ordersheet[j].battery.push({
                                 batt_no: parseInt(find_ordersheet.battery[k].no),
                                 batt_unit_price: '',
@@ -510,6 +510,7 @@ export default {
 
 
             function create_new_po(){
+
                 projectFirestore.collection('Po').add({
                     pecpo_no:poNo,
                     pecpo_year:poYear,
@@ -537,6 +538,7 @@ export default {
 
                 })
                 .then( async function(docRef) {
+                    console.log('update ordersheet')
                     const po_save_doc_id =  docRef.id
 
                     for(let i = 0; i < final_battorder.length; i++){
