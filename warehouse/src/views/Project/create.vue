@@ -105,7 +105,7 @@
                                                 </td>
                                                 <td>
                                                     <select id="origin-option-1" class="form-control form-control-sm"  data-no="1"   required>
-                                                        <option selected disabled>Choose here</option>
+                                                        <option value="" selected disabled>Choose here</option>
                                                         <option >China</option>
                                                         <option >Mexico</option>
                                                     </select>
@@ -196,8 +196,8 @@ export default {
         });
 
         projectFirestore.collection("BatterySpecifications").orderBy("series","asc").get().then((series) => {
-            $('#series-option-1').append('<option selected disabled>Choose here</option>')
-            $('#booking-series-option-1').append('<option selected disabled>Choose here</option>')
+            $('#series-option-1').append('<option value="" selected disabled>Choose here</option>')
+            $('#booking-series-option-1').append('<option value="" selected disabled>Choose here</option>')
             series.forEach((serie) => {
                 $('#series-option-1').append('<option value="'+serie.id+'" data-no="1">'+serie.data().series+'</option>')
                 $('#booking-series-option-1').append('<option value="'+serie.id+'" data-no="1">'+serie.data().series+'</option>')
@@ -251,7 +251,7 @@ export default {
             orderN0.push(no)
             orderN0Data.push({row:no,order_sheet_no:"",company:"",origin:"",warranty:"",amount:""})
             projectFirestore.collection("BatterySpecifications").orderBy("series","asc").get().then((series) => {
-                $('#series-option-'+no+'').append('<option selected disabled>Choose here</option>')
+                $('#series-option-'+no+'').append('<option value="" selected disabled>Choose here</option>')
                 series.forEach((serie) => {
                     $('#series-option-'+no+'').append('<option value="'+serie.id+'" data-no="'+no+'">'+serie.data().series+'</option>')
                 })

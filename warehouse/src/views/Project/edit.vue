@@ -416,7 +416,7 @@ export default {
                     '</td>'+
                     '<td>'+
                         '<select id="origin-option-'+no+'" class="form-control form-control-sm"  data-no="'+no+'"   required>    '+
-                            '<option selected disabled>Choose here</option>'+
+                            '<option value="" selected disabled>Choose here</option>'+
                             '<option >China</option>'+
                             '<option >Mexico</option>'+
                         '</select>'+

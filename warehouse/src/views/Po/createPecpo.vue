@@ -192,6 +192,8 @@ export default {
                                 origin:job_arr[i].orderSheet[j].origin
                             })
                         }
+                        console.log('job_arr[i] : ',job_arr[i])
+                        console.log('job_arr[i].orderSheet[j] : ',job_arr[i].orderSheet[j])
                     }
                 }
             }
@@ -243,7 +245,6 @@ export default {
 
 
             function render_con_box(){
-
                 for(let i = 0; i < uniq_condition_arr.length; i++){
                     var cdate = new Date(uniq_condition_arr[i].deliverydate);
                     var cday = cdate.getDate();

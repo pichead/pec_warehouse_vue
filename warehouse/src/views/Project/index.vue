@@ -56,14 +56,18 @@
 import { projectFirestore, projectAuth } from "../../firebase/config";
 import Sidebar from "../../components/Sidebar.vue";
 import router from "@/router";
+import { assert } from "console";
 export default {
     components: { Sidebar },
     mounted() {
-        projectFirestore.collection("Projects").get().then((Projects) => {
+
+        render()
+
+        async function render(){
+            const Projects = await projectFirestore.collection("Projects").orderBy("JobNoFirst","desc").orderBy("JobNoSecond").get()
+
             var i = 1
             
-
-
             $('#data').html('')
             Projects.forEach((Project) => {
 
@@ -140,7 +144,9 @@ export default {
                 }
                 
             })
-        })
+
+        }
+
 
         $("#data").on("click", ".edit-btn", function (e) {
           routeEdit(e.target.value);
