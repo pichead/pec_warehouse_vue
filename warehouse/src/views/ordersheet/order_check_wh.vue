@@ -56,7 +56,7 @@ import router from "@/router";
 export default {
     components: { Sidebar },
     mounted() {
-        projectFirestore.collection("Projects").get().then((Projects) => {
+        projectFirestore.collection("Projects").orderBy("JobNoFirst","desc").orderBy("JobNoSecond","desc").get().then((Projects) => {
             var i = 1
 
             $('#data').html('')

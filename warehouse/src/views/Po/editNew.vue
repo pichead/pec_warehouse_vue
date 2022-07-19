@@ -494,6 +494,7 @@ export default {
                     for(let i = 0 ; i  < project.data().orderSheet.length; i++){
                         if(project.data().orderSheet[i].origin == con_origin && project.data().orderSheet[i].warranty == con_warranty && project.data().orderSheet[i].deliverydate == con_delivery){
                             project_id.push(project.id)
+                            
                         }
                     }
                 })
@@ -596,11 +597,13 @@ export default {
             }
 
             async function get_ordersheet_data_project_render_project(){
-                
                 for(let j = 0; j < ordersheet_list.length;j++){
                     for(let i = 0; i < project_id.length ; i++){
                         const pre_project_data_con =  await projectFirestore.collection('Projects').doc(project_id[i]).get()
+                        
+
                         if(ordersheet_list[j].job == pre_project_data_con.id){
+                            
                             $('#row-job-'+(j+1)).append(
                                 '<option value="'+pre_project_data_con.id+'" data-first="'+pre_project_data_con.data().JobNoFirst+'" data-second="'+pre_project_data_con.data().JobNoSecond+'" data-name="'+pre_project_data_con.data().ProjectName+'" data-row="'+(j+1)+'" selected >'+pre_project_data_con.data().JobNoFirst+'/'+pre_project_data_con.data().JobNoSecond+'</option>'
                             )

@@ -196,7 +196,7 @@ export default {
             
         });
 
-        projectFirestore.collection("Projects").where("wh_validate", '==', true).get().then((Projects) => {
+        projectFirestore.collection("Projects").orderBy("JobNoFirst","desc").orderBy("JobNoSecond","desc").where("wh_validate", '==', true).get().then((Projects) => {
             var i = 1
             
             $('#data').html('')

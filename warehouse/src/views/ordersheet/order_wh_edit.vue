@@ -106,22 +106,10 @@
                         <h5 class="font-weight-bold col-6 text-right col-form-label">Checked <span id="stock_checking">0</span>/<span id="stock_count">0</span></h5>
                     </div>
                 </div>
-                <table id="stock_table" class="table col-12 px-0">
-                    
-                    <thead class="thead-dark">
-                        <tr class="text-center">
-                            <th>Barcode</th>
-                            <th>Model</th>
-                            <th>warranty</th>
-                            <th>Location</th>
-                            <th>Zone</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="stock_data" class="bg-white text-center" data-turbolinks="false">
+                <div id="zone_Stock">
 
-                    </tbody>
-                </table>
+                </div>
+
     
 
 
@@ -179,7 +167,22 @@ export default {
         predata()
 
         async function predata(){
-            $('#stock_data').html('')
+            $('#zone_Stock').html(
+                '<table id="stock_table" class="table col-12 px-0">'+
+                    '<thead class="thead-dark">'+
+                        '<tr class="text-center">'+
+                            '<th>Barcode</th>'+
+                            '<th>Model</th>'+
+                            '<th>warranty</th>'+
+                            '<th>Location</th>'+
+                            '<th>Zone</th>'+
+                            '<th></th>'+
+                        '</tr>'+
+                    '</thead>'+
+                    '<tbody id="stock_data" class="bg-white text-center" data-turbolinks="false">'+
+                    '</tbody>'+
+                '</table>'
+            )
             var all_model = []
             const job_data = await projectFirestore.collection("Projects").doc(id).get()
             const job_no = job_data.data().JobNoFirst+"/"+job_data.data().JobNoSecond
@@ -196,7 +199,6 @@ export default {
             await render_stock_batt()
             await data_table()
             function get_batt_model(){
-                console.log(1)
                 for(let i = 0; i < job_data.data().battery.length; i++){
                     if(job_data.data().battery[i].main == true){
                         all_model.push(
@@ -207,9 +209,9 @@ export default {
             }
 
             function render_stock_batt(){
-                console.log(2)
                 batt_model = Array.from(new Set(all_model))
                 var stock_count = 0
+                var stock_check_count = 0
                 for(let i = 0; i < stock_batt.length; i++){
                     if( batt_model.includes(stock_batt[i].data.series) ){
                         stock_count++
@@ -240,25 +242,26 @@ export default {
                                     '</td>'+
                                 '</tr>'
                             )
+                            stock_check_count++
                         }
 
                     }
                 }
                 $('#stock_count').html(stock_count)
+                $('#stock_checking').html(stock_check_count)
 
             }
 
             function data_table(){
-                console.log(3)
-                 $(document).ready(function(){
-                    $('#stock_table').DataTable({
-                        "searching": false,
-                        "ordering": true,
-                        "pageLength": 10,
-                        "info":false,
-                        "lengthChange": false
-                    })
+
+                $('#stock_table').DataTable({
+                    "searching": false,
+                    "ordering": true,
+                    "pageLength": 10,
+                    "info":false,
+                    "lengthChange": false
                 })
+
 
             }
 
@@ -346,42 +349,118 @@ export default {
         })
 
         $('#inputdata').on('change','.order_model',function(){
+            
+            const max_input = $(this).attr('max')
+            const min_input = $(this).attr('min')
+
             const change_model = $(this).data('model')
-            const total = $(this).val()
+            const total = parseInt($(this).val())
+   
+
             var checked_model_count = 0
             $('.stock_checkbox').prop('checked', false )
-            for(let i = 0; i < $('.stock_checkbox').length; i++){
-                if(checked_model_count != total && $($('.stock_checkbox')[i]).data('model') == change_model ){
-                    $($('.stock_checkbox')[i]).prop('checked',true)
-                    checked_model_count++
+            var stock_model_count = get_stock_model_count()
+
+            function get_stock_model_count(){
+                var model_counting = 0
+                for(let i = 0; i < $('.stock_checkbox').length; i++){
+                    if($($('.stock_checkbox')[i]).data('model') == change_model ){
+                        model_counting++
+                    }
+                }
+                return model_counting
+            }
+
+            
+            if(total <= stock_model_count){
+                if(total > max_input || total < min_input || !(Number.isInteger(total))){
+                    $(this).val(0)
+                    for(let i = 0; i < $('.stock_checkbox').length; i++){
+                        
+                        if($($('.stock_checkbox')[i]).prop('checked')){
+                            if($($('.stock_checkbox')[i]).data('model') == change_model ){
+                                $($('.stock_checkbox')[i]).prop('checked',false)
+                            }
+                            else{
+                                checked_model_count++
+                            }
+                        }
+                    }
+                    $('#stock_checking').html(checked_model_count)
+                }
+                else{
+
+                    for(let i = 0; i < $('.stock_checkbox').length; i++){
+                        if(checked_model_count != total && $($('.stock_checkbox')[i]).data('model') == change_model ){
+                            $($('.stock_checkbox')[i]).prop('checked',true)
+                            checked_model_count++
+                        }
+                    }
+                    $('#stock_checking').html(checked_model_count)
+                    
                 }
             }
+            else{
+                $(this).val(0)
+                for(let i = 0; i < $('.stock_checkbox').length; i++){
+                        
+                        if($($('.stock_checkbox')[i]).prop('checked')){
+                            if($($('.stock_checkbox')[i]).data('model') == change_model ){
+                                $($('.stock_checkbox')[i]).prop('checked',false)
+                            }
+                            else{
+                                checked_model_count++
+                            }
+                        }
+                    }
+                    $('#stock_checking').html(checked_model_count)
+            }
+
+
+
         })
 
-        $('#stock_data').on('change','.stock_checkbox',function(){
+        $('#stock_data').on('change','.stock_checkbox',async function(){
             var checked_count = 0
             var checked_count_model = 0
 
             var input_model
             const checkbox_model = $(this).data('model')
-            for(let i = 0; i < $('.order_model').length; i++){
-                if( $($('.order_model')[i]).data('model') ==  checkbox_model){
-                    input_model = i
-                }
-            }
+            const this_check = $(this)
 
-            for(let i = 0; i < $('.stock_checkbox').length; i++){
-                if($($('.stock_checkbox')[i]).prop('checked')){
-                    if($($('.stock_checkbox')[i]).data('model') == checkbox_model){
-                        checked_count_model++
+            await valid_check()
+            await change_input_box()
+
+            function valid_check(){
+                for(let i = 0; i < $('.order_model').length; i++){
+                    if( $($('.order_model')[i]).data('model') ==  checkbox_model){
+                        input_model = i
                     }
-                    checked_count++
+                }
+
+                for(let i = 0; i < $('.stock_checkbox').length; i++){
+                    if($($('.stock_checkbox')[i]).prop('checked')){
+                        if($($('.stock_checkbox')[i]).data('model') == checkbox_model){
+                            checked_count_model++
+                        }
+                        checked_count++
+                    }
+                }
+            }
+            
+            function change_input_box(){
+                if($($('.order_model')[input_model]).attr('max') < checked_count_model){
+                    this_check.prop('checked',false)
+                }
+                else{
+                    $($('.order_model')[input_model]).val(checked_count_model)
+                    $('#stock_checking').html(checked_count)
                 }
             }
 
 
-            $($('.order_model')[input_model]).val(checked_count_model)
-            $('#stock_checking').html(checked_count)
+            
+
 
         })
 
@@ -407,7 +486,6 @@ export default {
 
                 function GetAllData(){
                     for(let i = 0; i < battery_count; i++){
-
                         const wh_stock = $('#wh-stock-'+(i+1)).val()
                         if(all_batt.battery[i].main == true){
                             battery.push({no:all_batt.battery[i].no,series:all_batt.battery[i].series,company:all_batt.battery[i].company,origin:all_batt.battery[i].origin,warranty:all_batt.battery[i].warranty,amount:all_batt.battery[i].amount,deliverydate:all_batt.battery[i].deliverydate,wh_stock:wh_stock,lock:all_batt.battery[i].lock,main:all_batt.battery[i].main})
@@ -415,10 +493,7 @@ export default {
                         else{
                             battery.push({no:all_batt.battery[i].no,series:all_batt.battery[i].series,company:all_batt.battery[i].company,origin:all_batt.battery[i].origin,warranty:all_batt.battery[i].warranty,amount:all_batt.battery[i].amount,deliverydate:all_batt.battery[i].deliverydate,wh_stock:wh_stock,lock:all_batt.battery[i].lock,main:all_batt.battery[i].main})
                         }
-
                     }
-                    
-
                 }
 
                 function bookingSave(){
@@ -437,7 +512,6 @@ export default {
                                     job_history:job_history
                                 })
                             }
-
                         }
                         else{
                             if( $($('.stock_checkbox')[i]).data('check') == true ){

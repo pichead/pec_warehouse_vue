@@ -64,7 +64,7 @@ export default {
         render()
 
         async function render(){
-            const Projects = await projectFirestore.collection("Projects").orderBy("JobNoFirst","desc").orderBy("JobNoSecond").get()
+            const Projects = await projectFirestore.collection("Projects").orderBy("JobNoFirst","desc").orderBy("JobNoSecond","desc").get()
 
             var i = 1
             

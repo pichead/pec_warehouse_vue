@@ -570,7 +570,8 @@ export default {
                                         lock:true,
                                         no:job_update.data().orderSheet[j].no,
                                         po:po_save_doc_id,
-                                        warranty:job_update.data().orderSheet[j].warranty
+                                        warranty:job_update.data().orderSheet[j].warranty,
+                                        origin:job_update.data().orderSheet[j].origin
                                     })
                                 }
                                 else{
@@ -580,7 +581,8 @@ export default {
                                         lock:false,
                                         no:job_update.data().orderSheet[j].no,
                                         po:job_update.data().orderSheet[j].po,
-                                        warranty:job_update.data().orderSheet[j].warranty
+                                        warranty:job_update.data().orderSheet[j].warranty,
+                                        origin:job_update.data().orderSheet[j].origin
                                     })
                                 }
                             }
