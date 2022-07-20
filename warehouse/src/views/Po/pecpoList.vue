@@ -67,7 +67,7 @@ import router from "@/router";
 export default {
     components: { Sidebar },
     mounted() {
-        projectFirestore.collection("Po").get().then((Pos) => {
+        projectFirestore.collection("Po").orderBy('pecpo_year','desc').orderBy('pecpo_no','desc').get().then((Pos) => {
             
                 
             $('#polist').html('')

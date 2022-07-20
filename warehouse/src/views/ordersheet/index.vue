@@ -192,8 +192,7 @@ export default {
                         login_user = currentuser.data().name
                     }
                 })
-            })
-            
+            }) 
         });
 
         projectFirestore.collection("Projects").orderBy("JobNoFirst","desc").orderBy("JobNoSecond","desc").where("wh_validate", '==', true).get().then((Projects) => {
