@@ -282,6 +282,7 @@ export default {
         function onlyUnique(value, index, self) {
             return self.indexOf(value) === index;
         }
+        var ordersheet_old = []
 
         async function predata(){
             const Po = await projectFirestore.collection('Po').doc(id).get()
@@ -337,6 +338,21 @@ export default {
                         '</div> '
                     )
                 }
+            }
+
+
+
+            for(let i = 0; i < Po.data().battorder.length; i++){
+                ordersheet_old.push({
+                    job_id:Po.data().battorder[i].job,
+                    ordersheet:[]
+                })
+                for(let j = 0; j < Po.data().battorder[i].ordersheet.length; j++){
+                    ordersheet_old[i].ordersheet.push(
+                        Po.data().battorder[i].ordersheet[j].ordersheet
+                    )
+                }
+
             }
             
 
@@ -494,7 +510,7 @@ export default {
                     for(let i = 0 ; i  < project.data().orderSheet.length; i++){
                         if(project.data().orderSheet[i].origin == con_origin && project.data().orderSheet[i].warranty == con_warranty && project.data().orderSheet[i].deliverydate == con_delivery){
                             project_id.push(project.id)
-                            
+
                         }
                     }
                 })
@@ -1234,6 +1250,8 @@ export default {
             await arrayorder_batt()
             // await clear_old_data_get()
             // await clear_old_data()
+            await restore_status_ordersheet()
+            await new_status_ordersheet()
             await savedata()
             
             async function clear_old_data_get(){
@@ -1298,11 +1316,128 @@ export default {
             }
 
 
+            async function restore_status_ordersheet(){
+                for(let i = 0; i < ordersheet_old.length; i++){
+                    const job_update = await projectFirestore.collection('Projects').doc(ordersheet_old[i].job_id).get()
+                    var update_sheet = ordersheet_old[i].ordersheet
+                    var set_new_ordersheet = await check_ordersheet()
+                    await update_ordersheet_lock()
+
+                    // function get_update_sheet(){
+                    //     var sheet = []
+                    //     for(let j = 0; j < final_battorder[i].ordersheet.length; j++){
+                    //         sheet.push(
+                    //             final_battorder[i].ordersheet[j].ordersheet
+                    //         )
+                    //     }
+                    //     return sheet
+                    // }
+
+                    function check_ordersheet(){
+                        var set_new_sheet = []
+                        for(let j = 0; j < job_update.data().orderSheet.length; j++){
+                            set_new_sheet.push({
+                                battery:job_update.data().orderSheet[j].battery,
+                                deliverydate:job_update.data().orderSheet[j].deliverydate,
+                                lock:false,
+                                no:job_update.data().orderSheet[j].no,
+                                po:job_update.data().orderSheet[j].po,
+                                warranty:job_update.data().orderSheet[j].warranty,
+                                origin:job_update.data().orderSheet[j].origin
+                            })
+                        }
+
+                        return set_new_sheet
+                    }
+
+                    function update_ordersheet_lock(){
+                        console.log('set_new_ordersheet : ',set_new_ordersheet)
+                        projectFirestore.collection('Projects').doc(final_battorder[i].job).update({
+                            orderSheet:set_new_ordersheet 
+                        })
+                    }
+            
+
+                }
+            }
+
+            async function new_status_ordersheet(){
+
+                const new_ordersheet = await get_new_ordersheet()
+                function get_new_ordersheet(){
+                    var ordersheet_new = []
+                    for(let i = 0; i < job_count; i++){
+                        battarray.push({job:$($('.job')[i]).find('option:selected').val(),ordersheet:[],project_first:$($('.job')[i]).find('option:selected').data('first'),project_second:$($('.job')[i]).find('option:selected').data('second'),projectname:$($('.job')[i]).find('option:selected').data('name')})
+                        ordersheet_new.push({
+                            job_id:$($('.job')[i]).find('option:selected').val(),
+                            ordersheet:[]
+                        })
+                        for(let j = 0; j < ordersheet_count; j++){
+                    
+                            if(ordersheet_new[i].job_id == $($('.ordersheet')[j]).find('option:selected').data('project')){
+                                console.log('j : ',j)
+                                ordersheet_new[i].ordersheet.push($($('.ordersheet')[j]).find('option:selected').val())
+                            }
+                        }
+                    }
+                    return ordersheet_new
+                    
+                }
+
+                for(let i = 0; i < new_ordersheet.length; i++){
+                    const new_job_update = await projectFirestore.collection('Projects').doc(new_ordersheet[i].job_id).get()
+                    var update_sheet = new_ordersheet[i].ordersheet
+                    var set_new_ordersheet = await check_new_ordersheet()
+                    await update_new_ordersheet_lock()
+
+                    // function get_update_sheet(){
+                    //     var sheet = []
+                    //     for(let j = 0; j < final_battorder[i].ordersheet.length; j++){
+                    //         sheet.push(
+                    //             final_battorder[i].ordersheet[j].ordersheet
+                    //         )
+                    //     }
+                    //     return sheet
+                    // }
+
+                    function check_new_ordersheet(){
+                        var set_new_sheet = []
+                        for(let j = 0; j < new_job_update.data().orderSheet.length; j++){
+                            set_new_sheet.push({
+                                battery:new_job_update.data().orderSheet[j].battery,
+                                deliverydate:new_job_update.data().orderSheet[j].deliverydate,
+                                lock:true,
+                                no:new_job_update.data().orderSheet[j].no,
+                                po:new_job_update.data().orderSheet[j].po,
+                                warranty:new_job_update.data().orderSheet[j].warranty,
+                                origin:new_job_update.data().orderSheet[j].origin
+                            })
+                        }
+
+                        return set_new_sheet
+                    }
+
+                    function update_new_ordersheet_lock(){
+                        console.log('set_new_ordersheet : ',set_new_ordersheet)
+                        projectFirestore.collection('Projects').doc(final_battorder[i].job).update({
+                            orderSheet:set_new_ordersheet 
+                        })
+                    }
+            
+
+                }
+
+
+            }
+
+
             function arrayorder_job(){
                 
                 for(let i = 0; i < job_count; i++){
                     
                     battarray.push({job:$($('.job')[i]).find('option:selected').val(),ordersheet:[],project_first:$($('.job')[i]).find('option:selected').data('first'),project_second:$($('.job')[i]).find('option:selected').data('second'),projectname:$($('.job')[i]).find('option:selected').data('name')})
+
+                
                 }
 
                 for(let i = 0; i  <  $('.shipment-totoal-price').length; i++){
@@ -1352,25 +1487,21 @@ export default {
 
             function savedata(){
                 var timestamp = Math.round(new Date().getTime() / 1000);
+                
 
-                console.log('save')
-                console.log('timestamp : ',timestamp)
-                console.log('battarray : ',battarray)
-
-
-                projectFirestore.collection('Po').doc(id).update({
-                    update_time:timestamp,
-                    battorder:battarray,
-                    shipment:shipment_array,
-                    approve_status:false,
-                    manager_approve_status:false,
-                    generalmanager_approve_status:false,
-                }).then(()=>{
-                    router.push({ 
-                        name: 'PECpoList',
-                        params: { mserror: true} 
-                    })
-                })
+                // projectFirestore.collection('Po').doc(id).update({
+                //     update_time:timestamp,
+                //     battorder:battarray,
+                //     shipment:shipment_array,
+                //     approve_status:false,
+                //     manager_approve_status:false,
+                //     generalmanager_approve_status:false,
+                // }).then(()=>{
+                //     router.push({ 
+                //         name: 'PECpoList',
+                //         params: { mserror: true} 
+                //     })
+                // })
 
 
             }
