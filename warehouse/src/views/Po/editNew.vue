@@ -1295,26 +1295,6 @@ export default {
                     
                 }
             }
-            async function clear_old_data(){
-                console.log('new_batt_order : ',new_batt_order)
-                // for(let i = 0; i < old_batt_data_arry.length; i++){
-                //     const save_batt_no = await projectFirestore.collection('Projects').doc(old_batt_data_arry[i].job_id).get()
-                //     for(let j = 0; j < get_batt_no.data().battery.length; j++){
-                //         if(new_batt_order == save_batt_no.data().battery[j].no){
-
-
-                //             // projectFirestore.collection('Projects').doc(old_batt_data_arry[i].job_id).update({
-                //             //     battery:new_batt_order
-                //             // })
-                //         }
-
-                        
-                        
-                //     }
-                    
-                // }
-            }
-
 
             async function restore_status_ordersheet(){
                 for(let i = 0; i < ordersheet_old.length; i++){
@@ -1322,16 +1302,6 @@ export default {
                     var update_sheet = ordersheet_old[i].ordersheet
                     var set_new_ordersheet = await check_ordersheet()
                     await update_ordersheet_lock()
-
-                    // function get_update_sheet(){
-                    //     var sheet = []
-                    //     for(let j = 0; j < final_battorder[i].ordersheet.length; j++){
-                    //         sheet.push(
-                    //             final_battorder[i].ordersheet[j].ordersheet
-                    //         )
-                    //     }
-                    //     return sheet
-                    // }
 
                     function check_ordersheet(){
                         var set_new_sheet = []
@@ -1351,10 +1321,10 @@ export default {
                     }
 
                     function update_ordersheet_lock(){
-                        console.log('set_new_ordersheet : ',set_new_ordersheet)
-                        projectFirestore.collection('Projects').doc(final_battorder[i].job).update({
-                            orderSheet:set_new_ordersheet 
-                        })
+                        console.log('set_old_ordersheet : ',set_new_ordersheet)
+                        // projectFirestore.collection('Projects').doc(ordersheet_old[i].job_id).update({
+                        //     orderSheet:set_new_ordersheet 
+                        // })
                     }
             
 
@@ -1375,7 +1345,6 @@ export default {
                         for(let j = 0; j < ordersheet_count; j++){
                     
                             if(ordersheet_new[i].job_id == $($('.ordersheet')[j]).find('option:selected').data('project')){
-                                console.log('j : ',j)
                                 ordersheet_new[i].ordersheet.push($($('.ordersheet')[j]).find('option:selected').val())
                             }
                         }
@@ -1386,42 +1355,59 @@ export default {
 
                 for(let i = 0; i < new_ordersheet.length; i++){
                     const new_job_update = await projectFirestore.collection('Projects').doc(new_ordersheet[i].job_id).get()
-                    var update_sheet = new_ordersheet[i].ordersheet
+                    var update_sheet = await get_update_sheet()
                     var set_new_ordersheet = await check_new_ordersheet()
                     await update_new_ordersheet_lock()
 
-                    // function get_update_sheet(){
-                    //     var sheet = []
-                    //     for(let j = 0; j < final_battorder[i].ordersheet.length; j++){
-                    //         sheet.push(
-                    //             final_battorder[i].ordersheet[j].ordersheet
-                    //         )
-                    //     }
-                    //     return sheet
-                    // }
+                    function get_update_sheet(){
+                        var sheet = []
+                        for(let j = 0; j < new_ordersheet[i].ordersheet.length; j++){
+                            sheet.push(
+                                new_ordersheet[i].ordersheet[j]
+                            )
+                        }
+                        return sheet
+                    }
 
                     function check_new_ordersheet(){
                         var set_new_sheet = []
                         for(let j = 0; j < new_job_update.data().orderSheet.length; j++){
-                            set_new_sheet.push({
-                                battery:new_job_update.data().orderSheet[j].battery,
-                                deliverydate:new_job_update.data().orderSheet[j].deliverydate,
-                                lock:true,
-                                no:new_job_update.data().orderSheet[j].no,
-                                po:new_job_update.data().orderSheet[j].po,
-                                warranty:new_job_update.data().orderSheet[j].warranty,
-                                origin:new_job_update.data().orderSheet[j].origin
-                            })
+
+                            if(update_sheet.includes(new_job_update.data().orderSheet[j].no)){
+                                console.log('sda')
+                                set_new_sheet.push({
+                                    battery:new_job_update.data().orderSheet[j].battery,
+                                    deliverydate:new_job_update.data().orderSheet[j].deliverydate,
+                                    lock:true,
+                                    no:new_job_update.data().orderSheet[j].no,
+                                    po:id,
+                                    warranty:new_job_update.data().orderSheet[j].warranty,
+                                    origin:new_job_update.data().orderSheet[j].origin
+                                })
+                            }
+                            else{
+                                set_new_sheet.push({
+                                    battery:new_job_update.data().orderSheet[j].battery,
+                                    deliverydate:new_job_update.data().orderSheet[j].deliverydate,
+                                    lock:false,
+                                    no:new_job_update.data().orderSheet[j].no,
+                                    po:new_job_update.data().orderSheet[j].po,
+                                    warranty:new_job_update.data().orderSheet[j].warranty,
+                                    origin:new_job_update.data().orderSheet[j].origin
+                                })
+                            }
                         }
 
                         return set_new_sheet
                     }
 
                     function update_new_ordersheet_lock(){
+                        console.log('update_sheet : ',update_sheet)
+
                         console.log('set_new_ordersheet : ',set_new_ordersheet)
-                        projectFirestore.collection('Projects').doc(final_battorder[i].job).update({
-                            orderSheet:set_new_ordersheet 
-                        })
+                        // projectFirestore.collection('Projects').doc(final_battorder[i].job).update({
+                        //     orderSheet:set_new_ordersheet 
+                        // })
                     }
             
 
