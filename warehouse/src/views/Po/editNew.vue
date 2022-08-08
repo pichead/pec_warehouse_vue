@@ -1405,9 +1405,9 @@ export default {
                         console.log('update_sheet : ',update_sheet)
 
                         console.log('set_new_ordersheet : ',set_new_ordersheet)
-                        // projectFirestore.collection('Projects').doc(final_battorder[i].job).update({
-                        //     orderSheet:set_new_ordersheet 
-                        // })
+                        projectFirestore.collection('Projects').doc(new_ordersheet[i].job_id).update({
+                            orderSheet:set_new_ordersheet 
+                        })
                     }
             
 
@@ -1475,19 +1475,19 @@ export default {
                 var timestamp = Math.round(new Date().getTime() / 1000);
                 
 
-                // projectFirestore.collection('Po').doc(id).update({
-                //     update_time:timestamp,
-                //     battorder:battarray,
-                //     shipment:shipment_array,
-                //     approve_status:false,
-                //     manager_approve_status:false,
-                //     generalmanager_approve_status:false,
-                // }).then(()=>{
-                //     router.push({ 
-                //         name: 'PECpoList',
-                //         params: { mserror: true} 
-                //     })
-                // })
+                projectFirestore.collection('Po').doc(id).update({
+                    update_time:timestamp,
+                    battorder:battarray,
+                    shipment:shipment_array,
+                    approve_status:false,
+                    manager_approve_status:false,
+                    generalmanager_approve_status:false,
+                }).then(()=>{
+                    router.push({ 
+                        name: 'PECpoList',
+                        params: { mserror: true} 
+                    })
+                })
 
 
             }
