@@ -1,3 +1,9 @@
+<style>
+th {
+  vertical-align: center;
+}
+</style>
+
 <template>
     <Sidebar />
     <div id="content" style="margin-left: 250px">
@@ -72,10 +78,11 @@
                             <div class="font-weight-bold col-form-label">Requirements</div>
                             <table class="table col-12">
                                 <colgroup>
+                                    <col span="1" style="width: 12%;vertical-align: middle;">
                                     <col span="1" style="width: 12%;">
                                     <col span="1" style="width: 12%;">
-                                    <col span="1" style="width: 12%;">
-                                    <col span="1" style="width: 16%;">
+                                    <col span="1" style="width: 8%;">
+                                    <col span="1" style="width: 8%;">
                                     <col span="1" style="width: 8%;">
                                     <col span="1" style="width: 14%;">
                                     <col span="1" style="width: 6%;">
@@ -83,12 +90,13 @@
                                 </colgroup>
                                         <thead class="thead-dark">
                                             <tr class="text-center">
-                                                <th>Model</th>
-                                                <th>Brand</th>
-                                                <th>Origin</th>
-                                                <th>Warranty(month)</th>
-                                                <th>Amount</th>
-                                                <th>PEC WH Date</th>
+                                                <th style="vertical-align: middle;">Model</th>
+                                                <th style="vertical-align: middle;">Brand</th>
+                                                <th style="vertical-align: middle;">Origin</th>
+                                                <th>CustomerWarranty (month)</th>
+                                                <th>SupplierWarranty (month)</th>
+                                                <th style="vertical-align: middle;">Amount</th>
+                                                <th style="vertical-align: middle;">PEC WH Date</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
@@ -111,6 +119,9 @@
                                                     </select>
                                                 </td>
                                                 <td>
+                                                    <input id="customer-warranty-1" class="warranty form-control form-control-sm" type="number" required/>
+                                                </td>   
+                                                <td>
                                                     <input id="warranty-1" class="warranty form-control form-control-sm" type="number" required/>
                                                 </td>
                                                 <td>
@@ -124,8 +135,8 @@
                                             </tr>
 
                                             <tr id="addmore">
-                                                <td colspan="7"  class="bg-success text-center text-white">
-                                                    Add More
+                                                <td colspan="8" class="p-0" >
+                                                    <button type="button" class="col-12 btn btn-success text-center text-white">Add More</button>
                                                 </td>
                                             </tr>
 
@@ -233,6 +244,9 @@ export default {
                             '<option >China</option>'+
                             '<option >Mexcico</option>'+
                         '</select>'+
+                    '</td>'+
+                    '<td>'+
+                        '<input id="customer-warranty-'+no+'" class="warranty form-control form-control-sm" type="number" min="0"  required/>'+
                     '</td>'+
                     '<td>'+
                         '<input id="warranty-'+no+'" class="warranty form-control form-control-sm" type="number" min="0"  required/>'+
