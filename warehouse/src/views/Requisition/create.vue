@@ -58,17 +58,19 @@
                         <table class="table my-2 ">
                             <colgroup>
                                 <col span="1" style="width: 10%;">
-                                <col span="1" style="width: 30%;">
+                                <col span="1" style="width: 15%;">
                                 <col span="1" style="width: 20%;">
                                 <col span="1" style="width: 10%;">
                                 <col span="1" style="width: 10%;">
                                 <col span="1" style="width: 10%;">
+                                <col span="1" style="width: 15%;">
                                 <col span="1" style="width: 10%;">
                             </colgroup>
                             <thead class="thead-dark">
                                 <tr class="text-center">
                                     <th>ลำดับ</th>
-                                    <th>ชื่อวัสดุ/รายการ</th>
+                                    <th>OrderSheet</th>
+                                    <th>รายการ</th>
                                     <th>ยี่ห้อ</th>
                                     <th>เบิก</th>
                                     <th>หน่วย</th>
@@ -209,8 +211,9 @@ export default {
             if(job_select == 'job'){
                 
                 $('#data_table').html(
-                    '<tr>'+
+                    '<tr id="row-1">'+
                         '<th class="text-center" scope="row">1</th>'+
+                        '<td>65/001/1</td>'+
                         '<td>UPS12-320R MRX</td>'+
                         '<td class="text-center">C&D</td>'+
                         '<td class="text-center"><input type="number" value="25" class="form-control"></td>'+
@@ -218,10 +221,11 @@ export default {
                         '<td class="text-center">'+
                             '<textarea name="" id="" cols="30" rows="1" class="form-control"></textarea>'+
                         '</td>'+
-                        '<td><button type="buttonn" class="btn btn-danger py-0">ลบ</button></td>'+
+                        '<td><button type="buttonn" data-row="1" class="btn btn-danger removeBtn py-0">ลบ</button></td>'+
                     '</tr>'+
-                    '<tr>'+
+                    '<tr id="row-2">'+
                         '<th class="text-center" scope="row">2</th>'+
+                        '<td>65/001/2</td>'+
                         '<td>UPS12-220 MRX</td>'+
                         '<td class="text-center">C&D</td>'+
                         '<td class="text-center"><input type="number" value="90" class="form-control"></td>'+
@@ -229,7 +233,7 @@ export default {
                         '<td>'+
                             '<textarea name="" id="" cols="30" rows="1" class="form-control"></textarea>'+
                         '</td>'+
-                        '<td><button type="buttonn" class="btn btn-danger py-0">ลบ</button></td>'+
+                        '<td><button type="buttonn" data-row="2" class="btn btn-danger removeBtn py-0">ลบ</button></td>'+
                     '</tr>'
                 )
             }
@@ -238,6 +242,13 @@ export default {
 
         $('#submit_btn').on('click',function(){
             $('#report').removeClass('d-none')
+        })
+
+        $('#data_table').on('click','.removeBtn',function(){
+            const rowId = $(this).data('row');
+            $('#row-'+rowId).remove();
+            console.log(rowId)
+        
         })
     }
 }

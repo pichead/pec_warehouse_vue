@@ -1,6 +1,6 @@
 <style>
 th {
-  vertical-align: center;
+  vertical-align: middle;
 }
 </style>
 

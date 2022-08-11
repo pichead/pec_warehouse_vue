@@ -94,13 +94,14 @@
                 <table class="mb-5 mt-2 table table-bordered">
                     <thead>
                         <tr class="text-center">
-                            <th width="10%">Item</th>
-                            <th width="30%">Series</th>
-                            <th width="15%">Warranty(month)</th>
-                            <th width="15%">Origin</th>
-                            <th width="10%">Total/EA</th>
-                            <th width="10%">Stock/EA</th>
-                            <th width="10%">Order/EA</th>
+                            <th style="vertical-align: middle;" width="5%">Item</th>
+                            <th style="vertical-align: middle;" width="25%">Series</th>
+                            <th width="15%">CustomerWarranty (month)</th>
+                            <th width="15%">SupplierWarranty (month)</th>
+                            <th style="vertical-align: middle;" width="10%">Origin</th>
+                            <th style="vertical-align: middle;" width="10%">Total/EA</th>
+                            <th style="vertical-align: middle;" width="10%">Stock/EA</th>
+                            <th style="vertical-align: middle;" width="10%">Order/EA</th>
                             <!-- <th width="15%">Delivery Date</th> -->
                         </tr>
                     </thead>
@@ -218,6 +219,7 @@ export default {
                             '<td class="text-center">'+(i+1)+'</td>'+
                             '<td>'+Project.data().battery[i].series+' : '+Project.data().battery[i].company+'</td>'+
                             '<td class="text-center">'+Project.data().battery[i].warranty+'</td>'+
+                            '<td class="text-center">'+Project.data().battery[i].warranty+'</td>'+
                             '<td class="text-center">'+Project.data().battery[i].origin+'</td>'+
                             '<td class="text-center">'+Project.data().battery[i].amount+'</td>'+
                             '<td class="text-center">'+Project.data().battery[i].wh_stock+'</td>'+
@@ -272,10 +274,11 @@ export default {
                             '<table class="my-5 table table-bordered">'+
                                 '<thead>'+
                                     '<tr class="text-center">'+
-                                        '<th width="10%">Item</th>'+
-                                        '<th width="50%">Description</th>'+
-                                        '<th width="10%">Total/EA</th>'+
-                                        '<th width="30%">Supported Documents</th>'+
+                                        '<th style="vertical-align: middle;" width="10%">Item</th>'+
+                                        '<th style="vertical-align: middle;" width="30%">Description</th>'+
+                                        '<th style="vertical-align: middle;" width="20%">Customer Warranty (Month)</th>'+
+                                        '<th style="vertical-align: middle;" width="10%">Total/EA</th>'+
+                                        '<th style="vertical-align: middle;" width="30%">Supported Documents</th>'+
                                     '</tr>'+
                                 '</thead>'+
                                 '<tbody id="data'+i+'">'+
@@ -328,6 +331,7 @@ export default {
                                     '<tr height="50px">'+
                                         '<td class="text-center">'+(k+1)+'</td>'+
                                         '<td>'+Project.data().orderSheet[j].battery[k].series+'</td>'+
+                                        '<td class="text-center">'+Project.data().orderSheet[j].battery[k].warranty+'</td>'+
                                         '<td class="text-center">'+Project.data().orderSheet[j].battery[k].order_amount+'</td>'+
                                         '<td></td>'+
                                     '</tr>'
@@ -360,6 +364,7 @@ export default {
                                         '<tr height="50px">'+
                                             '<td class="text-center"></td>'+
                                             '<td></td>'+
+                                            '<td></td>'+
                                             '<td class="text-center"></td>'+
                                             '<td></td>'+
                                         '</tr>'
@@ -368,11 +373,6 @@ export default {
                         
                     }
                 }
-
-
-
-
-       
             }
             function OrderWarranty(){
                 for(let i = 0; i < uniqueOrder.length; i++){
@@ -393,7 +393,7 @@ export default {
                             
                             $('#footer'+i).html(
                                     '<td class="text-center"></td>'+
-                                    '<td ><small>Origin : '+Project.data().orderSheet[j].battery[0].origin+' / Warranty : '+Project.data().orderSheet[j].battery[0].warranty+' month / Order Delivery : '+fnew_date+'</small></td>'+
+                                    '<td ><small>Origin : '+Project.data().orderSheet[j].battery[0].origin+' / Supplier Warranty : '+Project.data().orderSheet[j].battery[0].warranty+' month / Order Delivery : '+fnew_date+'</small></td>'+
                                     '<td class="text-center"></td>'+
                                     '<td></td>'
                             )

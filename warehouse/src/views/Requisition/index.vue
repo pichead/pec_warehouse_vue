@@ -32,7 +32,9 @@
                         <td>มณีรัตน์ พิเชษฐ์</td>
                         <td>01/07/65</td>
                         <td>
-                            <button type="button" class="btn btn-info py-0">View</button>
+                            <button type="button" class="btn btn-primary py-0 mx-1">View</button>
+                            <button type="button" class="btn delBtn btn-danger py-0 mx-1" data-toggle="modal" data-target="#delModal">Delete</button>
+                            <button type="button" class="btn fileBtn btn-info py-0 mx-1" data-toggle="modal" data-target="#fileModal">Files</button>
                         </td>
                     </tr>
                     <tr>
@@ -42,12 +44,67 @@
                         <td>มณีรัตน์ พิเชษฐ์</td>
                         <td>02/07/65</td>
                         <td>
-                            <button type="button" class="btn btn-info py-0">View</button>
+                            <button type="button" class="btn btn-primary py-0 mx-1">View</button>
+                            <button type="button" class="btn btn-danger disabled py-0 mx-1">Delete</button>
+                            <button type="button" class="btn fileBtn btn-info py-0 mx-1" data-toggle="modal" data-target="#fileModal">Files</button>
                         </td>
                     </tr>
                 </tbody>
-            </table>
 
+            </table>
+            <div class="modal" id="fileModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Upload Files</h5>
+                            <button class="close" data-dismiss="modal">×</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="col-11 mx-auto p-3">
+                                <p>แนบใบส่งของ</p>
+                                <input type="file" class="mb-3" />
+                                <p>ระบุวันเริ่มการรับประกัน</p>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <p>OrderSheet 65/001/1</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="date" class="form-control" />
+                                    </div>
+                                    <div class="col-6">
+                                        <p>OrderSheet 65/001/1</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="date" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
+                            <button class="btn btn-primary" data-dismiss="modal">บันทึก</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal" id="delModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Delete Document</h5>
+                            <button class="close" data-dismiss="modal">×</button>
+                        </div>
+                        <div class="modal-body">
+                            ยืนยันการลบข้อมูลหรือไม่
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
+                            <button class="btn btn-danger" type="button">ลบรายการ</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>
